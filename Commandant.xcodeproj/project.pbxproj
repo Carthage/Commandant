@@ -9,11 +9,13 @@
 /* Begin PBXBuildFile section */
 		D00CCDDF1A20717400109F8C /* Commandant.h in Headers */ = {isa = PBXBuildFile; fileRef = D00CCDDE1A20717400109F8C /* Commandant.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D00CCDE51A20717400109F8C /* Commandant.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D00CCDD91A20717400109F8C /* Commandant.framework */; };
-		D00CCDEC1A20717400109F8C /* CommandantTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00CCDEB1A20717400109F8C /* CommandantTests.swift */; };
 		D00CCE201A2073CE00109F8C /* LlamaKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D00CCE1F1A2073CE00109F8C /* LlamaKit.framework */; };
 		D00CCE211A2073D200109F8C /* LlamaKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D00CCE1F1A2073CE00109F8C /* LlamaKit.framework */; };
 		D00CCE241A2073DA00109F8C /* Nimble.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D00CCE221A2073DA00109F8C /* Nimble.framework */; };
 		D00CCE251A2073DA00109F8C /* Quick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D00CCE231A2073DA00109F8C /* Quick.framework */; };
+		D00CCE271A20741300109F8C /* Command.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00CCE261A20741300109F8C /* Command.swift */; };
+		D00CCE291A20741C00109F8C /* CommandSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00CCE281A20741C00109F8C /* CommandSpec.swift */; };
+		D00CCE2B1A20748500109F8C /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00CCE2A1A20748500109F8C /* Errors.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -32,7 +34,6 @@
 		D00CCDDE1A20717400109F8C /* Commandant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Commandant.h; sourceTree = "<group>"; };
 		D00CCDE41A20717400109F8C /* CommandantTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CommandantTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D00CCDEA1A20717400109F8C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		D00CCDEB1A20717400109F8C /* CommandantTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommandantTests.swift; sourceTree = "<group>"; };
 		D00CCDF81A20719500109F8C /* Common.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Common.xcconfig; sourceTree = "<group>"; };
 		D00CCDFA1A20719500109F8C /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
 		D00CCDFB1A20719500109F8C /* Profile.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Profile.xcconfig; sourceTree = "<group>"; };
@@ -54,6 +55,9 @@
 		D00CCE1F1A2073CE00109F8C /* LlamaKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = LlamaKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D00CCE221A2073DA00109F8C /* Nimble.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Nimble.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D00CCE231A2073DA00109F8C /* Quick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Quick.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D00CCE261A20741300109F8C /* Command.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Command.swift; sourceTree = "<group>"; };
+		D00CCE281A20741C00109F8C /* CommandSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommandSpec.swift; sourceTree = "<group>"; };
+		D00CCE2A1A20748500109F8C /* Errors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,6 +106,8 @@
 			isa = PBXGroup;
 			children = (
 				D00CCDDE1A20717400109F8C /* Commandant.h */,
+				D00CCE261A20741300109F8C /* Command.swift */,
+				D00CCE2A1A20748500109F8C /* Errors.swift */,
 				D00CCDDC1A20717400109F8C /* Supporting Files */,
 			);
 			path = Commandant;
@@ -119,7 +125,7 @@
 		D00CCDE81A20717400109F8C /* CommandantTests */ = {
 			isa = PBXGroup;
 			children = (
-				D00CCDEB1A20717400109F8C /* CommandantTests.swift */,
+				D00CCE281A20741C00109F8C /* CommandSpec.swift */,
 				D00CCDE91A20717400109F8C /* Supporting Files */,
 			);
 			path = CommandantTests;
@@ -308,6 +314,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D00CCE2B1A20748500109F8C /* Errors.swift in Sources */,
+				D00CCE271A20741300109F8C /* Command.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -315,7 +323,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D00CCDEC1A20717400109F8C /* CommandantTests.swift in Sources */,
+				D00CCE291A20741C00109F8C /* CommandSpec.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -356,11 +364,15 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D00CCE0B1A20719500109F8C /* Mac-Framework.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				FRAMEWORK_VERSION = A;
 				INFOPLIST_FILE = Commandant/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
@@ -368,10 +380,13 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D00CCE0B1A20719500109F8C /* Mac-Framework.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				FRAMEWORK_VERSION = A;
 				INFOPLIST_FILE = Commandant/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -417,10 +432,13 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D00CCE0B1A20719500109F8C /* Mac-Framework.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				FRAMEWORK_VERSION = A;
 				INFOPLIST_FILE = Commandant/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Profile;
@@ -453,11 +471,15 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D00CCE0B1A20719500109F8C /* Mac-Framework.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				FRAMEWORK_VERSION = A;
 				INFOPLIST_FILE = Commandant/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Test;
 		};
