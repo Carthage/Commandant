@@ -1,5 +1,5 @@
 //
-//  CommandSpec.swift
+//  OptionSpec.swift
 //  Commandant
 //
 //  Created by Justin Spahr-Summers on 2014-10-25.

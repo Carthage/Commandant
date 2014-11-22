@@ -14,8 +14,10 @@
 		D00CCE241A2073DA00109F8C /* Nimble.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D00CCE221A2073DA00109F8C /* Nimble.framework */; };
 		D00CCE251A2073DA00109F8C /* Quick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D00CCE231A2073DA00109F8C /* Quick.framework */; };
 		D00CCE271A20741300109F8C /* Command.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00CCE261A20741300109F8C /* Command.swift */; };
-		D00CCE291A20741C00109F8C /* CommandSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00CCE281A20741C00109F8C /* CommandSpec.swift */; };
+		D00CCE291A20741C00109F8C /* OptionSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00CCE281A20741C00109F8C /* OptionSpec.swift */; };
 		D00CCE2B1A20748500109F8C /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00CCE2A1A20748500109F8C /* Errors.swift */; };
+		D00CCE2D1A2075ED00109F8C /* ArgumentParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00CCE2C1A2075ED00109F8C /* ArgumentParser.swift */; };
+		D00CCE2F1A2075F700109F8C /* Option.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00CCE2E1A2075F700109F8C /* Option.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,8 +58,10 @@
 		D00CCE221A2073DA00109F8C /* Nimble.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Nimble.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D00CCE231A2073DA00109F8C /* Quick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Quick.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D00CCE261A20741300109F8C /* Command.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Command.swift; sourceTree = "<group>"; };
-		D00CCE281A20741C00109F8C /* CommandSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommandSpec.swift; sourceTree = "<group>"; };
+		D00CCE281A20741C00109F8C /* OptionSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OptionSpec.swift; sourceTree = "<group>"; };
 		D00CCE2A1A20748500109F8C /* Errors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
+		D00CCE2C1A2075ED00109F8C /* ArgumentParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArgumentParser.swift; sourceTree = "<group>"; };
+		D00CCE2E1A2075F700109F8C /* Option.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Option.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,8 +110,10 @@
 			isa = PBXGroup;
 			children = (
 				D00CCDDE1A20717400109F8C /* Commandant.h */,
+				D00CCE2C1A2075ED00109F8C /* ArgumentParser.swift */,
 				D00CCE261A20741300109F8C /* Command.swift */,
 				D00CCE2A1A20748500109F8C /* Errors.swift */,
+				D00CCE2E1A2075F700109F8C /* Option.swift */,
 				D00CCDDC1A20717400109F8C /* Supporting Files */,
 			);
 			path = Commandant;
@@ -125,7 +131,7 @@
 		D00CCDE81A20717400109F8C /* CommandantTests */ = {
 			isa = PBXGroup;
 			children = (
-				D00CCE281A20741C00109F8C /* CommandSpec.swift */,
+				D00CCE281A20741C00109F8C /* OptionSpec.swift */,
 				D00CCDE91A20717400109F8C /* Supporting Files */,
 			);
 			path = CommandantTests;
@@ -314,8 +320,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D00CCE2F1A2075F700109F8C /* Option.swift in Sources */,
 				D00CCE2B1A20748500109F8C /* Errors.swift in Sources */,
 				D00CCE271A20741300109F8C /* Command.swift in Sources */,
+				D00CCE2D1A2075ED00109F8C /* ArgumentParser.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -323,7 +331,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D00CCE291A20741C00109F8C /* CommandSpec.swift in Sources */,
+				D00CCE291A20741C00109F8C /* OptionSpec.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
