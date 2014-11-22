@@ -1,0 +1,8 @@
+language: objective-c
+xcode_workspace: Commandant.xcworkspace
+xcode_scheme: Commandant
+
+script: script/cibuild
+
+notifications:
+  slack: reactivex:lKLbHnGla814zwk5ZB07aBDF
