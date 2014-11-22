@@ -55,10 +55,8 @@ assert(arguments.count >= 1)
 arguments.removeAtIndex(0)
 
 if let verb = arguments.first {
-	if arguments.count > 0 {
-		// Remove the command name.
-		arguments.removeAtIndex(0)
-	}
+	// Remove the command name.
+	arguments.removeAtIndex(0)
 
 	if let result = commands.runCommand(verb, arguments: arguments) {
 		// Handle success or failure.
