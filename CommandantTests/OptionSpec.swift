@@ -66,7 +66,7 @@ class OptionsTypeSpec: QuickSpec {
 
 		describe("CommandMode.Usage") {
 			it("should return an error containing usage information") {
-				let error = TestOptions.evaluate(.Usage).error()!
+				let error = TestOptions.evaluate(.Usage).error() as NSError
 				expect(error.localizedDescription).to(contain("intValue"))
 				expect(error.localizedDescription).to(contain("stringValue"))
 				expect(error.localizedDescription).to(contain("name you're required to"))
