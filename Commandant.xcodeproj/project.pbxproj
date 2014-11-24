@@ -96,6 +96,7 @@
 				D00CCDDA1A20717400109F8C /* Products */,
 			);
 			sourceTree = "<group>";
+			usesTabs = 1;
 		};
 		D00CCDDA1A20717400109F8C /* Products */ = {
 			isa = PBXGroup;
