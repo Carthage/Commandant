@@ -165,7 +165,7 @@ public func <*><T, U>(f: T -> U, value: Result<T>) -> Result<U> {
 public func <*><T, U>(f: Result<(T -> U)>, value: Result<T>) -> Result<U> {
 	switch (f, value) {
 	case let (.Failure(left), .Failure(right)):
-		return failure(combineUsageErrors(left, right))
+		return failure(combineUsageErrors(left as NSError, right as NSError))
 
 	case let (.Failure(left), .Success):
 		return failure(left)
