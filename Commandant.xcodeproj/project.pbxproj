@@ -157,7 +157,7 @@
 				D00CCE0D1A20719500109F8C /* README.md */,
 			);
 			name = Configuration;
-			path = Carthage.checkout/xcconfigs;
+			path = Carthage/Checkouts/xcconfigs;
 			sourceTree = "<group>";
 		};
 		D00CCDF71A20719500109F8C /* Base */ = {
