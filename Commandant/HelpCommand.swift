@@ -15,7 +15,7 @@ import LlamaKit
 /// If you want to use this command, initialize it with the registry, then add
 /// it to that same registry:
 ///
-/// 	let commands: CommandRegistry() = …
+/// 	let commands: CommandRegistry = …
 /// 	let helpCommand = HelpCommand(registry: commands)
 /// 	commands.register(helpCommand)
 public struct HelpCommand: CommandType {
