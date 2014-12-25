@@ -66,3 +66,46 @@ public final class CommandRegistry {
 		return commandsByVerb[verb]
 	}
 }
+
+extension CommandRegistry {
+	/// Hands off execution to the CommandRegistry, by parsing Process.arguments
+	/// and then running whichever command has been identified in the argument
+	/// list.
+	///
+	/// If the chosen command executes successfully, the process will exit with
+	/// a successful exit code.
+	///
+	/// If the chosen command fails, the provided error handler will be invoked,
+	/// then the process will exit with a failure exit code.
+	///
+	/// If a matching command could not be found, a helpful error message will
+	/// be written to `stderr`, then the process will exit with a failure error
+	/// code.
+	@noreturn public func main(#defaultCommand: CommandType, errorHandler: NSError -> ()) {
+		var arguments = Process.arguments
+		assert(arguments.count >= 1)
+
+		// Extract the executable name.
+		let executableName = arguments.first!
+		arguments.removeAtIndex(0)
+
+		let verb = arguments.first ?? defaultCommand.verb
+		if arguments.count > 0 {
+			// Remove the command name.
+			arguments.removeAtIndex(0)
+		}
+
+		switch runCommand(verb, arguments: arguments) {
+		case .Some(.Success):
+			exit(EXIT_SUCCESS)
+
+		case let .Some(.Failure(error)):
+			errorHandler(error)
+			exit(EXIT_FAILURE)
+
+		case .None:
+			fputs("Unrecognized command: '\(verb)'. See `\(executableName) help`.\n", stderr)
+			exit(EXIT_FAILURE)
+		}
+	}
+}
