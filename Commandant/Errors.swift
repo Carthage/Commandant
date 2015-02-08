@@ -39,7 +39,11 @@ internal func informativeUsageError<T>(keyValueExample: String, option: Option<T
 		description += "]"
 	}
 
-	description += "\n\t\(option.usage)"
+	description += option.usage.componentsSeparatedByString("\n")
+		.reduce(""){ previous, value in
+			return previous + "\n\t" + value
+		}
+
 	return NSError(domain: CommandantErrorDomain, code: CommandantError.InvalidArgument.rawValue, userInfo: [ NSLocalizedDescriptionKey: description ])
 }
 
