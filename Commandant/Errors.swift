@@ -39,7 +39,7 @@ internal func informativeUsageError<T>(keyValueExample: String, option: Option<T
 		description += "]"
 	}
 
-	description += option.usage.componentsSeparatedByString("\n")
+	description += option.usage.componentsSeparatedByCharactersInSet(NSCharacterSet.newlineCharacterSet())
 		.reduce(""){ previous, value in
 			return previous + "\n\t" + value
 		}
