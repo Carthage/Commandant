@@ -20,7 +20,7 @@ public protocol CommandType {
 	var function: String { get }
 
 	/// Runs this subcommand in the given mode.
-	func run(mode: CommandMode) -> Result<()>
+	func run(mode: CommandMode) -> Result<(), CommandantError>
 }
 
 /// Describes the "mode" in which a command should run.
@@ -56,7 +56,7 @@ public final class CommandRegistry {
 	/// arguments.
 	///
 	/// Returns the results of the execution, or nil if no such command exists.
-	public func runCommand(verb: String, arguments: [String]) -> Result<()>? {
+	public func runCommand(verb: String, arguments: [String]) -> Result<(), CommandantError>? {
 		return self[verb]?.run(.Arguments(ArgumentParser(arguments)))
 	}
 
@@ -81,7 +81,7 @@ extension CommandRegistry {
 	/// If a matching command could not be found, a helpful error message will
 	/// be written to `stderr`, then the process will exit with a failure error
 	/// code.
-	@noreturn public func main(#defaultCommand: CommandType, errorHandler: NSError -> ()) {
+	@noreturn public func main(#defaultCommand: CommandType, errorHandler: CommandantError -> ()) {
 		var arguments = Process.arguments
 		assert(arguments.count >= 1)
 
@@ -100,7 +100,7 @@ extension CommandRegistry {
 			exit(EXIT_SUCCESS)
 
 		case let .Some(.Failure(error)):
-			errorHandler(error)
+			errorHandler(error.unbox)
 			exit(EXIT_FAILURE)
 
 		case .None:

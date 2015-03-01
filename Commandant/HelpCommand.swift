@@ -30,7 +30,7 @@ public struct HelpCommand: CommandType {
 		self.registry = registry
 	}
 
-	public func run(mode: CommandMode) -> Result<()> {
+	public func run(mode: CommandMode) -> Result<(), CommandantError> {
 		return HelpOptions.evaluate(mode)
 			.flatMap { options in
 				if let verb = options.verb {
@@ -68,7 +68,7 @@ private struct HelpOptions: OptionsType {
 		return self(verb: (verb == "" ? nil : verb))
 	}
 
-	static func evaluate(m: CommandMode) -> Result<HelpOptions> {
+	static func evaluate(m: CommandMode) -> Result<HelpOptions, CommandantError> {
 		return create
 			<*> m <| Option(defaultValue: "", usage: "the command to display help for")
 	}
