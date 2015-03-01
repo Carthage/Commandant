@@ -38,7 +38,7 @@ public protocol OptionsType {
 	///
 	/// Returns the parsed options, or an `InvalidArgument` error containing
 	/// usage information.
-	class func evaluate(m: CommandMode) -> Result<Self>
+	class func evaluate(m: CommandMode) -> Result<Self, CommandantError>
 }
 
 /// Describes an option that can be provided on the command line.
@@ -74,9 +74,9 @@ public struct Option<T> {
 
 	/// Constructs an `InvalidArgument` error that describes how the option was
 	/// used incorrectly. `value` should be the invalid value given by the user.
-	private func invalidUsageError(value: String) -> NSError {
+	private func invalidUsageError(value: String) -> CommandantError {
 		let description = "Invalid value for '\(self)': \(value)"
-		return NSError(domain: CommandantErrorDomain, code: CommandantError.InvalidArgument.rawValue, userInfo: [ NSLocalizedDescriptionKey: description ])
+		return CommandantError.UsageError(description: description)
 	}
 }
 
@@ -154,7 +154,7 @@ infix operator <| {
 ///
 /// In the context of command-line option parsing, this is used to chain
 /// together the parsing of multiple arguments. See OptionsType for an example.
-public func <*><T, U>(f: T -> U, value: Result<T>) -> Result<U> {
+public func <*><T, U>(f: T -> U, value: Result<T, CommandantError>) -> Result<U, CommandantError> {
 	return value.map(f)
 }
 
@@ -162,16 +162,16 @@ public func <*><T, U>(f: T -> U, value: Result<T>) -> Result<U> {
 ///
 /// In the context of command-line option parsing, this is used to chain
 /// together the parsing of multiple arguments. See OptionsType for an example.
-public func <*><T, U>(f: Result<(T -> U)>, value: Result<T>) -> Result<U> {
+public func <*><T, U>(f: Result<(T -> U), CommandantError>, value: Result<T, CommandantError>) -> Result<U, CommandantError> {
 	switch (f, value) {
 	case let (.Failure(left), .Failure(right)):
-		return failure(combineUsageErrors(left, right))
+		return failure(combineUsageErrors(left.unbox, right.unbox))
 
 	case let (.Failure(left), .Success):
-		return failure(left)
+		return failure(left.unbox)
 
 	case let (.Success, .Failure(right)):
-		return failure(right)
+		return failure(right.unbox)
 
 	case let (.Success(f), .Success(value)):
 		let newValue = f.unbox(value.unbox)
@@ -183,7 +183,7 @@ public func <*><T, U>(f: Result<(T -> U)>, value: Result<T>) -> Result<U> {
 ///
 /// If parsing command line arguments, and no value was specified on the command
 /// line, the option's `defaultValue` is used.
-public func <|<T: ArgumentType>(mode: CommandMode, option: Option<T>) -> Result<T> {
+public func <|<T: ArgumentType>(mode: CommandMode, option: Option<T>) -> Result<T, CommandantError> {
 	switch mode {
 	case let .Arguments(arguments):
 		var stringValue: String?
@@ -193,7 +193,7 @@ public func <|<T: ArgumentType>(mode: CommandMode, option: Option<T>) -> Result<
 				stringValue = value.unbox
 
 			case let .Failure(error):
-				return failure(error)
+				return failure(error.unbox)
 			}
 		} else {
 			stringValue = arguments.consumePositionalArgument()
@@ -220,7 +220,7 @@ public func <|<T: ArgumentType>(mode: CommandMode, option: Option<T>) -> Result<
 ///
 /// If parsing command line arguments, and no value was specified on the command
 /// line, the option's `defaultValue` is used.
-public func <|(mode: CommandMode, option: Option<Bool>) -> Result<Bool> {
+public func <|(mode: CommandMode, option: Option<Bool>) -> Result<Bool, CommandantError> {
 	precondition(option.key != nil)
 
 	switch mode {
