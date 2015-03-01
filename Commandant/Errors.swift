@@ -10,9 +10,6 @@ import Foundation
 
 /// Possible errors that can originate from Commandant.
 public enum CommandantError {
-	/// The named option did not include a value argument.
-	case MissingArgument(optionName: String)
-
 	/// An option was used incorrectly.
 	case UsageError(description: String)
 
@@ -21,14 +18,26 @@ public enum CommandantError {
 		let domain = "org.carthage.Commandant"
 
 		switch self {
-		case let .MissingArgument(optionName):
-			let description = "Missing argument for \(optionName)"
-			return NSError(domain: domain, code: 0, userInfo: [ NSLocalizedDescriptionKey: description ])
-
 		case let .UsageError(description):
-			return NSError(domain: domain, code: 1, userInfo: [ NSLocalizedDescriptionKey: description ])
+			return NSError(domain: domain, code: 0, userInfo: [ NSLocalizedDescriptionKey: description ])
 		}
 	}
+}
+
+extension CommandantError: Printable {
+	public var description: String {
+		switch self {
+		case let .UsageError(description):
+			return description
+		}
+	}
+}
+
+/// Constructs an `InvalidArgument` error that indicates a missing value for
+/// the argument by the given name.
+internal func missingArgumentError(argumentName: String) -> CommandantError {
+	let description = "Missing argument for \(argumentName)"
+	return CommandantError.UsageError(description: description)
 }
 
 /// Constructs an error that describes how to use the option, with the given
