@@ -45,10 +45,10 @@ public struct HelpCommand: CommandType {
 
 				println("Available commands:\n")
 
-				let maxVerbLength = maxElement(self.registry.commands.map { countElements($0.verb) })
+				let maxVerbLength = maxElement(self.registry.commands.map { count($0.verb) })
 
 				for command in self.registry.commands {
-					let padding = Repeat<Character>(count: maxVerbLength - countElements(command.verb), repeatedValue: " ")
+					let padding = Repeat<Character>(count: maxVerbLength - count(command.verb), repeatedValue: " ")
 
 					var formattedVerb = command.verb
 					formattedVerb.extend(padding)
@@ -63,6 +63,10 @@ public struct HelpCommand: CommandType {
 
 private struct HelpOptions: OptionsType {
 	let verb: String?
+	
+	init(verb: String?) {
+		self.verb = verb
+	}
 
 	static func create(verb: String) -> HelpOptions {
 		return self(verb: (verb == "" ? nil : verb))
