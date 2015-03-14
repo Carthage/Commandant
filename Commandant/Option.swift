@@ -38,7 +38,7 @@ public protocol OptionsType {
 	///
 	/// Returns the parsed options, or an `InvalidArgument` error containing
 	/// usage information.
-	class func evaluate(m: CommandMode) -> Result<Self, CommandantError>
+	static func evaluate(m: CommandMode) -> Result<Self, CommandantError>
 }
 
 /// Describes an option that can be provided on the command line.
@@ -93,10 +93,10 @@ extension Option: Printable {
 /// Represents a value that can be converted from a command-line argument.
 public protocol ArgumentType {
 	/// A human-readable name for this type.
-	class var name: String { get }
+	static var name: String { get }
 
 	/// Attempts to parse a value from the given command-line argument.
-	class func fromString(string: String) -> Self?
+	static func fromString(string: String) -> Self?
 }
 
 extension Int: ArgumentType {
