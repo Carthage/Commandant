@@ -12,10 +12,12 @@ import LlamaKit
 import Nimble
 import Quick
 
+enum NoError {}
+
 class OptionsTypeSpec: QuickSpec {
 	override func spec() {
 		describe("CommandMode.Arguments") {
-			func tryArguments(arguments: String...) -> Result<TestOptions, CommandantError> {
+			func tryArguments(arguments: String...) -> Result<TestOptions, CommandantError<NoError>> {
 				return TestOptions.evaluate(.Arguments(ArgumentParser(arguments)))
 			}
 
@@ -87,7 +89,7 @@ struct TestOptions: OptionsType, Equatable {
 		return self(intValue: a, stringValue: b, optionalFilename: d, requiredName: c, enabled: e)
 	}
 
-	static func evaluate(m: CommandMode) -> Result<TestOptions, CommandantError> {
+	static func evaluate(m: CommandMode) -> Result<TestOptions, CommandantError<NoError>> {
 		return create
 			<*> m <| Option(key: "intValue", defaultValue: 42, usage: "Some integer value")
 			<*> m <| Option(key: "stringValue", defaultValue: "foobar", usage: "Some string value")

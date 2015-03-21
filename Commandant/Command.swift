@@ -11,6 +11,8 @@ import LlamaKit
 
 /// Represents a subcommand that can be executed with its own set of arguments.
 public protocol CommandType {
+	typealias ClientError
+
 	/// The action that users should specify to use this subcommand (e.g.,
 	/// `help`).
 	var verb: String { get }
@@ -20,7 +22,25 @@ public protocol CommandType {
 	var function: String { get }
 
 	/// Runs this subcommand in the given mode.
-	func run(mode: CommandMode) -> Result<(), CommandantError>
+	func run(mode: CommandMode) -> Result<(), CommandantError<ClientError>>
+}
+
+/// A type-erased CommandType.
+public struct CommandOf<ClientError>: CommandType {
+	public let verb: String
+	public let function: String
+	private let runClosure: CommandMode -> Result<(), CommandantError<ClientError>>
+
+	/// Creates a command that wraps another.
+	public init<C: CommandType where C.ClientError == ClientError>(_ command: C) {
+		verb = command.verb
+		function = command.function
+		runClosure = { mode in command.run(mode) }
+	}
+
+	public func run(mode: CommandMode) -> Result<(), CommandantError<ClientError>> {
+		return runClosure(mode)
+	}
 }
 
 /// Describes the "mode" in which a command should run.
@@ -34,11 +54,11 @@ public enum CommandMode {
 }
 
 /// Maintains the list of commands available to run.
-public final class CommandRegistry {
-	private var commandsByVerb: [String: CommandType] = [:]
+public final class CommandRegistry<ClientError> {
+	private var commandsByVerb: [String: CommandOf<ClientError>] = [:]
 
 	/// All available commands.
-	public var commands: [CommandType] {
+	public var commands: [CommandOf<ClientError>] {
 		return sorted(commandsByVerb.values) { return $0.verb < $1.verb }
 	}
 
@@ -48,21 +68,21 @@ public final class CommandRegistry {
 	///
 	/// If another command was already registered with the same `verb`, it will
 	/// be overwritten.
-	public func register(command: CommandType) {
-		commandsByVerb[command.verb] = command
+	public func register<C: CommandType where C.ClientError == ClientError>(command: C) {
+		commandsByVerb[command.verb] = CommandOf(command)
 	}
 
 	/// Runs the command corresponding to the given verb, passing it the given
 	/// arguments.
 	///
 	/// Returns the results of the execution, or nil if no such command exists.
-	public func runCommand(verb: String, arguments: [String]) -> Result<(), CommandantError>? {
+	public func runCommand(verb: String, arguments: [String]) -> Result<(), CommandantError<ClientError>>? {
 		return self[verb]?.run(.Arguments(ArgumentParser(arguments)))
 	}
 
 	/// Returns the command matching the given verb, or nil if no such command
 	/// is registered.
-	public subscript(verb: String) -> CommandType? {
+	public subscript(verb: String) -> CommandOf<ClientError>? {
 		return commandsByVerb[verb]
 	}
 }
@@ -78,10 +98,10 @@ extension CommandRegistry {
 	/// If the chosen command fails, the provided error handler will be invoked,
 	/// then the process will exit with a failure exit code.
 	///
-	/// If a matching command could not be found, a helpful error message will
-	/// be written to `stderr`, then the process will exit with a failure error
-	/// code.
-	@noreturn public func main(#defaultCommand: CommandType, errorHandler: CommandantError -> ()) {
+	/// If a matching command could not be found or a usage error occurred,
+	/// a helpful error message will be written to `stderr`, then the process
+	/// will exit with a failure error code.
+	@noreturn public func main(#defaultVerb: String, errorHandler: ClientError -> ()) {
 		var arguments = Process.arguments
 		assert(arguments.count >= 1)
 
@@ -89,7 +109,7 @@ extension CommandRegistry {
 		let executableName = arguments.first!
 		arguments.removeAtIndex(0)
 
-		let verb = arguments.first ?? defaultCommand.verb
+		let verb = arguments.first ?? defaultVerb
 		if arguments.count > 0 {
 			// Remove the command name.
 			arguments.removeAtIndex(0)
@@ -100,7 +120,14 @@ extension CommandRegistry {
 			exit(EXIT_SUCCESS)
 
 		case let .Some(.Failure(error)):
-			errorHandler(error.unbox)
+			switch error.unbox {
+			case let .UsageError(description):
+				fputs(description + "\n", stderr)
+
+			case let .CommandError(error):
+				errorHandler(error.unbox)
+			}
+
 			exit(EXIT_FAILURE)
 
 		case .None:
