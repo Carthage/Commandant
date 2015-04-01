@@ -157,4 +157,26 @@ public final class ArgumentParser {
 
 		return nil
 	}
+
+	/// Returns whether the given flag was specified and removes it from the
+	/// list of arguments remaining.
+	internal func consumeBooleanFlag(flag: Character) -> Bool {
+		for (index, arg) in enumerate(rawArguments) {
+			switch arg {
+			case var .Flag(flags) where flags.contains(flag):
+				flags.remove(flag)
+				if flags.isEmpty {
+					rawArguments.removeAtIndex(index)
+				} else {
+					rawArguments[index] = .Flag(flags)
+				}
+				return true
+
+			default:
+				break
+			}
+		}
+
+		return false
+	}
 }
