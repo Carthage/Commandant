@@ -18,8 +18,8 @@ private enum RawArgument: Equatable {
 	/// argument.
 	case Value(String)
 
-	/// One or more flag arguments (e.g `rf` for `-rf`)
-	case Flag(String)
+	/// One or more flag arguments (e.g 'r' and 'f' for `-rf`)
+	case Flag(Set<Character>)
 }
 
 private func ==(lhs: RawArgument, rhs: RawArgument) -> Bool {
@@ -48,7 +48,8 @@ extension RawArgument: Printable {
 			return "\"\(value)\""
 
 		case let .Flag(flags):
-			return "-\(flags)"
+			let combined = join("", map(flags) { String($0) })
+			return "-\(combined)"
 		}
 	}
 }
@@ -69,7 +70,7 @@ public final class ArgumentParser {
 				if arg.hasPrefix("-") {
 					// Do we have `--{key}` or `-{flags}`.
 					var opt = dropFirst(arg)
-					return opt.hasPrefix("-") ? .Key(dropFirst(opt)) : .Flag(opt)
+					return opt.hasPrefix("-") ? .Key(dropFirst(opt)) : .Flag(Set(opt))
 				} else {
 					return .Value(arg)
 				}
