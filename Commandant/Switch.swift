@@ -10,15 +10,16 @@ import LlamaKit
 
 /// Describes a boolean value that can be switched on/off
 public struct Switch {
-	/// Optional single letter flag that controls this switch.
+	/// The key that toggles the `defaultValue` for this switch. For example, a key
+	/// of `verbose` would be used for a `--verbose` option.
+	public let key: String
+
+	/// Optional single letter flag that toggles the `defaultValue` for this switch.
+	/// For example, `-v` would be used as a shorthand for `--verbose`.
 	///
 	/// Multiple flags can be grouped together as a single argument and will split
 	/// when parsing (e.g. `rm -rf` treats 'r' and 'f' as inidividual flags).
 	public let flag: Character?
-
-	/// The key that controls this option. For example, a key of `verbose` would
-	/// be used for a `--verbose` option.
-	public let key: String
 
 	/// The default value for this option. This is the value that will be used
 	/// if the option is never explicitly specified on the command line.
@@ -48,5 +49,27 @@ public struct Switch {
 extension Switch: Printable {
 	public var description: String {
 		return key
+	}
+}
+
+/// Evaluates the given boolean switch in the given mode.
+///
+/// If parsing command line arguments, and no value was specified on the command
+/// line, the option's `defaultValue` is used.
+public func <|(mode: CommandMode, option: Switch) -> Result<Bool, CommandantError> {
+	switch mode {
+	case let .Arguments(arguments):
+		if let value = arguments.consumeBooleanKey(option.key) {
+			return success(value)
+		} else if let flag = option.flag {
+			if arguments.consumeBooleanFlag(flag) {
+				return success(!option.defaultValue)
+			}
+		}
+		return success(option.defaultValue)
+
+	case .Usage:
+		let description = option.defaultValue ? "--no-\(option.key)" : "--\(option.key)"
+		return failure(CommandantError.UsageError(description: description))
 	}
 }

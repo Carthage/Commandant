@@ -93,7 +93,7 @@ struct TestOptions: OptionsType, Equatable {
 			<*> m <| Option(key: "stringValue", defaultValue: "foobar", usage: "Some string value")
 			<*> m <| Option(usage: "A name you're required to specify")
 			<*> m <| Option(defaultValue: "filename", usage: "A filename that you can optionally specify")
-			<*> m <| Option(key: "enabled", defaultValue: false, usage: "Whether to be enabled")
+			<*> m <| Switch(flag: "e", key: "enabled", defaultValue: false, usage: "Whether to be enabled")
 	}
 }
 
