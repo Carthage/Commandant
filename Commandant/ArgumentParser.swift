@@ -62,23 +62,23 @@ public final class ArgumentParser {
 	/// Initializes the generator from a simple list of command-line arguments.
 	public init(_ arguments: [String]) {
 		// The first instance of `--` terminates the option list.
-		let params = split(arguments, maxSplit: 1) { $0 == "--" }
+		let params = split(arguments, maxSplit: 1, allowEmptySlices: true) { $0 == "--" }
 
 		// Parse out the keyed and flag options.
-		if let options = params.first {
-			rawArguments.extend(options.map { arg in
-				if arg.hasPrefix("-") {
-					// Do we have `--{key}` or `-{flags}`.
-					var opt = dropFirst(arg)
-					return opt.hasPrefix("-") ? .Key(dropFirst(opt)) : .Flag(Set(opt))
-				} else {
-					return .Value(arg)
-				}
-			})
-		}
+		let options = params.first!
+		rawArguments.extend(options.map { arg in
+			if arg.hasPrefix("-") {
+				// Do we have `--{key}` or `-{flags}`.
+				var opt = dropFirst(arg)
+				return opt.hasPrefix("-") ? .Key(dropFirst(opt)) : .Flag(Set(opt))
+			} else {
+				return .Value(arg)
+			}
+		})
 
 		// Remaining arguments are all positional parameters.
-		if let positional = params.last {
+		if params.count == 2 {
+			let positional = params.last!
 			rawArguments.extend(positional.map { .Value($0) })
 		}
 	}
