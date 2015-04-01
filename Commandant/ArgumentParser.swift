@@ -17,6 +17,9 @@ private enum RawArgument: Equatable {
 	/// A value, either associated with an option or passed as a positional
 	/// argument.
 	case Value(String)
+
+	/// One or more flag arguments (e.g `rf` for `-rf`)
+	case Flag(String)
 }
 
 private func ==(lhs: RawArgument, rhs: RawArgument) -> Bool {
@@ -25,6 +28,9 @@ private func ==(lhs: RawArgument, rhs: RawArgument) -> Bool {
 		return left == right
 
 	case let (.Value(left), .Value(right)):
+		return left == right
+
+	case let (.Flag(left), .Flag(right)):
 		return left == right
 
 	default:
@@ -40,6 +46,9 @@ extension RawArgument: Printable {
 
 		case let .Value(value):
 			return "\"\(value)\""
+
+		case let .Flag(flags):
+			return "-\(flags)"
 		}
 	}
 }
@@ -51,23 +60,25 @@ public final class ArgumentParser {
 
 	/// Initializes the generator from a simple list of command-line arguments.
 	public init(_ arguments: [String]) {
-		var permitKeys = true
+		// The first instance of `--` terminates the option list.
+		let params = split(arguments, maxSplit: 1) { $0 == "--" }
 
-		for arg in arguments {
-			// Check whether this is a keyed argument.
-			if permitKeys && arg.hasPrefix("--") {
-				// Check for -- by itself, which should terminate the keyed
-				// argument list.
-				let keyStartIndex = arg.startIndex.successor().successor()
-				if keyStartIndex == arg.endIndex {
-					permitKeys = false
+		// Parse out the keyed and flag options.
+		if let options = params.first {
+			rawArguments.extend(options.map { arg in
+				if arg.hasPrefix("-") {
+					// Do we have `--{key}` or `-{flags}`.
+					var opt = dropFirst(arg)
+					return opt.hasPrefix("-") ? .Key(dropFirst(opt)) : .Flag(opt)
 				} else {
-					let key = arg.substringFromIndex(keyStartIndex)
-					rawArguments.append(.Key(key))
+					return .Value(arg)
 				}
-			} else {
-				rawArguments.append(.Value(arg))
-			}
+			})
+		}
+
+		// Remaining arguments are all positional parameters.
+		if let positional = params.last {
+			rawArguments.extend(positional.map { .Value($0) })
 		}
 	}
 
