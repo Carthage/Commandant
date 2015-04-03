@@ -48,8 +48,7 @@ extension RawArgument: Printable {
 			return "\"\(value)\""
 
 		case let .Flag(flags):
-			let combined = join("", map(flags) { String($0) })
-			return "-\(combined)"
+			return "-\(String(flags))"
 		}
 	}
 }
