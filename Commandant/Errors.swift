@@ -40,27 +40,24 @@ internal func missingArgumentError(argumentName: String) -> CommandantError {
 	return CommandantError.UsageError(description: description)
 }
 
+/// Constructs an error by combining the example of key (and value, if applicable)
+/// with the usage description.
+internal func informativeUsageError(keyValueExample: String, usage: String) -> CommandantError {
+	let lines = usage.componentsSeparatedByCharactersInSet(NSCharacterSet.newlineCharacterSet())
+
+	return .UsageError(description: reduce(lines, keyValueExample) { previous, value in
+		return previous + "\n\t" + value
+	})
+}
+
 /// Constructs an error that describes how to use the option, with the given
 /// example of key (and value, if applicable) usage.
 internal func informativeUsageError<T>(keyValueExample: String, option: Option<T>) -> CommandantError {
-	var description = ""
-
 	if option.defaultValue != nil {
-		description += "["
+		return informativeUsageError("[\(keyValueExample)]", option.usage)
+	} else {
+		return informativeUsageError(keyValueExample, option.usage)
 	}
-
-	description += keyValueExample
-
-	if option.defaultValue != nil {
-		description += "]"
-	}
-
-	description += option.usage.componentsSeparatedByCharactersInSet(NSCharacterSet.newlineCharacterSet())
-		.reduce(""){ previous, value in
-			return previous + "\n\t" + value
-		}
-	
-	return CommandantError.UsageError(description: description)
 }
 
 /// Constructs an error that describes how to use the option.

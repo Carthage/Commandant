@@ -37,13 +37,6 @@ public struct Switch {
 		self.defaultValue = defaultValue
 		self.usage = usage
 	}
-
-	/// Constructs an `InvalidArgument` error that describes how the option was
-	/// used incorrectly. `value` should be the invalid value given by the user.
-	private func invalidUsageError(value: String) -> CommandantError {
-		let description = "Invalid value for '\(self)': \(value)"
-		return CommandantError.UsageError(description: description)
-	}
 }
 
 extension Switch: Printable {
@@ -69,7 +62,10 @@ public func <|(mode: CommandMode, option: Switch) -> Result<Bool, CommandantErro
 		return success(option.defaultValue)
 
 	case .Usage:
-		let description = option.defaultValue ? "--no-\(option.key)" : "--\(option.key)"
-		return failure(CommandantError.UsageError(description: description))
+		var key = option.defaultValue ? "--no-\(option.key)" : "--\(option.key)"
+		if let flag = option.flag {
+			key = "\(key)|-\(flag)"
+		}
+		return failure(informativeUsageError(key, option.usage))
 	}
 }
