@@ -8,40 +8,40 @@
 
 import LlamaKit
 
-/// Describes a boolean value that can be switched on/off
+/// Describes a parameterless command line flag that defaults to false and can only
+/// be switched on. Canonical examples include `--force` and `--recurse`.
+///
+/// For a boolean toggle that can be enabled and disabled use `Option<Bool>`.
 public struct Switch {
-	/// The key that toggles the `defaultValue` for this switch. For example, a key
-	/// of `verbose` would be used for a `--verbose` option.
+	/// The key that enables this switch. For example, a key of `verbose` would be
+	/// used for a `--verbose` option.
 	public let key: String
 
-	/// Optional single letter flag that toggles the `defaultValue` for this switch.
-	/// For example, `-v` would be used as a shorthand for `--verbose`.
+	/// Optional single letter flag that enables this switch. For example, `-v` would
+	/// be used as a shorthand for `--verbose`.
 	///
 	/// Multiple flags can be grouped together as a single argument and will split
 	/// when parsing (e.g. `rm -rf` treats 'r' and 'f' as inidividual flags).
 	public let flag: Character?
 
-	/// The default value for this option. This is the value that will be used
-	/// if the option is never explicitly specified on the command line.
-	public let defaultValue: Bool
-
 	/// A human-readable string describing the purpose of this option. This will
-	/// be shown in help messages. This should describe the effect of _not_ using
-	/// the default value (i.e., what will happen if you disable/enable the flag
-	/// differently from the default).
+	/// be shown in help messages.
 	public let usage: String
 
-	public init(flag: Character? = nil, key: String, defaultValue: Bool, usage: String) {
+	public init(flag: Character? = nil, key: String, usage: String) {
 		self.flag = flag
 		self.key = key
-		self.defaultValue = defaultValue
 		self.usage = usage
 	}
 }
 
 extension Switch: Printable {
 	public var description: String {
-		return key
+		var options = "--\(key)"
+		if let flag = self.flag {
+			options += "|-\(flag)"
+		}
+		return options
 	}
 }
 
@@ -52,20 +52,13 @@ extension Switch: Printable {
 public func <|(mode: CommandMode, option: Switch) -> Result<Bool, CommandantError> {
 	switch mode {
 	case let .Arguments(arguments):
-		if let value = arguments.consumeBooleanKey(option.key) {
-			return success(value)
-		} else if let flag = option.flag {
-			if arguments.consumeBooleanFlag(flag) {
-				return success(!option.defaultValue)
-			}
+		var enabled = arguments.consumeKey(option.key)
+		if let flag = option.flag {
+			enabled = arguments.consumeBooleanFlag(flag)
 		}
-		return success(option.defaultValue)
+		return success(enabled)
 
 	case .Usage:
-		var key = option.defaultValue ? "--no-\(option.key)" : "--\(option.key)"
-		if let flag = option.flag {
-			key = "\(key)|-\(flag)"
-		}
-		return failure(informativeUsageError(key, option.usage))
+		return failure(informativeUsageError(option.description, option.usage))
 	}
 }

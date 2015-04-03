@@ -157,6 +157,15 @@ public final class ArgumentParser {
 		return nil
 	}
 
+	/// Returns whether the given key was specified and removes it from the
+	/// list of arguments remaining.
+	internal func consumeKey(key: String) -> Bool {
+		let oldArguments = rawArguments
+		rawArguments = oldArguments.filter { $0 != .Key(key) }
+
+		return rawArguments.count < oldArguments.count
+	}
+
 	/// Returns whether the given flag was specified and removes it from the
 	/// list of arguments remaining.
 	internal func consumeBooleanFlag(flag: Character) -> Bool {
