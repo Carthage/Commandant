@@ -19,6 +19,7 @@
 		D00CCE2D1A2075ED00109F8C /* ArgumentParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00CCE2C1A2075ED00109F8C /* ArgumentParser.swift */; };
 		D00CCE2F1A2075F700109F8C /* Option.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00CCE2E1A2075F700109F8C /* Option.swift */; };
 		D0BF14FB1A4C8957003147BC /* HelpCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BF14FA1A4C8957003147BC /* HelpCommand.swift */; };
+		D8169D871ACB942D00923FB0 /* Switch.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8169D861ACB942D00923FB0 /* Switch.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -64,6 +65,7 @@
 		D00CCE2C1A2075ED00109F8C /* ArgumentParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArgumentParser.swift; sourceTree = "<group>"; };
 		D00CCE2E1A2075F700109F8C /* Option.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Option.swift; sourceTree = "<group>"; };
 		D0BF14FA1A4C8957003147BC /* HelpCommand.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HelpCommand.swift; sourceTree = "<group>"; };
+		D8169D861ACB942D00923FB0 /* Switch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Switch.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -221,6 +223,7 @@
 				D00CCE261A20741300109F8C /* Command.swift */,
 				D00CCE2A1A20748500109F8C /* Errors.swift */,
 				D00CCE2E1A2075F700109F8C /* Option.swift */,
+				D8169D861ACB942D00923FB0 /* Switch.swift */,
 			);
 			name = Core;
 			sourceTree = "<group>";
@@ -343,6 +346,7 @@
 				D0BF14FB1A4C8957003147BC /* HelpCommand.swift in Sources */,
 				D00CCE2F1A2075F700109F8C /* Option.swift in Sources */,
 				D00CCE2B1A20748500109F8C /* Errors.swift in Sources */,
+				D8169D871ACB942D00923FB0 /* Switch.swift in Sources */,
 				D00CCE271A20741300109F8C /* Command.swift in Sources */,
 				D00CCE2D1A2075ED00109F8C /* ArgumentParser.swift in Sources */,
 			);
