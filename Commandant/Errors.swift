@@ -7,21 +7,18 @@
 //
 
 import Foundation
+import LlamaKit
 
 /// Possible errors that can originate from Commandant.
-public enum CommandantError {
+///
+/// `ClientError` should be the type of error (if any) that can occur when
+/// running commands.
+public enum CommandantError<ClientError> {
 	/// An option was used incorrectly.
 	case UsageError(description: String)
 
-	/// Creates an NSError that represents the receiver.
-	public func toNSError() -> NSError {
-		let domain = "org.carthage.Commandant"
-
-		switch self {
-		case let .UsageError(description):
-			return NSError(domain: domain, code: 0, userInfo: [ NSLocalizedDescriptionKey: description ])
-		}
-	}
+	/// An error occurred while running a command.
+	case CommandError(Box<ClientError>)
 }
 
 extension CommandantError: Printable {
@@ -29,20 +26,26 @@ extension CommandantError: Printable {
 		switch self {
 		case let .UsageError(description):
 			return description
+
+		case let .CommandError(error):
+			return toString(error)
 		}
 	}
 }
 
+/// Used to represent that a ClientError will never occur.
+internal enum NoError {}
+
 /// Constructs an `InvalidArgument` error that indicates a missing value for
 /// the argument by the given name.
-internal func missingArgumentError(argumentName: String) -> CommandantError {
+internal func missingArgumentError<ClientError>(argumentName: String) -> CommandantError<ClientError> {
 	let description = "Missing argument for \(argumentName)"
-	return CommandantError.UsageError(description: description)
+	return .UsageError(description: description)
 }
 
 /// Constructs an error by combining the example of key (and value, if applicable)
 /// with the usage description.
-internal func informativeUsageError(keyValueExample: String, usage: String) -> CommandantError {
+internal func informativeUsageError<ClientError>(keyValueExample: String, usage: String) -> CommandantError<ClientError> {
 	let lines = usage.componentsSeparatedByCharactersInSet(NSCharacterSet.newlineCharacterSet())
 
 	return .UsageError(description: reduce(lines, keyValueExample) { previous, value in
@@ -52,7 +55,7 @@ internal func informativeUsageError(keyValueExample: String, usage: String) -> C
 
 /// Constructs an error that describes how to use the option, with the given
 /// example of key (and value, if applicable) usage.
-internal func informativeUsageError<T>(keyValueExample: String, option: Option<T>) -> CommandantError {
+internal func informativeUsageError<T, ClientError>(keyValueExample: String, option: Option<T>) -> CommandantError<ClientError> {
 	if option.defaultValue != nil {
 		return informativeUsageError("[\(keyValueExample)]", option.usage)
 	} else {
@@ -61,7 +64,7 @@ internal func informativeUsageError<T>(keyValueExample: String, option: Option<T
 }
 
 /// Constructs an error that describes how to use the option.
-internal func informativeUsageError<T: ArgumentType>(option: Option<T>) -> CommandantError {
+internal func informativeUsageError<T: ArgumentType, ClientError>(option: Option<T>) -> CommandantError<ClientError> {
 	var example = ""
 
 	if let key = option.key {
@@ -83,7 +86,7 @@ internal func informativeUsageError<T: ArgumentType>(option: Option<T>) -> Comma
 }
 
 /// Constructs an error that describes how to use the given boolean option.
-internal func informativeUsageError(option: Option<Bool>) -> CommandantError {
+internal func informativeUsageError<ClientError>(option: Option<Bool>) -> CommandantError<ClientError> {
 	precondition(option.key != nil)
 
 	let key = option.key!
@@ -97,11 +100,11 @@ internal func informativeUsageError(option: Option<Bool>) -> CommandantError {
 
 /// Combines the text of the two errors, if they're both `UsageError`s.
 /// Otherwise, uses whichever one is not (biased toward the left).
-internal func combineUsageErrors(lhs: CommandantError, rhs: CommandantError) -> CommandantError {
+internal func combineUsageErrors<ClientError>(lhs: CommandantError<ClientError>, rhs: CommandantError<ClientError>) -> CommandantError<ClientError> {
 	switch (lhs, rhs) {
 	case let (.UsageError(left), .UsageError(right)):
 		let combinedDescription = "\(left)\n\n\(right)"
-		return CommandantError.UsageError(description: combinedDescription)
+		return .UsageError(description: combinedDescription)
 
 	case (.UsageError, _):
 		return rhs

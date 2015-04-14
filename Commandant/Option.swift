@@ -35,11 +35,12 @@ import LlamaKit
 ///			}
 ///		}
 public protocol OptionsType {
+	typealias ClientError
+
 	/// Evaluates this set of options in the given mode.
 	///
-	/// Returns the parsed options, or an `InvalidArgument` error containing
-	/// usage information.
-	static func evaluate(m: CommandMode) -> Result<Self, CommandantError>
+	/// Returns the parsed options or a `UsageError`.
+	static func evaluate(m: CommandMode) -> Result<Self, CommandantError<ClientError>>
 }
 
 /// Describes an option that can be provided on the command line.
@@ -75,9 +76,9 @@ public struct Option<T> {
 
 	/// Constructs an `InvalidArgument` error that describes how the option was
 	/// used incorrectly. `value` should be the invalid value given by the user.
-	private func invalidUsageError(value: String) -> CommandantError {
+	private func invalidUsageError<ClientError>(value: String) -> CommandantError<ClientError> {
 		let description = "Invalid value for '\(self)': \(value)"
-		return CommandantError.UsageError(description: description)
+		return .UsageError(description: description)
 	}
 }
 
@@ -155,7 +156,7 @@ infix operator <| {
 ///
 /// In the context of command-line option parsing, this is used to chain
 /// together the parsing of multiple arguments. See OptionsType for an example.
-public func <*><T, U>(f: T -> U, value: Result<T, CommandantError>) -> Result<U, CommandantError> {
+public func <*> <T, U, ClientError>(f: T -> U, value: Result<T, CommandantError<ClientError>>) -> Result<U, CommandantError<ClientError>> {
 	return value.map(f)
 }
 
@@ -163,7 +164,7 @@ public func <*><T, U>(f: T -> U, value: Result<T, CommandantError>) -> Result<U,
 ///
 /// In the context of command-line option parsing, this is used to chain
 /// together the parsing of multiple arguments. See OptionsType for an example.
-public func <*><T, U>(f: Result<(T -> U), CommandantError>, value: Result<T, CommandantError>) -> Result<U, CommandantError> {
+public func <*> <T, U, ClientError>(f: Result<(T -> U), CommandantError<ClientError>>, value: Result<T, CommandantError<ClientError>>) -> Result<U, CommandantError<ClientError>> {
 	switch (f, value) {
 	case let (.Failure(left), .Failure(right)):
 		return failure(combineUsageErrors(left.unbox, right.unbox))
@@ -184,7 +185,7 @@ public func <*><T, U>(f: Result<(T -> U), CommandantError>, value: Result<T, Com
 ///
 /// If parsing command line arguments, and no value was specified on the command
 /// line, the option's `defaultValue` is used.
-public func <|<T: ArgumentType>(mode: CommandMode, option: Option<T>) -> Result<T, CommandantError> {
+public func <| <T: ArgumentType, ClientError>(mode: CommandMode, option: Option<T>) -> Result<T, CommandantError<ClientError>> {
 	switch mode {
 	case let .Arguments(arguments):
 		var stringValue: String?
@@ -194,7 +195,13 @@ public func <|<T: ArgumentType>(mode: CommandMode, option: Option<T>) -> Result<
 				stringValue = value.unbox
 
 			case let .Failure(error):
-				return failure(error.unbox)
+				switch error.unbox {
+				case let .UsageError(description):
+					return failure(.UsageError(description: description))
+
+				case .CommandError:
+					fatalError("CommandError should be impossible when parameterized over NoError")
+				}
 			}
 		} else {
 			stringValue = arguments.consumePositionalArgument()
@@ -221,7 +228,7 @@ public func <|<T: ArgumentType>(mode: CommandMode, option: Option<T>) -> Result<
 ///
 /// If parsing command line arguments, and no value was specified on the command
 /// line, the option's `defaultValue` is used.
-public func <|(mode: CommandMode, option: Option<Bool>) -> Result<Bool, CommandantError> {
+public func <| <ClientError>(mode: CommandMode, option: Option<Bool>) -> Result<Bool, CommandantError<ClientError>> {
 	precondition(option.key != nil)
 
 	switch mode {

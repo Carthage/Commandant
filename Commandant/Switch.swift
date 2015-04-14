@@ -49,7 +49,7 @@ extension Switch: Printable {
 ///
 /// If parsing command line arguments, and no value was specified on the command
 /// line, the option's `defaultValue` is used.
-public func <|(mode: CommandMode, option: Switch) -> Result<Bool, CommandantError> {
+public func <| <ClientError> (mode: CommandMode, option: Switch) -> Result<Bool, CommandantError<ClientError>> {
 	switch mode {
 	case let .Arguments(arguments):
 		var enabled = arguments.consumeKey(option.key)

@@ -15,23 +15,23 @@ import LlamaKit
 /// If you want to use this command, initialize it with the registry, then add
 /// it to that same registry:
 ///
-/// 	let commands: CommandRegistry = …
+/// 	let commands: CommandRegistry<MyErrorType> = …
 /// 	let helpCommand = HelpCommand(registry: commands)
 /// 	commands.register(helpCommand)
-public struct HelpCommand: CommandType {
+public struct HelpCommand<ClientError>: CommandType {
 	public let verb = "help"
 	public let function = "Display general or command-specific help"
 
-	private let registry: CommandRegistry
+	private let registry: CommandRegistry<ClientError>
 
 	/// Initializes the command to provide help from the given registry of
 	/// commands.
-	public init(registry: CommandRegistry) {
+	public init(registry: CommandRegistry<ClientError>) {
 		self.registry = registry
 	}
 
-	public func run(mode: CommandMode) -> Result<(), CommandantError> {
-		return HelpOptions.evaluate(mode)
+	public func run(mode: CommandMode) -> Result<(), CommandantError<ClientError>> {
+		return HelpOptions<ClientError>.evaluate(mode)
 			.flatMap { options in
 				if let verb = options.verb {
 					if let command = self.registry[verb] {
@@ -61,7 +61,7 @@ public struct HelpCommand: CommandType {
 	}
 }
 
-private struct HelpOptions: OptionsType {
+private struct HelpOptions<ClientError>: OptionsType {
 	let verb: String?
 	
 	init(verb: String?) {
@@ -72,7 +72,7 @@ private struct HelpOptions: OptionsType {
 		return self(verb: (verb == "" ? nil : verb))
 	}
 
-	static func evaluate(m: CommandMode) -> Result<HelpOptions, CommandantError> {
+	static func evaluate(m: CommandMode) -> Result<HelpOptions, CommandantError<ClientError>> {
 		return create
 			<*> m <| Option(defaultValue: "", usage: "the command to display help for")
 	}
