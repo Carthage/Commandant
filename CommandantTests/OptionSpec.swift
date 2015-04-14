@@ -31,37 +31,43 @@ class OptionsTypeSpec: QuickSpec {
 
 			it("should succeed without optional arguments") {
 				let value = tryArguments("required").value
-				let expected = TestOptions(intValue: 42, stringValue: "foobar", optionalFilename: "filename", requiredName: "required", enabled: false)
+				let expected = TestOptions(intValue: 42, stringValue: "foobar", optionalFilename: "filename", requiredName: "required", enabled: false, force: false, glob: false)
 				expect(value).to(equal(expected))
 			}
 
 			it("should succeed with some optional arguments") {
 				let value = tryArguments("required", "--intValue", "3", "fuzzbuzz").value
-				let expected = TestOptions(intValue: 3, stringValue: "foobar", optionalFilename: "fuzzbuzz", requiredName: "required", enabled: false)
+				let expected = TestOptions(intValue: 3, stringValue: "foobar", optionalFilename: "fuzzbuzz", requiredName: "required", enabled: false, force: false, glob: false)
 				expect(value).to(equal(expected))
 			}
 
 			it("should override previous optional arguments") {
 				let value = tryArguments("required", "--intValue", "3", "--stringValue", "fuzzbuzz", "--intValue", "5", "--stringValue", "bazbuzz").value
-				let expected = TestOptions(intValue: 5, stringValue: "bazbuzz", optionalFilename: "filename", requiredName: "required", enabled: false)
+				let expected = TestOptions(intValue: 5, stringValue: "bazbuzz", optionalFilename: "filename", requiredName: "required", enabled: false, force: false, glob: false)
 				expect(value).to(equal(expected))
 			}
 
 			it("should enable a boolean flag") {
 				let value = tryArguments("required", "--enabled", "--intValue", "3", "fuzzbuzz").value
-				let expected = TestOptions(intValue: 3, stringValue: "foobar", optionalFilename: "fuzzbuzz", requiredName: "required", enabled: true)
+				let expected = TestOptions(intValue: 3, stringValue: "foobar", optionalFilename: "fuzzbuzz", requiredName: "required", enabled: true, force: false, glob: false)
 				expect(value).to(equal(expected))
 			}
 
 			it("should re-disable a boolean flag") {
 				let value = tryArguments("required", "--enabled", "--no-enabled", "--intValue", "3", "fuzzbuzz").value
-				let expected = TestOptions(intValue: 3, stringValue: "foobar", optionalFilename: "fuzzbuzz", requiredName: "required", enabled: false)
+				let expected = TestOptions(intValue: 3, stringValue: "foobar", optionalFilename: "fuzzbuzz", requiredName: "required", enabled: false, force: false, glob: false)
+				expect(value).to(equal(expected))
+			}
+
+			it("should enable multiple boolean flags") {
+				let value = tryArguments("required", "-fg").value
+				let expected = TestOptions(intValue: 42, stringValue: "foobar", optionalFilename: "filename", requiredName: "required", enabled: false, force: true, glob: true)
 				expect(value).to(equal(expected))
 			}
 
 			it("should treat -- as the end of valued options") {
 				let value = tryArguments("--", "--intValue").value
-				let expected = TestOptions(intValue: 42, stringValue: "foobar", optionalFilename: "filename", requiredName: "--intValue", enabled: false)
+				let expected = TestOptions(intValue: 42, stringValue: "foobar", optionalFilename: "filename", requiredName: "--intValue", enabled: false, force: false, glob: false)
 				expect(value).to(equal(expected))
 			}
 		}
@@ -84,9 +90,11 @@ struct TestOptions: OptionsType, Equatable {
 	let optionalFilename: String
 	let requiredName: String
 	let enabled: Bool
+	let force: Bool
+	let glob: Bool
 
-	static func create(a: Int)(b: String)(c: String)(d: String)(e: Bool) -> TestOptions {
-		return self(intValue: a, stringValue: b, optionalFilename: d, requiredName: c, enabled: e)
+	static func create(a: Int)(b: String)(c: String)(d: String)(e: Bool)(f: Bool)(g: Bool) -> TestOptions {
+		return self(intValue: a, stringValue: b, optionalFilename: d, requiredName: c, enabled: e, force: f, glob: g)
 	}
 
 	static func evaluate(m: CommandMode) -> Result<TestOptions, CommandantError<NoError>> {
@@ -96,6 +104,8 @@ struct TestOptions: OptionsType, Equatable {
 			<*> m <| Option(usage: "A name you're required to specify")
 			<*> m <| Option(defaultValue: "filename", usage: "A filename that you can optionally specify")
 			<*> m <| Option(key: "enabled", defaultValue: false, usage: "Whether to be enabled")
+			<*> m <| Switch(flag: "f", key: "force", usage: "Whether to force")
+			<*> m <| Switch(flag: "g", key: "glob", usage: "Whether to glob")
 	}
 }
 

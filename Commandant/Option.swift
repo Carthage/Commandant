@@ -12,8 +12,8 @@ import LlamaKit
 /// Represents a record of options for a command, which can be parsed from
 /// a list of command-line arguments.
 ///
-/// This is most helpful when used in conjunction with the `Option` type, and
-/// `<*>` and `<|` combinators.
+/// This is most helpful when used in conjunction with the `Option` and `Switch`
+/// types, and `<*>` and `<|` combinators.
 ///
 /// Example:
 ///
@@ -30,6 +30,7 @@ import LlamaKit
 ///				return create
 ///					<*> m <| Option(key: "verbose", defaultValue: 0, usage: "the verbosity level with which to read the logs")
 ///					<*> m <| Option(key: "outputFilename", defaultValue: "", usage: "a file to print output to, instead of stdout")
+///					<*> m <| Switch(flag: "d", key: "delete", defaultValue: false, usage: "delete the logs when finished")
 ///					<*> m <| Option(usage: "the log to read")
 ///			}
 ///		}
