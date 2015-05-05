@@ -8,9 +8,9 @@
 
 import Commandant
 import Foundation
-import LlamaKit
 import Nimble
 import Quick
+import Result
 
 enum NoError {}
 
@@ -22,11 +22,11 @@ class OptionsTypeSpec: QuickSpec {
 			}
 
 			it("should fail if a required argument is missing") {
-				expect(tryArguments().isSuccess).to(beFalsy())
+				expect(tryArguments().value).to(beNil())
 			}
 
 			it("should fail if an option is missing a value") {
-				expect(tryArguments("required", "--intValue").isSuccess).to(beFalsy())
+				expect(tryArguments("required", "--intValue").value).to(beNil())
 			}
 
 			it("should succeed without optional arguments") {

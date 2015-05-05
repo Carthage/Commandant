@@ -9,8 +9,6 @@
 /* Begin PBXBuildFile section */
 		D00CCDDF1A20717400109F8C /* Commandant.h in Headers */ = {isa = PBXBuildFile; fileRef = D00CCDDE1A20717400109F8C /* Commandant.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D00CCDE51A20717400109F8C /* Commandant.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D00CCDD91A20717400109F8C /* Commandant.framework */; };
-		D00CCE201A2073CE00109F8C /* LlamaKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D00CCE1F1A2073CE00109F8C /* LlamaKit.framework */; };
-		D00CCE211A2073D200109F8C /* LlamaKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D00CCE1F1A2073CE00109F8C /* LlamaKit.framework */; };
 		D00CCE241A2073DA00109F8C /* Nimble.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D00CCE221A2073DA00109F8C /* Nimble.framework */; };
 		D00CCE251A2073DA00109F8C /* Quick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D00CCE231A2073DA00109F8C /* Quick.framework */; };
 		D00CCE271A20741300109F8C /* Command.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00CCE261A20741300109F8C /* Command.swift */; };
@@ -18,6 +16,8 @@
 		D00CCE2B1A20748500109F8C /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00CCE2A1A20748500109F8C /* Errors.swift */; };
 		D00CCE2D1A2075ED00109F8C /* ArgumentParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00CCE2C1A2075ED00109F8C /* ArgumentParser.swift */; };
 		D00CCE2F1A2075F700109F8C /* Option.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00CCE2E1A2075F700109F8C /* Option.swift */; };
+		D02130991AF87D6E00B9EC20 /* Box.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D02130971AF87D6E00B9EC20 /* Box.framework */; };
+		D021309A1AF87D6E00B9EC20 /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D02130981AF87D6E00B9EC20 /* Result.framework */; };
 		D0BF14FB1A4C8957003147BC /* HelpCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BF14FA1A4C8957003147BC /* HelpCommand.swift */; };
 		D8169D871ACB942D00923FB0 /* Switch.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8169D861ACB942D00923FB0 /* Switch.swift */; };
 /* End PBXBuildFile section */
@@ -56,7 +56,6 @@
 		D00CCE0B1A20719500109F8C /* Mac-Framework.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Mac-Framework.xcconfig"; sourceTree = "<group>"; };
 		D00CCE0C1A20719500109F8C /* Mac-StaticLibrary.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Mac-StaticLibrary.xcconfig"; sourceTree = "<group>"; };
 		D00CCE0D1A20719500109F8C /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		D00CCE1F1A2073CE00109F8C /* LlamaKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = LlamaKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D00CCE221A2073DA00109F8C /* Nimble.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Nimble.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D00CCE231A2073DA00109F8C /* Quick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Quick.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D00CCE261A20741300109F8C /* Command.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Command.swift; sourceTree = "<group>"; };
@@ -64,6 +63,8 @@
 		D00CCE2A1A20748500109F8C /* Errors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
 		D00CCE2C1A2075ED00109F8C /* ArgumentParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArgumentParser.swift; sourceTree = "<group>"; };
 		D00CCE2E1A2075F700109F8C /* Option.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Option.swift; sourceTree = "<group>"; };
+		D02130971AF87D6E00B9EC20 /* Box.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Box.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D02130981AF87D6E00B9EC20 /* Result.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Result.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0BF14FA1A4C8957003147BC /* HelpCommand.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HelpCommand.swift; sourceTree = "<group>"; };
 		D8169D861ACB942D00923FB0 /* Switch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Switch.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -73,7 +74,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D00CCE201A2073CE00109F8C /* LlamaKit.framework in Frameworks */,
+				D02130991AF87D6E00B9EC20 /* Box.framework in Frameworks */,
+				D021309A1AF87D6E00B9EC20 /* Result.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -84,7 +86,6 @@
 				D00CCE251A2073DA00109F8C /* Quick.framework in Frameworks */,
 				D00CCE241A2073DA00109F8C /* Nimble.framework in Frameworks */,
 				D00CCDE51A20717400109F8C /* Commandant.framework in Frameworks */,
-				D00CCE211A2073D200109F8C /* LlamaKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -125,7 +126,8 @@
 		D00CCDDC1A20717400109F8C /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				D00CCE1F1A2073CE00109F8C /* LlamaKit.framework */,
+				D02130971AF87D6E00B9EC20 /* Box.framework */,
+				D02130981AF87D6E00B9EC20 /* Result.framework */,
 				D00CCDDD1A20717400109F8C /* Info.plist */,
 			);
 			name = "Supporting Files";

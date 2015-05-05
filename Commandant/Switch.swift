@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Carthage. All rights reserved.
 //
 
-import LlamaKit
+import Result
 
 /// Describes a parameterless command line flag that defaults to false and can only
 /// be switched on. Canonical examples include `--force` and `--recurse`.
@@ -56,9 +56,9 @@ public func <| <ClientError> (mode: CommandMode, option: Switch) -> Result<Bool,
 		if let flag = option.flag {
 			enabled = arguments.consumeBooleanFlag(flag)
 		}
-		return success(enabled)
+		return .success(enabled)
 
 	case .Usage:
-		return failure(informativeUsageError(option.description, option.usage))
+		return .failure(informativeUsageError(option.description, option.usage))
 	}
 }

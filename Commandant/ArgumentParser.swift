@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import LlamaKit
+import Result
 
 /// Represents an argument passed on the command line.
 private enum RawArgument: Equatable {
@@ -131,13 +131,13 @@ public final class ArgumentParser {
 					}
 				}
 
-				return failure(missingArgumentError("--\(key)"))
+				return .failure(missingArgumentError("--\(key)"))
 			} else {
 				rawArguments.append(arg)
 			}
 		}
 
-		return success(foundValue)
+		return .success(foundValue)
 	}
 
 	/// Returns the next positional argument that hasn't yet been returned, or

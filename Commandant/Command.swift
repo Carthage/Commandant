@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import LlamaKit
+import Result
 
 /// Represents a subcommand that can be executed with its own set of arguments.
 public protocol CommandType {
@@ -120,12 +120,12 @@ extension CommandRegistry {
 			exit(EXIT_SUCCESS)
 
 		case let .Some(.Failure(error)):
-			switch error.unbox {
+			switch error.value {
 			case let .UsageError(description):
 				fputs(description + "\n", stderr)
 
 			case let .CommandError(error):
-				errorHandler(error.unbox)
+				errorHandler(error.value)
 			}
 
 			exit(EXIT_FAILURE)
