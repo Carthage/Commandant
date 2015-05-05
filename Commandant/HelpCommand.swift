@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import LlamaKit
+import Result
 
 /// A basic implementation of a `help` command, using information available in a
 /// `CommandRegistry`.
@@ -56,7 +56,7 @@ public struct HelpCommand<ClientError>: CommandType {
 					println("   \(formattedVerb)   \(command.function)")
 				}
 
-				return success(())
+				return .success(())
 			}
 	}
 }
