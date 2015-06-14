@@ -38,7 +38,7 @@ private func ==(lhs: RawArgument, rhs: RawArgument) -> Bool {
 	}
 }
 
-extension RawArgument: Printable {
+extension RawArgument: CustomStringConvertible {
 	private var description: String {
 		switch self {
 		case let .Key(key):
@@ -68,8 +68,8 @@ public final class ArgumentParser {
 		rawArguments.extend(options.map { arg in
 			if arg.hasPrefix("-") {
 				// Do we have `--{key}` or `-{flags}`.
-				var opt = dropFirst(arg)
-				return opt.hasPrefix("-") ? .Key(dropFirst(opt)) : .Flag(Set(opt))
+				let opt = dropFirst(arg.characters)
+				return String(opt).hasPrefix("-") ? .Key(String(dropFirst(opt))) : .Flag(Set(opt))
 			} else {
 				return .Value(arg)
 			}
@@ -78,7 +78,7 @@ public final class ArgumentParser {
 		// Remaining arguments are all positional parameters.
 		if params.count == 2 {
 			let positional = params.last!
-			rawArguments.extend(positional.map { .Value($0) })
+			rawArguments.extend(Array(positional.map { .Value($0) }))
 		}
 	}
 
@@ -169,7 +169,7 @@ public final class ArgumentParser {
 	/// Returns whether the given flag was specified and removes it from the
 	/// list of arguments remaining.
 	internal func consumeBooleanFlag(flag: Character) -> Bool {
-		for (index, arg) in enumerate(rawArguments) {
+		for (index, arg) in rawArguments.enumerate() {
 			switch arg {
 			case var .Flag(flags) where flags.contains(flag):
 				flags.remove(flag)

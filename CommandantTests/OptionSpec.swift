@@ -113,7 +113,7 @@ func ==(lhs: TestOptions, rhs: TestOptions) -> Bool {
 	return lhs.intValue == rhs.intValue && lhs.stringValue == rhs.stringValue && lhs.optionalFilename == rhs.optionalFilename && lhs.requiredName == rhs.requiredName
 }
 
-extension TestOptions: Printable {
+extension TestOptions: CustomStringConvertible {
 	var description: String {
 		return "{ intValue: \(intValue), stringValue: \(stringValue), optionalFilename: \(optionalFilename), requiredName: \(requiredName) }"
 	}

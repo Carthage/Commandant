@@ -35,7 +35,7 @@ public struct Switch {
 	}
 }
 
-extension Switch: Printable {
+extension Switch: CustomStringConvertible {
 	public var description: String {
 		var options = "--\(key)"
 		if let flag = self.flag {
@@ -59,6 +59,6 @@ public func <| <ClientError> (mode: CommandMode, option: Switch) -> Result<Bool,
 		return .success(enabled)
 
 	case .Usage:
-		return .failure(informativeUsageError(option.description, option.usage))
+		return .failure(informativeUsageError(option.description, usage: option.usage))
 	}
 }

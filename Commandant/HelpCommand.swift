@@ -35,25 +35,24 @@ public struct HelpCommand<ClientError>: CommandType {
 			.flatMap { options in
 				if let verb = options.verb {
 					if let command = self.registry[verb] {
-						println(command.function)
-						println()
+						print(command.function + "\n")
 						return command.run(.Usage)
 					} else {
 						fputs("Unrecognized command: '\(verb)'\n", stderr)
 					}
 				}
 
-				println("Available commands:\n")
+				print("Available commands:\n")
 
-				let maxVerbLength = maxElement(self.registry.commands.map { count($0.verb) })
+				let maxVerbLength = self.registry.commands.map { $0.verb.characters.count }.maxElement() ?? 0
 
 				for command in self.registry.commands {
-					let padding = Repeat<Character>(count: maxVerbLength - count(command.verb), repeatedValue: " ")
+					let padding = Repeat<Character>(count: maxVerbLength - command.verb.characters.count, repeatedValue: " ")
 
 					var formattedVerb = command.verb
 					formattedVerb.extend(padding)
 
-					println("   \(formattedVerb)   \(command.function)")
+					print("   \(formattedVerb)   \(command.function)")
 				}
 
 				return .success(())
