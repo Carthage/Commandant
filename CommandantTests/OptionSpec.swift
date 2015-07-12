@@ -94,7 +94,7 @@ struct TestOptions: OptionsType, Equatable {
 	let glob: Bool
 
 	static func create(a: Int)(b: String)(c: String)(d: String)(e: Bool)(f: Bool)(g: Bool) -> TestOptions {
-		return self(intValue: a, stringValue: b, optionalFilename: d, requiredName: c, enabled: e, force: f, glob: g)
+		return self.init(intValue: a, stringValue: b, optionalFilename: d, requiredName: c, enabled: e, force: f, glob: g)
 	}
 
 	static func evaluate(m: CommandMode) -> Result<TestOptions, CommandantError<NoError>> {

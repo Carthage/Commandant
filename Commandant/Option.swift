@@ -167,17 +167,17 @@ public func <*> <T, U, ClientError>(f: T -> U, value: Result<T, CommandantError<
 public func <*> <T, U, ClientError>(f: Result<(T -> U), CommandantError<ClientError>>, value: Result<T, CommandantError<ClientError>>) -> Result<U, CommandantError<ClientError>> {
 	switch (f, value) {
 	case let (.Failure(left), .Failure(right)):
-		return .failure(combineUsageErrors(left, rhs: right))
+		return .Failure(combineUsageErrors(left, rhs: right))
 
 	case let (.Failure(left), .Success):
-		return .failure(left)
+		return .Failure(left)
 
 	case let (.Success, .Failure(right)):
-		return .failure(right)
+		return .Failure(right)
 
 	case let (.Success(f), .Success(value)):
 		let newValue = f(value)
-		return .success(newValue)
+		return .Success(newValue)
 	}
 }
 
@@ -197,7 +197,7 @@ public func <| <T: ArgumentType, ClientError>(mode: CommandMode, option: Option<
 			case let .Failure(error):
 				switch error {
 				case let .UsageError(description):
-					return .failure(.UsageError(description: description))
+					return .Failure(.UsageError(description: description))
 
 				case .CommandError:
 					fatalError("CommandError should be impossible when parameterized over NoError")
@@ -209,18 +209,18 @@ public func <| <T: ArgumentType, ClientError>(mode: CommandMode, option: Option<
 
 		if let stringValue = stringValue {
 			if let value = T.fromString(stringValue) {
-				return .success(value)
+				return .Success(value)
 			}
 
-			return .failure(option.invalidUsageError(stringValue))
+			return .Failure(option.invalidUsageError(stringValue))
 		} else if let defaultValue = option.defaultValue {
-			return .success(defaultValue)
+			return .Success(defaultValue)
 		} else {
-			return .failure(missingArgumentError(option.description))
+			return .Failure(missingArgumentError(option.description))
 		}
 
 	case .Usage:
-		return .failure(informativeUsageError(option))
+		return .Failure(informativeUsageError(option))
 	}
 }
 
@@ -234,14 +234,14 @@ public func <| <ClientError>(mode: CommandMode, option: Option<Bool>) -> Result<
 	switch mode {
 	case let .Arguments(arguments):
 		if let value = arguments.consumeBooleanKey(option.key!) {
-			return .success(value)
+			return .Success(value)
 		} else if let defaultValue = option.defaultValue {
-			return .success(defaultValue)
+			return .Success(defaultValue)
 		} else {
-			return .failure(missingArgumentError(option.description))
+			return .Failure(missingArgumentError(option.description))
 		}
 
 	case .Usage:
-		return .failure(informativeUsageError(option))
+		return .Failure(informativeUsageError(option))
 	}
 }

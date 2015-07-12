@@ -55,7 +55,7 @@ public struct HelpCommand<ClientError>: CommandType {
 					print("   \(formattedVerb)   \(command.function)")
 				}
 
-				return .success(())
+				return .Success(())
 			}
 	}
 }
@@ -68,7 +68,7 @@ private struct HelpOptions<ClientError>: OptionsType {
 	}
 
 	static func create(verb: String) -> HelpOptions {
-		return self(verb: (verb == "" ? nil : verb))
+		return self.init(verb: (verb == "" ? nil : verb))
 	}
 
 	static func evaluate(m: CommandMode) -> Result<HelpOptions, CommandantError<ClientError>> {

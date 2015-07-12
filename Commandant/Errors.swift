@@ -13,7 +13,7 @@ import Result
 ///
 /// `ClientError` should be the type of error (if any) that can occur when
 /// running commands.
-public enum CommandantError<ClientError> {
+public enum CommandantError<ClientError>: ErrorType {
 	/// An option was used incorrectly.
 	case UsageError(description: String)
 

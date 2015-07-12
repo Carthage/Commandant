@@ -131,13 +131,13 @@ public final class ArgumentParser {
 					}
 				}
 
-				return .failure(missingArgumentError("--\(key)"))
+				return .Failure(missingArgumentError("--\(key)"))
 			} else {
 				rawArguments.append(arg)
 			}
 		}
 
-		return .success(foundValue)
+		return .Success(foundValue)
 	}
 
 	/// Returns the next positional argument that hasn't yet been returned, or
