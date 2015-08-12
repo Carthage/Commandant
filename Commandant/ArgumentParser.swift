@@ -61,15 +61,15 @@ public final class ArgumentParser {
 	/// Initializes the generator from a simple list of command-line arguments.
 	public init(_ arguments: [String]) {
 		// The first instance of `--` terminates the option list.
-		let params = split(arguments, maxSplit: 1, allowEmptySlices: true) { $0 == "--" }
+		let params = arguments.split(2, allowEmptySlices: true) { $0 == "--" }
 
 		// Parse out the keyed and flag options.
 		let options = params.first!
 		rawArguments.extend(options.map { arg in
 			if arg.hasPrefix("-") {
 				// Do we have `--{key}` or `-{flags}`.
-				let opt = dropFirst(arg.characters)
-				return String(opt).hasPrefix("-") ? .Key(String(dropFirst(opt))) : .Flag(Set(opt))
+				let opt = arg.characters.dropFirst()
+				return String(opt).hasPrefix("-") ? .Key(String(opt.dropFirst())) : .Flag(Set(opt))
 			} else {
 				return .Value(arg)
 			}
