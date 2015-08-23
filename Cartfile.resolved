@@ -1,4 +1,4 @@
-github "Quick/Nimble" "decf8c6be4139cbbadbb15c6505628ec168662f4"
-github "Quick/Quick" "4f7480ff9560e3791096e1a58ce09b6c0a8c926c"
-github "antitypical/Result" "932ac1aabf6d881ead74c4e6911d1271e95d2859"
+github "Quick/Nimble" "dbfc4ebd53395361c14eb2c9b13f629fc541bba2"
+github "Quick/Quick" "6b8507b28767b6fe54cfdc7112ab554505604c95"
+github "antitypical/Result" "0.6-beta.1"
 github "jspahrsummers/xcconfigs" "0.8.1"
