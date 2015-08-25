@@ -65,7 +65,7 @@ public final class ArgumentParser {
 
 		// Parse out the keyed and flag options.
 		let options = params.first!
-		rawArguments.extend(options.map { arg in
+		rawArguments.appendContentsOf(options.map { arg in
 			if arg.hasPrefix("-") {
 				// Do we have `--{key}` or `-{flags}`.
 				let opt = arg.characters.dropFirst()
@@ -78,7 +78,7 @@ public final class ArgumentParser {
 		// Remaining arguments are all positional parameters.
 		if params.count == 2 {
 			let positional = params.last!
-			rawArguments.extend(Array(positional.map { .Value($0) }))
+			rawArguments.appendContentsOf(positional.map { .Value($0) })
 		}
 	}
 
