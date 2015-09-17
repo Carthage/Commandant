@@ -68,11 +68,11 @@ public final class ArgumentParser {
 		rawArguments.appendContentsOf(Array(options.map { arg in
 			if arg.hasPrefix("-") {
 				// Do we have `--{key}` or `-{flags}`.
-				let opt = String(arg.characters.dropFirst())
-				if opt.hasPrefix("-") {
-					return .Key(String(opt.characters.dropFirst()))
+				let opt = arg.characters.dropFirst()
+				if opt.first == "-" {
+					return .Key(String(opt.dropFirst()))
 				} else {
-					return .Flag(Set(opt.characters))
+					return .Flag(Set(opt))
 				}
 			} else {
 				return .Value(arg)
