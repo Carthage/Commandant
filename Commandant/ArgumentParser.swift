@@ -38,7 +38,7 @@ private func ==(lhs: RawArgument, rhs: RawArgument) -> Bool {
 	}
 }
 
-extension RawArgument: Printable {
+extension RawArgument: CustomStringConvertible {
 	private var description: String {
 		switch self {
 		case let .Key(key):
@@ -61,24 +61,28 @@ public final class ArgumentParser {
 	/// Initializes the generator from a simple list of command-line arguments.
 	public init(_ arguments: [String]) {
 		// The first instance of `--` terminates the option list.
-		let params = split(arguments, maxSplit: 1, allowEmptySlices: true) { $0 == "--" }
+		let params = arguments.split(1, allowEmptySlices: true) { $0 == "--" }
 
 		// Parse out the keyed and flag options.
 		let options = params.first!
-		rawArguments.extend(options.map { arg in
+		rawArguments.appendContentsOf(Array(options.map { arg in
 			if arg.hasPrefix("-") {
 				// Do we have `--{key}` or `-{flags}`.
-				var opt = dropFirst(arg)
-				return opt.hasPrefix("-") ? .Key(dropFirst(opt)) : .Flag(Set(opt))
+				let opt = String(arg.characters.dropFirst())
+				if opt.hasPrefix("-") {
+					return .Key(String(opt.characters.dropFirst()))
+				} else {
+					return .Flag(Set(opt.characters))
+				}
 			} else {
 				return .Value(arg)
 			}
-		})
+		}))
 
 		// Remaining arguments are all positional parameters.
 		if params.count == 2 {
 			let positional = params.last!
-			rawArguments.extend(positional.map { .Value($0) })
+			rawArguments.appendContentsOf(Array(positional.map { .Value($0) }))
 		}
 	}
 
@@ -131,13 +135,13 @@ public final class ArgumentParser {
 					}
 				}
 
-				return .failure(missingArgumentError("--\(key)"))
+				return .Failure(missingArgumentError("--\(key)"))
 			} else {
 				rawArguments.append(arg)
 			}
 		}
 
-		return .success(foundValue)
+		return .Success(foundValue)
 	}
 
 	/// Returns the next positional argument that hasn't yet been returned, or
@@ -169,7 +173,7 @@ public final class ArgumentParser {
 	/// Returns whether the given flag was specified and removes it from the
 	/// list of arguments remaining.
 	internal func consumeBooleanFlag(flag: Character) -> Bool {
-		for (index, arg) in enumerate(rawArguments) {
+		for (index, arg) in rawArguments.enumerate() {
 			switch arg {
 			case var .Flag(flags) where flags.contains(flag):
 				flags.remove(flag)

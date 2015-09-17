@@ -59,7 +59,7 @@ public final class CommandRegistry<ClientError> {
 
 	/// All available commands.
 	public var commands: [CommandOf<ClientError>] {
-		return sorted(commandsByVerb.values) { return $0.verb < $1.verb }
+		return commandsByVerb.values.sort { return $0.verb < $1.verb }
 	}
 
 	public init() {}
@@ -101,7 +101,7 @@ extension CommandRegistry {
 	/// If a matching command could not be found or a usage error occurred,
 	/// a helpful error message will be written to `stderr`, then the process
 	/// will exit with a failure error code.
-	@noreturn public func main(#defaultVerb: String, errorHandler: ClientError -> ()) {
+	@noreturn public func main(defaultVerb defaultVerb: String, errorHandler: ClientError -> ()) {
 		var arguments = Process.arguments
 		assert(arguments.count >= 1)
 
@@ -120,12 +120,12 @@ extension CommandRegistry {
 			exit(EXIT_SUCCESS)
 
 		case let .Some(.Failure(error)):
-			switch error.value {
+			switch error {
 			case let .UsageError(description):
 				fputs(description + "\n", stderr)
 
 			case let .CommandError(error):
-				errorHandler(error.value)
+				errorHandler(error)
 			}
 
 			exit(EXIT_FAILURE)
