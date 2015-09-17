@@ -35,8 +35,7 @@ public struct HelpCommand<ClientError>: CommandType {
 			.flatMap { options in
 				if let verb = options.verb {
 					if let command = self.registry[verb] {
-						print(command.function)
-						print("")
+						print(command.function, terminator: "\n\n")
 						return command.run(.Usage)
 					} else {
 						fputs("Unrecognized command: '\(verb)'\n", stderr)
