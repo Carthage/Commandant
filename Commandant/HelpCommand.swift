@@ -44,8 +44,7 @@ public struct HelpCommand<ClientError>: CommandType {
 
 				print("Available commands:\n")
 
-				let verbLengths = self.registry.commands.map { $0.verb.characters.count }
-				let maxVerbLength = verbLengths.maxElement() ?? 0
+				let maxVerbLength = self.registry.commands.map { $0.verb.characters.count }.maxElement() ?? 0
 
 				for command in self.registry.commands {
 					let padding = Repeat<Character>(count: maxVerbLength - command.verb.characters.count, repeatedValue: " ")
