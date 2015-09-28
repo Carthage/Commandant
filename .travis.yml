@@ -2,6 +2,7 @@ language: objective-c
 osx_image: xcode7
 xcode_workspace: Commandant.xcworkspace
 xcode_scheme: Commandant
+before_script: brew update && brew upgrade xctool
 script: script/cibuild
 notifications:
   email: false
