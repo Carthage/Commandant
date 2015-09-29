@@ -35,28 +35,23 @@ public struct HelpCommand<ClientError>: CommandType {
 			.flatMap { options in
 				if let verb = options.verb {
 					if let command = self.registry[verb] {
-						println(command.function)
-						println()
+						print(command.function, terminator: "\n\n")
 						return command.run(.Usage)
 					} else {
 						fputs("Unrecognized command: '\(verb)'\n", stderr)
 					}
 				}
 
-				println("Available commands:\n")
+				print("Available commands:\n")
 
-				let maxVerbLength = maxElement(self.registry.commands.map { count($0.verb) })
+				let maxVerbLength = self.registry.commands.map { $0.verb.characters.count }.maxElement() ?? 0
 
 				for command in self.registry.commands {
-					let padding = Repeat<Character>(count: maxVerbLength - count(command.verb), repeatedValue: " ")
-
-					var formattedVerb = command.verb
-					formattedVerb.extend(padding)
-
-					println("   \(formattedVerb)   \(command.function)")
+					let padding = Repeat<Character>(count: maxVerbLength - command.verb.characters.count, repeatedValue: " ")
+					print("   \(command.verb)\(String(padding))   \(command.function)")
 				}
 
-				return .success(())
+				return .Success(())
 			}
 	}
 }
@@ -69,7 +64,7 @@ private struct HelpOptions<ClientError>: OptionsType {
 	}
 
 	static func create(verb: String) -> HelpOptions {
-		return self(verb: (verb == "" ? nil : verb))
+		return self.init(verb: (verb == "" ? nil : verb))
 	}
 
 	static func evaluate(m: CommandMode) -> Result<HelpOptions, CommandantError<ClientError>> {
