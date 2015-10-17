@@ -77,7 +77,12 @@ public final class CommandRegistry<ClientError> {
 	///
 	/// Returns the results of the execution, or nil if no such command exists.
 	public func runCommand(verb: String, arguments: [String]) -> Result<(), CommandantError<ClientError>>? {
-		return self[verb]?.run(.Arguments(ArgumentParser(arguments)))
+		let argumentsParser = ArgumentParser(arguments)
+		let result = self[verb]?.run(.Arguments(argumentsParser))
+		if let remainingArguments = argumentsParser.remainingArguments {
+			print("\nUnknown arguments are ignored:", remainingArguments.joinWithSeparator(","))
+		}
+		return result
 	}
 
 	/// Returns the command matching the given verb, or nil if no such command

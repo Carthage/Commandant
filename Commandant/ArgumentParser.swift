@@ -86,10 +86,6 @@ public final class ArgumentParser {
 		}
 	}
 	
-	deinit {
-		print("\nUnknown arguments are ignored:", rawArguments.map { $0.description }.joinWithSeparator(","))
-	}
-
 	/// Returns whether the given key was enabled or disabled, or nil if it
 	/// was not given at all.
 	///
@@ -194,5 +190,10 @@ public final class ArgumentParser {
 		}
 
 		return false
+	}
+	
+	/// Returns remaining arguments
+	internal var remainingArguments: [String]? {
+		return rawArguments.isEmpty ? nil : rawArguments.map { $0.description }
 	}
 }
