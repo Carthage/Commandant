@@ -85,6 +85,10 @@ public final class ArgumentParser {
 			rawArguments.appendContentsOf(positional.map { .Value($0) })
 		}
 	}
+	
+	deinit {
+		print("\nUnknown arguments are ignored:", rawArguments.map { $0.description }.joinWithSeparator(","))
+	}
 
 	/// Returns whether the given key was enabled or disabled, or nil if it
 	/// was not given at all.
