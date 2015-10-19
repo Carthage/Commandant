@@ -102,7 +102,23 @@ extension CommandRegistry {
 	/// a helpful error message will be written to `stderr`, then the process
 	/// will exit with a failure error code.
 	@noreturn public func main(defaultVerb defaultVerb: String, errorHandler: ClientError -> ()) {
-		var arguments = Process.arguments
+		main(arguments: Process.arguments, defaultVerb: defaultVerb, errorHandler: errorHandler)
+	}
+	
+	/// Hands off execution to the CommandRegistry, by parsing `arguments`
+	/// and then running whichever command has been identified in the argument
+	/// list.
+	///
+	/// If the chosen command executes successfully, the process will exit with
+	/// a successful exit code.
+	///
+	/// If the chosen command fails, the provided error handler will be invoked,
+	/// then the process will exit with a failure exit code.
+	///
+	/// If a matching command could not be found or a usage error occurred,
+	/// a helpful error message will be written to `stderr`, then the process
+	/// will exit with a failure error code.
+	@noreturn public func main(var arguments arguments: [String], defaultVerb: String, errorHandler: ClientError -> ()) {
 		assert(arguments.count >= 1)
 
 		// Extract the executable name.
