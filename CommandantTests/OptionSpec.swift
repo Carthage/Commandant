@@ -18,7 +18,7 @@ class OptionsTypeSpec: QuickSpec {
 	override func spec() {
 		describe("CommandMode.Arguments") {
 			func tryArguments(arguments: String...) -> Result<TestOptions, CommandantError<NoError>> {
-				return TestOptions.evaluateAndCheckUnknownArguments(.Arguments(ArgumentParser(arguments)))
+				return TestOptions.evaluateAndCheckUnrecognizedArguments(.Arguments(ArgumentParser(arguments)))
 			}
 
 			it("should fail if a required argument is missing") {
@@ -71,10 +71,10 @@ class OptionsTypeSpec: QuickSpec {
 				expect(value).to(equal(expected))
 			}
 			
-			it("should error with unknown arguments") {
-				let error = tryArguments("--enabled", "--unknown").error
+			it("should generate error when unrecognized arguments remains") {
+				let error = tryArguments("--enabled", "--unrecognized").error
 				expect(error?.description).toNot(contain("--enabled"))
-				expect(error?.description).to(contain("--unknown"))
+				expect(error?.description).to(contain("--unrecognized"))
 			}
 		}
 

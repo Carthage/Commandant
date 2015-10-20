@@ -43,16 +43,16 @@ public protocol OptionsType {
 	static func evaluate(m: CommandMode) -> Result<Self, CommandantError<ClientError>>
 }
 
-/// Evaluates and checks unknown arguments.
-/// If unknown arguments are detected, it returns a `UsageError` describing "unknown options".
+/// Evaluates and checks unrecognized arguments remains.
+/// If unrecognized arguments are detected, it returns a `UsageError` indicates "unrecognized arguments".
 ///
 /// Returns the parsed options or a `UsageError`
 extension OptionsType {
-	public static func evaluateAndCheckUnknownArguments(m: CommandMode) -> Result<Self, CommandantError<ClientError>> {
+	public static func evaluateAndCheckUnrecognizedArguments(m: CommandMode) -> Result<Self, CommandantError<ClientError>> {
 		let result = evaluate(m)
 		if case let .Arguments(argumentsParser) = m,
 			let remainingArguments = argumentsParser.remainingArguments {
-			return .Failure(unknownOptionsError(remainingArguments))
+			return .Failure(unrecognizedArgumentsError(remainingArguments))
 		}
 		return result
 	}
