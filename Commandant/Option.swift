@@ -43,6 +43,21 @@ public protocol OptionsType {
 	static func evaluate(m: CommandMode) -> Result<Self, CommandantError<ClientError>>
 }
 
+/// Evaluates and checks unknown arguments.
+/// If unknown arguments are detected, it returns a `UsageError` describing "unknown options".
+///
+/// Returns the parsed options or a `UsageError`
+extension OptionsType {
+	public static func evaluateAndCheckUnknownArguments(m: CommandMode) -> Result<Self, CommandantError<ClientError>> {
+		let result = evaluate(m)
+		if case let .Arguments(argumentsParser) = m,
+			let remainingArguments = argumentsParser.remainingArguments {
+			return .Failure(unknownOptionsError(remainingArguments))
+		}
+		return result
+	}
+}
+
 /// Describes an option that can be provided on the command line.
 public struct Option<T> {
 	/// The key that controls this option. For example, a key of `verbose` would

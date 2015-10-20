@@ -113,3 +113,8 @@ internal func combineUsageErrors<ClientError>(lhs: CommandantError<ClientError>,
 		return lhs
 	}
 }
+
+/// Constructs an error that unknown options are specified.
+internal func unknownOptionsError<ClientError>(options: [String]) -> CommandantError<ClientError> {
+	return .UsageError(description: "Unknown options: " + options.joinWithSeparator(","))
+}
