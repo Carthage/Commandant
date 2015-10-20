@@ -11,7 +11,7 @@ struct LogCommand: CommandType {
 	let verb = "log"
 	let function = "Reads the log"
 
-	func run(mode: CommandMode) -> Result<()> {
+	func run(mode: CommandMode) -> Result<(), CommandantError<YourErrorType>> {
 		return LogOptions.evaluate(mode).map { options in
 			// Use the parsed options to do something interesting here.
 			return ()
@@ -28,7 +28,7 @@ struct LogOptions: OptionsType {
 		return LogOptions(lines: lines, verbose: verbose, logName: logName)
 	}
 
-	static func evaluate(m: CommandMode) -> Result<LogOptions> {
+	static func evaluate(m: CommandMode) -> Result<LogOptions, CommandantError<YourErrorType>> {
 		return create
 			<*> m <| Option(key: "lines", defaultValue: 0, usage: "the number of lines to read from the logs")
 			<*> m <| Option(key: "verbose", defaultValue: false, usage: "show verbose output")
