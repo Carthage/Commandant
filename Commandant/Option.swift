@@ -26,7 +26,7 @@ import Result
 ///				return LogOptions(verbosity: verbosity, outputFilename: outputFilename, logName: logName)
 ///			}
 ///
-///			static func evaluate(m: CommandMode) -> Result<LogOptions> {
+///			static func evaluate(m: CommandMode) -> Result<LogOptions, CommandantError<YourErrorType>> {
 ///				return create
 ///					<*> m <| Option(key: "verbose", defaultValue: 0, usage: "the verbosity level with which to read the logs")
 ///					<*> m <| Option(key: "outputFilename", defaultValue: "", usage: "a file to print output to, instead of stdout")
