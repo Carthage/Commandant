@@ -85,7 +85,7 @@ public final class ArgumentParser {
 			rawArguments.appendContentsOf(positional.map { .Value($0) })
 		}
 	}
-	
+
 	/// Returns whether the given key was enabled or disabled, or nil if it
 	/// was not given at all.
 	///
