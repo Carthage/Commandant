@@ -44,6 +44,11 @@ public struct CommandWrapper<ClientError: ErrorType> {
 		function = command.function
 		run = { (arguments: ArgumentParser) -> Result<(), CommandantError<ClientError>> in
 			let options = C.Options.evaluate(.Arguments(arguments))
+
+			if let remainingArguments = arguments.remainingArguments {
+				return .Failure(unrecognizedArgumentsError(remainingArguments))
+			}
+
 			if let options = options.value {
 				command.run(options)
 				return .Success()
