@@ -31,7 +31,7 @@ public struct HelpCommand<ClientError>: CommandType {
 	}
 
 	public func run(mode: CommandMode) -> Result<(), CommandantError<ClientError>> {
-		return HelpOptions<ClientError>.evaluate(mode)
+		return HelpOptions<ClientError>.evaluateAndCheckUnrecognizedArguments(mode)
 			.flatMap { options in
 				if let verb = options.verb {
 					if let command = self.registry[verb] {

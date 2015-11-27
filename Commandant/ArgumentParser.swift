@@ -191,4 +191,9 @@ public final class ArgumentParser {
 
 		return false
 	}
+	
+	/// Returns remaining arguments
+	internal var remainingArguments: [String]? {
+		return rawArguments.isEmpty ? nil : rawArguments.map { $0.description }
+	}
 }

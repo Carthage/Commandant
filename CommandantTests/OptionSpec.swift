@@ -18,7 +18,7 @@ class OptionsTypeSpec: QuickSpec {
 	override func spec() {
 		describe("CommandMode.Arguments") {
 			func tryArguments(arguments: String...) -> Result<TestOptions, CommandantError<NoError>> {
-				return TestOptions.evaluate(.Arguments(ArgumentParser(arguments)))
+				return TestOptions.evaluateAndCheckUnrecognizedArguments(.Arguments(ArgumentParser(arguments)))
 			}
 
 			it("should fail if a required argument is missing") {
@@ -69,6 +69,12 @@ class OptionsTypeSpec: QuickSpec {
 				let value = tryArguments("--", "--intValue").value
 				let expected = TestOptions(intValue: 42, stringValue: "foobar", optionalFilename: "filename", requiredName: "--intValue", enabled: false, force: false, glob: false)
 				expect(value).to(equal(expected))
+			}
+			
+			it("should generate error when unrecognized arguments remains") {
+				let error = tryArguments("--enabled", "--unrecognized").error
+				expect(error?.description).toNot(contain("--enabled"))
+				expect(error?.description).to(contain("--unrecognized"))
 			}
 		}
 
