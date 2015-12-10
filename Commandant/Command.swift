@@ -25,8 +25,8 @@ public protocol CommandType {
 	func run(mode: CommandMode) -> Result<(), CommandantError<ClientError>>
 }
 
-/// A type-erased CommandType.
-public struct AnyCommand<ClientError>: CommandType {
+/// A type-erased command.
+public struct AnyCommand<ClientError> {
 	public let verb: String
 	public let function: String
 	private let runClosure: CommandMode -> Result<(), CommandantError<ClientError>>
