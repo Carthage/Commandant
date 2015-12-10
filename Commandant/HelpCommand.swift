@@ -19,6 +19,7 @@ import Result
 /// 	let helpCommand = HelpCommand(registry: commands)
 /// 	commands.register(helpCommand)
 public struct HelpCommand<ClientError>: CommandType {
+	public typealias Options = HelpOptions<ClientError>
 	public let verb = "help"
 	public let function = "Display general or command-specific help"
 
@@ -56,7 +57,7 @@ public struct HelpCommand<ClientError>: CommandType {
 	}
 }
 
-private struct HelpOptions<ClientError>: OptionsType {
+public struct HelpOptions<ClientError>: OptionsType {
 	let verb: String?
 	
 	init(verb: String?) {
@@ -67,7 +68,7 @@ private struct HelpOptions<ClientError>: OptionsType {
 		return self.init(verb: (verb == "" ? nil : verb))
 	}
 
-	static func evaluate(m: CommandMode) -> Result<HelpOptions, CommandantError<ClientError>> {
+	public static func evaluate(m: CommandMode) -> Result<HelpOptions, CommandantError<ClientError>> {
 		return create
 			<*> m <| Option(defaultValue: "", usage: "the command to display help for")
 	}

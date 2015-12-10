@@ -12,6 +12,9 @@ import Result
 /// Represents a subcommand that can be executed with its own set of arguments.
 public protocol CommandType {
 	typealias ClientError
+	
+	/// The command's options type.
+	typealias Options: OptionsType
 
 	/// The action that users should specify to use this subcommand (e.g.,
 	/// `help`).
