@@ -11,11 +11,12 @@ import Result
 
 /// Represents a subcommand that can be executed with its own set of arguments.
 public protocol CommandType {
-	typealias ClientError
 	
 	/// The command's options type.
 	typealias Options: OptionsType
 
+	typealias ClientError: ErrorType = Options.ClientError
+	
 	/// The action that users should specify to use this subcommand (e.g.,
 	/// `help`).
 	var verb: String { get }
@@ -24,25 +25,35 @@ public protocol CommandType {
 	/// for.
 	var function: String { get }
 
-	/// Runs this subcommand in the given mode.
-	func run(mode: CommandMode) -> Result<(), CommandantError<ClientError>>
+	/// Runs this subcommand with the given options.
+	func run(options: Options) -> Result<(), ClientError>
 }
 
 /// A type-erased command.
-public struct AnyCommand<ClientError> {
+public struct AnyCommand<ClientError: ErrorType> {
 	public let verb: String
 	public let function: String
-	private let runClosure: CommandMode -> Result<(), CommandantError<ClientError>>
+	
+	public let run: ArgumentParser -> Result<(), CommandantError<ClientError>>
+	
+	public let usage: () -> CommandantError<ClientError>
 
 	/// Creates a command that wraps another.
-	public init<C: CommandType where C.ClientError == ClientError>(_ command: C) {
+	init<C: CommandType where C.Options.ClientError == ClientError>(_ command: C) {
 		verb = command.verb
 		function = command.function
-		runClosure = { mode in command.run(mode) }
-	}
-
-	public func run(mode: CommandMode) -> Result<(), CommandantError<ClientError>> {
-		return runClosure(mode)
+		run = { (arguments: ArgumentParser)-> Result<(), CommandantError<ClientError>>  in
+			let options = C.Options.evaluate(.Arguments(arguments))
+			if let options = options.value {
+				command.run(options)
+				return .Success()
+			} else {
+				return .Failure(options.error!)
+			}
+		}
+		usage = { () -> CommandantError<ClientError> in
+			return C.Options.evaluate(.Usage).error!
+		}
 	}
 }
 
@@ -57,7 +68,7 @@ public enum CommandMode {
 }
 
 /// Maintains the list of commands available to run.
-public final class CommandRegistry<ClientError> {
+public final class CommandRegistry<ClientError: ErrorType> {
 	private var commandsByVerb: [String: AnyCommand<ClientError>] = [:]
 
 	/// All available commands.
@@ -71,7 +82,7 @@ public final class CommandRegistry<ClientError> {
 	///
 	/// If another command was already registered with the same `verb`, it will
 	/// be overwritten.
-	public func register<C: CommandType where C.ClientError == ClientError>(command: C) {
+	public func register<C: CommandType where C.Options.ClientError == ClientError>(command: C) {
 		commandsByVerb[command.verb] = AnyCommand(command)
 	}
 
@@ -80,7 +91,7 @@ public final class CommandRegistry<ClientError> {
 	///
 	/// Returns the results of the execution, or nil if no such command exists.
 	public func runCommand(verb: String, arguments: [String]) -> Result<(), CommandantError<ClientError>>? {
-		return self[verb]?.run(.Arguments(ArgumentParser(arguments)))
+		return self[verb]?.run(ArgumentParser(arguments))
 	}
 
 	/// Returns the command matching the given verb, or nil if no such command

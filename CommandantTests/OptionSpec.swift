@@ -12,7 +12,7 @@ import Nimble
 import Quick
 import Result
 
-enum NoError {}
+enum NoError: ErrorType {}
 
 class OptionsTypeSpec: QuickSpec {
 	override func spec() {
@@ -92,6 +92,8 @@ struct TestOptions: OptionsType, Equatable {
 	let enabled: Bool
 	let force: Bool
 	let glob: Bool
+	
+	typealias ClientError = NoError
 
 	static func create(a: Int)(b: String)(c: String)(d: String)(e: Bool)(f: Bool)(g: Bool) -> TestOptions {
 		return self.init(intValue: a, stringValue: b, optionalFilename: d, requiredName: c, enabled: e, force: f, glob: g)
