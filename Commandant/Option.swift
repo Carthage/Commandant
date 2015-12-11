@@ -43,6 +43,15 @@ public protocol OptionsType {
 	static func evaluate(m: CommandMode) -> Result<Self, CommandantError<ClientError>>
 }
 
+/// An `OptionsType` that has no options.
+public struct NoOptions<ClientError: ErrorType>: OptionsType {
+	private init() {}
+	
+	public static func evaluate(m: CommandMode) -> Result<NoOptions, CommandantError<ClientError>> {
+		return .Success(NoOptions())
+	}
+}
+
 /// Describes an option that can be provided on the command line.
 public struct Option<T> {
 	/// The key that controls this option. For example, a key of `verbose` would
