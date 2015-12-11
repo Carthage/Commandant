@@ -8,14 +8,13 @@ With Commandant, a command and its associated options could be defined as follow
 
 ```swift
 struct LogCommand: CommandType {
+	typealias Options = LogOptions
 	let verb = "log"
 	let function = "Reads the log"
 
-	func run(mode: CommandMode) -> Result<(), CommandantError<YourErrorType>> {
-		return LogOptions.evaluate(mode).map { options in
-			// Use the parsed options to do something interesting here.
-			return ()
-		}
+	func run(options: Options) -> Result<(), YourErrorType
+		// Use the parsed options to do something interesting here.
+		return ()
 	}
 }
 
