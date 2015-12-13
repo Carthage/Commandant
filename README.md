@@ -12,7 +12,7 @@ struct LogCommand: CommandType {
 	let verb = "log"
 	let function = "Reads the log"
 
-	func run(options: Options) -> Result<(), YourErrorType
+	func run(options: Options) -> Result<(), YourErrorType> {
 		// Use the parsed options to do something interesting here.
 		return ()
 	}
