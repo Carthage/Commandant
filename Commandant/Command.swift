@@ -30,7 +30,7 @@ public protocol CommandType {
 }
 
 /// A type-erased command.
-public struct AnyCommand<ClientError: ErrorType> {
+public struct CommandWrapper<ClientError: ErrorType> {
 	public let verb: String
 	public let function: String
 	
@@ -69,10 +69,10 @@ public enum CommandMode {
 
 /// Maintains the list of commands available to run.
 public final class CommandRegistry<ClientError: ErrorType> {
-	private var commandsByVerb: [String: AnyCommand<ClientError>] = [:]
+	private var commandsByVerb: [String: CommandWrapper<ClientError>] = [:]
 
 	/// All available commands.
-	public var commands: [AnyCommand<ClientError>] {
+	public var commands: [CommandWrapper<ClientError>] {
 		return commandsByVerb.values.sort { return $0.verb < $1.verb }
 	}
 
@@ -83,7 +83,7 @@ public final class CommandRegistry<ClientError: ErrorType> {
 	/// If another command was already registered with the same `verb`, it will
 	/// be overwritten.
 	public func register<C: CommandType where C.Options.ClientError == ClientError>(command: C) {
-		commandsByVerb[command.verb] = AnyCommand(command)
+		commandsByVerb[command.verb] = CommandWrapper(command)
 	}
 
 	/// Runs the command corresponding to the given verb, passing it the given
@@ -96,7 +96,7 @@ public final class CommandRegistry<ClientError: ErrorType> {
 
 	/// Returns the command matching the given verb, or nil if no such command
 	/// is registered.
-	public subscript(verb: String) -> AnyCommand<ClientError>? {
+	public subscript(verb: String) -> CommandWrapper<ClientError>? {
 		return commandsByVerb[verb]
 	}
 }
