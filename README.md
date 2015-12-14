@@ -9,6 +9,7 @@ With Commandant, a command and its associated options could be defined as follow
 ```swift
 struct LogCommand: CommandType {
 	typealias Options = LogOptions
+
 	let verb = "log"
 	let function = "Reads the log"
 

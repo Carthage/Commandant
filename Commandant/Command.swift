@@ -42,7 +42,7 @@ public struct CommandWrapper<ClientError: ErrorType> {
 	init<C: CommandType where C.Options.ClientError == ClientError>(_ command: C) {
 		verb = command.verb
 		function = command.function
-		run = { (arguments: ArgumentParser)-> Result<(), CommandantError<ClientError>>  in
+		run = { (arguments: ArgumentParser) -> Result<(), CommandantError<ClientError>> in
 			let options = C.Options.evaluate(.Arguments(arguments))
 			if let options = options.value {
 				command.run(options)

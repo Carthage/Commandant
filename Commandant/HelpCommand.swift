@@ -20,6 +20,7 @@ import Result
 /// 	commands.register(helpCommand)
 public struct HelpCommand<ClientError: ErrorType>: CommandType {
 	public typealias Options = HelpOptions<ClientError>
+
 	public let verb = "help"
 	public let function = "Display general or command-specific help"
 
