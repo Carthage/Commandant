@@ -53,6 +53,24 @@ internal func informativeUsageError<ClientError>(keyValueExample: String, usage:
 	})
 }
 
+/// Combines the text of the two errors, if they're both `UsageError`s.
+/// Otherwise, uses whichever one is not (biased toward the left).
+internal func combineUsageErrors<ClientError>(lhs: CommandantError<ClientError>, _ rhs: CommandantError<ClientError>) -> CommandantError<ClientError> {
+	switch (lhs, rhs) {
+	case let (.UsageError(left), .UsageError(right)):
+		let combinedDescription = "\(left)\n\n\(right)"
+		return .UsageError(description: combinedDescription)
+
+	case (.UsageError, _):
+		return rhs
+
+	case (_, .UsageError), (_, _):
+		return lhs
+	}
+}
+
+// MARK: Option
+
 /// Constructs an error that describes how to use the option, with the given
 /// example of key (and value, if applicable) usage.
 internal func informativeUsageError<T, ClientError>(keyValueExample: String, option: Option<T>) -> CommandantError<ClientError> {
@@ -95,21 +113,5 @@ internal func informativeUsageError<ClientError>(option: Option<Bool>) -> Comman
 		return informativeUsageError((defaultValue ? "--no-\(key)" : "--\(key)"), option: option)
 	} else {
 		return informativeUsageError("--(no-)\(key)", option: option)
-	}
-}
-
-/// Combines the text of the two errors, if they're both `UsageError`s.
-/// Otherwise, uses whichever one is not (biased toward the left).
-internal func combineUsageErrors<ClientError>(lhs: CommandantError<ClientError>, _ rhs: CommandantError<ClientError>) -> CommandantError<ClientError> {
-	switch (lhs, rhs) {
-	case let (.UsageError(left), .UsageError(right)):
-		let combinedDescription = "\(left)\n\n\(right)"
-		return .UsageError(description: combinedDescription)
-
-	case (.UsageError, _):
-		return rhs
-	
-	case (_, .UsageError), (_, _):
-		return lhs
 	}
 }
