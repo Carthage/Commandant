@@ -131,11 +131,7 @@ internal func informativeUsageError<T, ClientError>(keyValueExample: String, opt
 
 /// Constructs an error that describes how to use the option.
 internal func informativeUsageError<T: ArgumentType, ClientError>(option: Option<T>) -> CommandantError<ClientError> {
-	var example = ""
-
-	if let key = option.key {
-		example += "--\(key) "
-	}
+	var example = "--\(option.key) "
 
 	var valueExample = ""
 	if let defaultValue = option.defaultValue {
@@ -153,9 +149,7 @@ internal func informativeUsageError<T: ArgumentType, ClientError>(option: Option
 
 /// Constructs an error that describes how to use the given boolean option.
 internal func informativeUsageError<ClientError>(option: Option<Bool>) -> CommandantError<ClientError> {
-	precondition(option.key != nil)
-
-	let key = option.key!
+	let key = option.key
 
 	if let defaultValue = option.defaultValue {
 		return informativeUsageError((defaultValue ? "--no-\(key)" : "--\(key)"), option: option)
