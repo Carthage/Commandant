@@ -6,13 +6,11 @@
 //  Copyright (c) 2014 Carthage. All rights reserved.
 //
 
-import Commandant
+@testable import Commandant
 import Foundation
 import Nimble
 import Quick
 import Result
-
-enum NoError: ErrorType {}
 
 class OptionsTypeSpec: QuickSpec {
 	override func spec() {
