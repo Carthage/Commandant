@@ -69,6 +69,54 @@ internal func combineUsageErrors<ClientError>(lhs: CommandantError<ClientError>,
 	}
 }
 
+// MARK: Argument
+
+/// Constructs an error that describes how to use the argument, with the given
+/// example of value usage if applicable.
+internal func informativeUsageError<T, ClientError>(valueExample: String, argument: Argument<T>) -> CommandantError<ClientError> {
+	if argument.defaultValue != nil {
+		return informativeUsageError("[\(valueExample)]", usage: argument.usage)
+	} else {
+		return informativeUsageError(valueExample, usage: argument.usage)
+	}
+}
+
+/// Constructs an error that describes how to use the argument.
+internal func informativeUsageError<T: ArgumentType, ClientError>(argument: Argument<T>) -> CommandantError<ClientError> {
+	var example = ""
+
+	var valueExample = ""
+	if let defaultValue = argument.defaultValue {
+		valueExample = "\(defaultValue)"
+	}
+
+	if valueExample.isEmpty {
+		example += "(\(T.name))"
+	} else {
+		example += valueExample
+	}
+
+	return informativeUsageError(example, argument: argument)
+}
+
+/// Constructs an error that describes how to use the argument list.
+internal func informativeUsageError<T: ArgumentType, ClientError>(argument: Argument<[T]>) -> CommandantError<ClientError> {
+	var example = ""
+
+	var valueExample = ""
+	if let defaultValue = argument.defaultValue {
+		valueExample = "\(defaultValue)"
+	}
+
+	if valueExample.isEmpty {
+		example += "(\(T.name))"
+	} else {
+		example += valueExample
+	}
+
+	return informativeUsageError(example, argument: argument)
+}
+
 // MARK: Option
 
 /// Constructs an error that describes how to use the option, with the given
