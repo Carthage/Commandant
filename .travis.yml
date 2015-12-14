@@ -10,7 +10,7 @@ notifications:
 before_deploy:
   - brew update
   - brew install carthage
-  - carthage build --no-skip-current
+  - carthage build --no-skip-current --platform mac
   - carthage archive Commandant
 deploy:
   provider: releases
