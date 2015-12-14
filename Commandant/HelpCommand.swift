@@ -57,13 +57,13 @@ public struct HelpCommand<ClientError: ErrorType>: CommandType {
 }
 
 public struct HelpOptions<ClientError: ErrorType>: OptionsType {
-	let verb: String?
+	private let verb: String?
 	
-	init(verb: String?) {
+	private init(verb: String?) {
 		self.verb = verb
 	}
 
-	static func create(verb: String) -> HelpOptions {
+	private static func create(verb: String) -> HelpOptions {
 		return self.init(verb: (verb == "" ? nil : verb))
 	}
 

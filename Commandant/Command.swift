@@ -39,7 +39,7 @@ public struct CommandWrapper<ClientError: ErrorType> {
 	public let usage: () -> CommandantError<ClientError>
 
 	/// Creates a command that wraps another.
-	init<C: CommandType where C.Options.ClientError == ClientError>(_ command: C) {
+	private init<C: CommandType where C.Options.ClientError == ClientError>(_ command: C) {
 		verb = command.verb
 		function = command.function
 		run = { (arguments: ArgumentParser) -> Result<(), CommandantError<ClientError>> in
