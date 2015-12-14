@@ -113,3 +113,8 @@ internal func combineUsageErrors<ClientError>(lhs: CommandantError<ClientError>,
 		return lhs
 	}
 }
+
+/// Constructs an error that indicates unrecognized arguments remains.
+internal func unrecognizedArgumentsError<ClientError>(options: [String]) -> CommandantError<ClientError> {
+	return .UsageError(description: "Unrecognized arguments: " + options.joinWithSeparator(", "))
+}
