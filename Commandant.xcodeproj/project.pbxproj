@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CD2ED3411C1E6C5D0076092B /* Argument.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD2ED3401C1E6C5D0076092B /* Argument.swift */; };
+		CD2ED3431C1E6D540076092B /* ArgumentType.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD2ED3421C1E6D540076092B /* ArgumentType.swift */; };
 		D00CCDDF1A20717400109F8C /* Commandant.h in Headers */ = {isa = PBXBuildFile; fileRef = D00CCDDE1A20717400109F8C /* Commandant.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D00CCDE51A20717400109F8C /* Commandant.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D00CCDD91A20717400109F8C /* Commandant.framework */; };
 		D00CCE241A2073DA00109F8C /* Nimble.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D00CCE221A2073DA00109F8C /* Nimble.framework */; };
@@ -32,6 +34,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		CD2ED3401C1E6C5D0076092B /* Argument.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Argument.swift; sourceTree = "<group>"; };
+		CD2ED3421C1E6D540076092B /* ArgumentType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArgumentType.swift; sourceTree = "<group>"; };
 		D00CCDD91A20717400109F8C /* Commandant.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Commandant.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D00CCDDD1A20717400109F8C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D00CCDDE1A20717400109F8C /* Commandant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Commandant.h; sourceTree = "<group>"; };
@@ -217,7 +221,9 @@
 		D0BF14F81A4C892E003147BC /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				CD2ED3401C1E6C5D0076092B /* Argument.swift */,
 				D00CCE2C1A2075ED00109F8C /* ArgumentParser.swift */,
+				CD2ED3421C1E6D540076092B /* ArgumentType.swift */,
 				D00CCE261A20741300109F8C /* Command.swift */,
 				D00CCE2A1A20748500109F8C /* Errors.swift */,
 				D00CCE2E1A2075F700109F8C /* Option.swift */,
@@ -343,7 +349,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CD2ED3411C1E6C5D0076092B /* Argument.swift in Sources */,
 				D0BF14FB1A4C8957003147BC /* HelpCommand.swift in Sources */,
+				CD2ED3431C1E6D540076092B /* ArgumentType.swift in Sources */,
 				D00CCE2F1A2075F700109F8C /* Option.swift in Sources */,
 				D00CCE2B1A20748500109F8C /* Errors.swift in Sources */,
 				D8169D871ACB942D00923FB0 /* Switch.swift in Sources */,

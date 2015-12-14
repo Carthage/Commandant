@@ -29,43 +29,49 @@ class OptionsTypeSpec: QuickSpec {
 
 			it("should succeed without optional arguments") {
 				let value = tryArguments("required").value
-				let expected = TestOptions(intValue: 42, stringValue: "foobar", optionalFilename: "filename", requiredName: "required", enabled: false, force: false, glob: false)
+				let expected = TestOptions(intValue: 42, stringValue: "foobar", optionalFilename: "filename", requiredName: "required", enabled: false, force: false, glob: false, arguments: [])
 				expect(value).to(equal(expected))
 			}
 
 			it("should succeed with some optional arguments") {
 				let value = tryArguments("required", "--intValue", "3", "fuzzbuzz").value
-				let expected = TestOptions(intValue: 3, stringValue: "foobar", optionalFilename: "fuzzbuzz", requiredName: "required", enabled: false, force: false, glob: false)
+				let expected = TestOptions(intValue: 3, stringValue: "foobar", optionalFilename: "fuzzbuzz", requiredName: "required", enabled: false, force: false, glob: false, arguments: [])
 				expect(value).to(equal(expected))
 			}
 
 			it("should override previous optional arguments") {
 				let value = tryArguments("required", "--intValue", "3", "--stringValue", "fuzzbuzz", "--intValue", "5", "--stringValue", "bazbuzz").value
-				let expected = TestOptions(intValue: 5, stringValue: "bazbuzz", optionalFilename: "filename", requiredName: "required", enabled: false, force: false, glob: false)
+				let expected = TestOptions(intValue: 5, stringValue: "bazbuzz", optionalFilename: "filename", requiredName: "required", enabled: false, force: false, glob: false, arguments: [])
 				expect(value).to(equal(expected))
 			}
 
 			it("should enable a boolean flag") {
 				let value = tryArguments("required", "--enabled", "--intValue", "3", "fuzzbuzz").value
-				let expected = TestOptions(intValue: 3, stringValue: "foobar", optionalFilename: "fuzzbuzz", requiredName: "required", enabled: true, force: false, glob: false)
+				let expected = TestOptions(intValue: 3, stringValue: "foobar", optionalFilename: "fuzzbuzz", requiredName: "required", enabled: true, force: false, glob: false, arguments: [])
 				expect(value).to(equal(expected))
 			}
 
 			it("should re-disable a boolean flag") {
 				let value = tryArguments("required", "--enabled", "--no-enabled", "--intValue", "3", "fuzzbuzz").value
-				let expected = TestOptions(intValue: 3, stringValue: "foobar", optionalFilename: "fuzzbuzz", requiredName: "required", enabled: false, force: false, glob: false)
+				let expected = TestOptions(intValue: 3, stringValue: "foobar", optionalFilename: "fuzzbuzz", requiredName: "required", enabled: false, force: false, glob: false, arguments: [])
 				expect(value).to(equal(expected))
 			}
 
 			it("should enable multiple boolean flags") {
 				let value = tryArguments("required", "-fg").value
-				let expected = TestOptions(intValue: 42, stringValue: "foobar", optionalFilename: "filename", requiredName: "required", enabled: false, force: true, glob: true)
+				let expected = TestOptions(intValue: 42, stringValue: "foobar", optionalFilename: "filename", requiredName: "required", enabled: false, force: true, glob: true, arguments: [])
+				expect(value).to(equal(expected))
+			}
+
+			it("should consume the rest of positional arguments") {
+				let value = tryArguments("required", "optional", "value1", "value2").value
+				let expected = TestOptions(intValue: 42, stringValue: "foobar", optionalFilename: "optional", requiredName: "required", enabled: false, force: false, glob: false, arguments: [ "value1", "value2" ])
 				expect(value).to(equal(expected))
 			}
 
 			it("should treat -- as the end of valued options") {
 				let value = tryArguments("--", "--intValue").value
-				let expected = TestOptions(intValue: 42, stringValue: "foobar", optionalFilename: "filename", requiredName: "--intValue", enabled: false, force: false, glob: false)
+				let expected = TestOptions(intValue: 42, stringValue: "foobar", optionalFilename: "filename", requiredName: "--intValue", enabled: false, force: false, glob: false, arguments: [])
 				expect(value).to(equal(expected))
 			}
 		}
@@ -90,31 +96,33 @@ struct TestOptions: OptionsType, Equatable {
 	let enabled: Bool
 	let force: Bool
 	let glob: Bool
-	
+	let arguments: [String]
+
 	typealias ClientError = NoError
 
-	static func create(a: Int)(b: String)(c: String)(d: String)(e: Bool)(f: Bool)(g: Bool) -> TestOptions {
-		return self.init(intValue: a, stringValue: b, optionalFilename: d, requiredName: c, enabled: e, force: f, glob: g)
+	static func create(a: Int)(b: String)(c: String)(d: String)(e: Bool)(f: Bool)(g: Bool)(h: [String]) -> TestOptions {
+		return self.init(intValue: a, stringValue: b, optionalFilename: d, requiredName: c, enabled: e, force: f, glob: g, arguments: h)
 	}
 
 	static func evaluate(m: CommandMode) -> Result<TestOptions, CommandantError<NoError>> {
 		return create
 			<*> m <| Option(key: "intValue", defaultValue: 42, usage: "Some integer value")
 			<*> m <| Option(key: "stringValue", defaultValue: "foobar", usage: "Some string value")
-			<*> m <| Option(usage: "A name you're required to specify")
-			<*> m <| Option(defaultValue: "filename", usage: "A filename that you can optionally specify")
+			<*> m <| Argument(usage: "A name you're required to specify")
+			<*> m <| Argument(defaultValue: "filename", usage: "A filename that you can optionally specify")
 			<*> m <| Option(key: "enabled", defaultValue: false, usage: "Whether to be enabled")
 			<*> m <| Switch(flag: "f", key: "force", usage: "Whether to force")
 			<*> m <| Switch(flag: "g", key: "glob", usage: "Whether to glob")
+			<*> m <| Argument(defaultValue: [], usage: "An argument list that consumes the rest of positional arguments")
 	}
 }
 
 func ==(lhs: TestOptions, rhs: TestOptions) -> Bool {
-	return lhs.intValue == rhs.intValue && lhs.stringValue == rhs.stringValue && lhs.optionalFilename == rhs.optionalFilename && lhs.requiredName == rhs.requiredName
+	return lhs.intValue == rhs.intValue && lhs.stringValue == rhs.stringValue && lhs.optionalFilename == rhs.optionalFilename && lhs.requiredName == rhs.requiredName && lhs.enabled == rhs.enabled && lhs.force == rhs.force && lhs.glob == rhs.glob && lhs.arguments == rhs.arguments
 }
 
 extension TestOptions: CustomStringConvertible {
 	var description: String {
-		return "{ intValue: \(intValue), stringValue: \(stringValue), optionalFilename: \(optionalFilename), requiredName: \(requiredName) }"
+		return "{ intValue: \(intValue), stringValue: \(stringValue), optionalFilename: \(optionalFilename), requiredName: \(requiredName), enabled: \(enabled), force: \(force), glob: \(glob), arguments: \(arguments) }"
 	}
 }

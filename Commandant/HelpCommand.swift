@@ -69,6 +69,6 @@ public struct HelpOptions<ClientError: ErrorType>: OptionsType {
 
 	public static func evaluate(m: CommandMode) -> Result<HelpOptions, CommandantError<ClientError>> {
 		return create
-			<*> m <| Option(defaultValue: "", usage: "the command to display help for")
+			<*> m <| Argument(defaultValue: "", usage: "the command to display help for")
 	}
 }

@@ -56,12 +56,7 @@ public struct NoOptions<ClientError: ErrorType>: OptionsType {
 public struct Option<T> {
 	/// The key that controls this option. For example, a key of `verbose` would
 	/// be used for a `--verbose` option.
-	///
-	/// If this is nil, this option will not have a corresponding flag, and must
-	/// be specified as a plain value at the end of the argument list.
-	///
-	/// This must be non-nil for a boolean option.
-	public let key: String?
+	public let key: String
 
 	/// The default value for this option. This is the value that will be used
 	/// if the option is never explicitly specified on the command line.
@@ -77,7 +72,7 @@ public struct Option<T> {
 	/// differently from the default).
 	public let usage: String
 
-	public init(key: String? = nil, defaultValue: T? = nil, usage: String) {
+	public init(key: String, defaultValue: T? = nil, usage: String) {
 		self.key = key
 		self.defaultValue = defaultValue
 		self.usage = usage
@@ -93,36 +88,7 @@ public struct Option<T> {
 
 extension Option: CustomStringConvertible {
 	public var description: String {
-		if let key = key {
-			return "--\(key)"
-		} else {
-			return usage
-		}
-	}
-}
-
-/// Represents a value that can be converted from a command-line argument.
-public protocol ArgumentType {
-	/// A human-readable name for this type.
-	static var name: String { get }
-
-	/// Attempts to parse a value from the given command-line argument.
-	static func fromString(string: String) -> Self?
-}
-
-extension Int: ArgumentType {
-	public static let name = "integer"
-
-	public static func fromString(string: String) -> Int? {
-		return Int(string)
-	}
-}
-
-extension String: ArgumentType {
-	public static let name = "string"
-
-	public static func fromString(string: String) -> String? {
-		return string
+		return "--\(key)"
 	}
 }
 
@@ -198,22 +164,18 @@ public func <| <T: ArgumentType, ClientError>(mode: CommandMode, option: Option<
 	switch mode {
 	case let .Arguments(arguments):
 		var stringValue: String?
-		if let key = option.key {
-			switch arguments.consumeValueForKey(key) {
-			case let .Success(value):
-				stringValue = value
+		switch arguments.consumeValueForKey(option.key) {
+		case let .Success(value):
+			stringValue = value
 
-			case let .Failure(error):
-				switch error {
-				case let .UsageError(description):
-					return .Failure(.UsageError(description: description))
+		case let .Failure(error):
+			switch error {
+			case let .UsageError(description):
+				return .Failure(.UsageError(description: description))
 
-				case .CommandError:
-					fatalError("CommandError should be impossible when parameterized over NoError")
-				}
+			case .CommandError:
+				fatalError("CommandError should be impossible when parameterized over NoError")
 			}
-		} else {
-			stringValue = arguments.consumePositionalArgument()
 		}
 
 		if let stringValue = stringValue {
@@ -238,11 +200,9 @@ public func <| <T: ArgumentType, ClientError>(mode: CommandMode, option: Option<
 /// If parsing command line arguments, and no value was specified on the command
 /// line, the option's `defaultValue` is used.
 public func <| <ClientError>(mode: CommandMode, option: Option<Bool>) -> Result<Bool, CommandantError<ClientError>> {
-	precondition(option.key != nil)
-
 	switch mode {
 	case let .Arguments(arguments):
-		if let value = arguments.consumeBooleanKey(option.key!) {
+		if let value = arguments.consumeBooleanKey(option.key) {
 			return .Success(value)
 		} else if let defaultValue = option.defaultValue {
 			return .Success(defaultValue)

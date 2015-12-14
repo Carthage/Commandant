@@ -53,6 +53,77 @@ internal func informativeUsageError<ClientError>(keyValueExample: String, usage:
 	})
 }
 
+/// Combines the text of the two errors, if they're both `UsageError`s.
+/// Otherwise, uses whichever one is not (biased toward the left).
+internal func combineUsageErrors<ClientError>(lhs: CommandantError<ClientError>, _ rhs: CommandantError<ClientError>) -> CommandantError<ClientError> {
+	switch (lhs, rhs) {
+	case let (.UsageError(left), .UsageError(right)):
+		let combinedDescription = "\(left)\n\n\(right)"
+		return .UsageError(description: combinedDescription)
+
+	case (.UsageError, _):
+		return rhs
+
+	case (_, .UsageError), (_, _):
+		return lhs
+	}
+}
+
+/// Constructs an error that indicates unrecognized arguments remains.
+internal func unrecognizedArgumentsError<ClientError>(options: [String]) -> CommandantError<ClientError> {
+	return .UsageError(description: "Unrecognized arguments: " + options.joinWithSeparator(", "))
+}
+
+// MARK: Argument
+
+/// Constructs an error that describes how to use the argument, with the given
+/// example of value usage if applicable.
+internal func informativeUsageError<T, ClientError>(valueExample: String, argument: Argument<T>) -> CommandantError<ClientError> {
+	if argument.defaultValue != nil {
+		return informativeUsageError("[\(valueExample)]", usage: argument.usage)
+	} else {
+		return informativeUsageError(valueExample, usage: argument.usage)
+	}
+}
+
+/// Constructs an error that describes how to use the argument.
+internal func informativeUsageError<T: ArgumentType, ClientError>(argument: Argument<T>) -> CommandantError<ClientError> {
+	var example = ""
+
+	var valueExample = ""
+	if let defaultValue = argument.defaultValue {
+		valueExample = "\(defaultValue)"
+	}
+
+	if valueExample.isEmpty {
+		example += "(\(T.name))"
+	} else {
+		example += valueExample
+	}
+
+	return informativeUsageError(example, argument: argument)
+}
+
+/// Constructs an error that describes how to use the argument list.
+internal func informativeUsageError<T: ArgumentType, ClientError>(argument: Argument<[T]>) -> CommandantError<ClientError> {
+	var example = ""
+
+	var valueExample = ""
+	if let defaultValue = argument.defaultValue {
+		valueExample = "\(defaultValue)"
+	}
+
+	if valueExample.isEmpty {
+		example += "(\(T.name))"
+	} else {
+		example += valueExample
+	}
+
+	return informativeUsageError(example, argument: argument)
+}
+
+// MARK: Option
+
 /// Constructs an error that describes how to use the option, with the given
 /// example of key (and value, if applicable) usage.
 internal func informativeUsageError<T, ClientError>(keyValueExample: String, option: Option<T>) -> CommandantError<ClientError> {
@@ -65,11 +136,7 @@ internal func informativeUsageError<T, ClientError>(keyValueExample: String, opt
 
 /// Constructs an error that describes how to use the option.
 internal func informativeUsageError<T: ArgumentType, ClientError>(option: Option<T>) -> CommandantError<ClientError> {
-	var example = ""
-
-	if let key = option.key {
-		example += "--\(key) "
-	}
+	var example = "--\(option.key) "
 
 	var valueExample = ""
 	if let defaultValue = option.defaultValue {
@@ -87,34 +154,11 @@ internal func informativeUsageError<T: ArgumentType, ClientError>(option: Option
 
 /// Constructs an error that describes how to use the given boolean option.
 internal func informativeUsageError<ClientError>(option: Option<Bool>) -> CommandantError<ClientError> {
-	precondition(option.key != nil)
-
-	let key = option.key!
+	let key = option.key
 
 	if let defaultValue = option.defaultValue {
 		return informativeUsageError((defaultValue ? "--no-\(key)" : "--\(key)"), option: option)
 	} else {
 		return informativeUsageError("--(no-)\(key)", option: option)
 	}
-}
-
-/// Combines the text of the two errors, if they're both `UsageError`s.
-/// Otherwise, uses whichever one is not (biased toward the left).
-internal func combineUsageErrors<ClientError>(lhs: CommandantError<ClientError>, _ rhs: CommandantError<ClientError>) -> CommandantError<ClientError> {
-	switch (lhs, rhs) {
-	case let (.UsageError(left), .UsageError(right)):
-		let combinedDescription = "\(left)\n\n\(right)"
-		return .UsageError(description: combinedDescription)
-
-	case (.UsageError, _):
-		return rhs
-	
-	case (_, .UsageError), (_, _):
-		return lhs
-	}
-}
-
-/// Constructs an error that indicates unrecognized arguments remains.
-internal func unrecognizedArgumentsError<ClientError>(options: [String]) -> CommandantError<ClientError> {
-	return .UsageError(description: "Unrecognized arguments: " + options.joinWithSeparator(", "))
 }
