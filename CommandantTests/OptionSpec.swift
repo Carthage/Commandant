@@ -6,13 +6,11 @@
 //  Copyright (c) 2014 Carthage. All rights reserved.
 //
 
-import Commandant
+@testable import Commandant
 import Foundation
 import Nimble
 import Quick
 import Result
-
-enum NoError {}
 
 class OptionsTypeSpec: QuickSpec {
 	override func spec() {
@@ -99,6 +97,8 @@ struct TestOptions: OptionsType, Equatable {
 	let force: Bool
 	let glob: Bool
 	let arguments: [String]
+
+	typealias ClientError = NoError
 
 	static func create(a: Int)(b: String)(c: String)(d: String)(e: Bool)(f: Bool)(g: Bool)(h: [String]) -> TestOptions {
 		return self.init(intValue: a, stringValue: b, optionalFilename: d, requiredName: c, enabled: e, force: f, glob: g, arguments: h)

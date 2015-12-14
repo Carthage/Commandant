@@ -34,7 +34,7 @@ extension CommandantError: CustomStringConvertible {
 }
 
 /// Used to represent that a ClientError will never occur.
-internal enum NoError {}
+internal enum NoError: ErrorType {}
 
 /// Constructs an `InvalidArgument` error that indicates a missing value for
 /// the argument by the given name.
@@ -67,6 +67,11 @@ internal func combineUsageErrors<ClientError>(lhs: CommandantError<ClientError>,
 	case (_, .UsageError), (_, _):
 		return lhs
 	}
+}
+
+/// Constructs an error that indicates unrecognized arguments remains.
+internal func unrecognizedArgumentsError<ClientError>(options: [String]) -> CommandantError<ClientError> {
+	return .UsageError(description: "Unrecognized arguments: " + options.joinWithSeparator(", "))
 }
 
 // MARK: Argument

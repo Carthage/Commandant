@@ -86,6 +86,11 @@ public final class ArgumentParser {
 		}
 	}
 
+	/// Returns the remaining arguments.
+	internal var remainingArguments: [String]? {
+		return rawArguments.isEmpty ? nil : rawArguments.map { $0.description }
+	}
+
 	/// Returns whether the given key was enabled or disabled, or nil if it
 	/// was not given at all.
 	///
