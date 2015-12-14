@@ -34,7 +34,7 @@ extension CommandantError: CustomStringConvertible {
 }
 
 /// Used to represent that a ClientError will never occur.
-internal enum NoError {}
+internal enum NoError: ErrorType {}
 
 /// Constructs an `InvalidArgument` error that indicates a missing value for
 /// the argument by the given name.

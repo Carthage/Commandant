@@ -35,12 +35,21 @@ import Result
 ///			}
 ///		}
 public protocol OptionsType {
-	typealias ClientError
+	typealias ClientError: ErrorType
 
 	/// Evaluates this set of options in the given mode.
 	///
 	/// Returns the parsed options or a `UsageError`.
 	static func evaluate(m: CommandMode) -> Result<Self, CommandantError<ClientError>>
+}
+
+/// An `OptionsType` that has no options.
+public struct NoOptions<ClientError: ErrorType>: OptionsType {
+	private init() {}
+	
+	public static func evaluate(m: CommandMode) -> Result<NoOptions, CommandantError<ClientError>> {
+		return .Success(NoOptions())
+	}
 }
 
 /// Describes an option that can be provided on the command line.

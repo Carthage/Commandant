@@ -18,7 +18,9 @@ import Result
 /// 	let commands: CommandRegistry<MyErrorType> = …
 /// 	let helpCommand = HelpCommand(registry: commands)
 /// 	commands.register(helpCommand)
-public struct HelpCommand<ClientError>: CommandType {
+public struct HelpCommand<ClientError: ErrorType>: CommandType {
+	public typealias Options = HelpOptions<ClientError>
+
 	public let verb = "help"
 	public let function = "Display general or command-specific help"
 
@@ -30,44 +32,42 @@ public struct HelpCommand<ClientError>: CommandType {
 		self.registry = registry
 	}
 
-	public func run(mode: CommandMode) -> Result<(), CommandantError<ClientError>> {
-		return HelpOptions<ClientError>.evaluate(mode)
-			.flatMap { options in
-				if let verb = options.verb {
-					if let command = self.registry[verb] {
-						print(command.function, terminator: "\n\n")
-						return command.run(.Usage)
-					} else {
-						fputs("Unrecognized command: '\(verb)'\n", stderr)
-					}
-				}
-
-				print("Available commands:\n")
-
-				let maxVerbLength = self.registry.commands.map { $0.verb.characters.count }.maxElement() ?? 0
-
-				for command in self.registry.commands {
-					let padding = Repeat<Character>(count: maxVerbLength - command.verb.characters.count, repeatedValue: " ")
-					print("   \(command.verb)\(String(padding))   \(command.function)")
-				}
-
+	public func run(options: Options) -> Result<(), ClientError> {
+		if let verb = options.verb {
+			if let command = self.registry[verb] {
+				print(command.function, terminator: "\n\n")
+				print(command.usage())
 				return .Success(())
+			} else {
+				fputs("Unrecognized command: '\(verb)'\n", stderr)
 			}
+		}
+
+		print("Available commands:\n")
+
+		let maxVerbLength = self.registry.commands.map { $0.verb.characters.count }.maxElement() ?? 0
+
+		for command in self.registry.commands {
+			let padding = Repeat<Character>(count: maxVerbLength - command.verb.characters.count, repeatedValue: " ")
+			print("   \(command.verb)\(String(padding))   \(command.function)")
+		}
+
+		return .Success(())
 	}
 }
 
-private struct HelpOptions<ClientError>: OptionsType {
-	let verb: String?
+public struct HelpOptions<ClientError: ErrorType>: OptionsType {
+	private let verb: String?
 	
-	init(verb: String?) {
+	private init(verb: String?) {
 		self.verb = verb
 	}
 
-	static func create(verb: String) -> HelpOptions {
+	private static func create(verb: String) -> HelpOptions {
 		return self.init(verb: (verb == "" ? nil : verb))
 	}
 
-	static func evaluate(m: CommandMode) -> Result<HelpOptions, CommandantError<ClientError>> {
+	public static func evaluate(m: CommandMode) -> Result<HelpOptions, CommandantError<ClientError>> {
 		return create
 			<*> m <| Option(defaultValue: "", usage: "the command to display help for")
 	}
