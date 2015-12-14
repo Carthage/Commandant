@@ -34,7 +34,7 @@ public struct Argument<T> {
 /// Evaluates the given argument in the given mode.
 ///
 /// If parsing command line arguments, and no value was specified on the command
-/// line, the option's `defaultValue` is used.
+/// line, the argument's `defaultValue` is used.
 public func <| <T: ArgumentType, ClientError>(mode: CommandMode, argument: Argument<T>) -> Result<T, CommandantError<ClientError>> {
 	switch mode {
 	case let .Arguments(arguments):
@@ -60,7 +60,7 @@ public func <| <T: ArgumentType, ClientError>(mode: CommandMode, argument: Argum
 /// Evaluates the given argument list in the given mode.
 ///
 /// If parsing command line arguments, and no value was specified on the command
-/// line, the option's `defaultValue` is used.
+/// line, the argument's `defaultValue` is used.
 public func <| <T: ArgumentType, ClientError>(mode: CommandMode, argument: Argument<[T]>) -> Result<[T], CommandantError<ClientError>> {
 	switch mode {
 	case let .Arguments(arguments):
