@@ -141,8 +141,7 @@ extension CommandRegistry {
 		assert(arguments.count >= 1)
 
 		// Extract the executable name.
-		let executableName = arguments.first!
-		arguments.removeAtIndex(0)
+		let executableName = arguments.removeAtIndex(0)
 
 		let verb = arguments.first ?? defaultVerb
 		if arguments.count > 0 {
