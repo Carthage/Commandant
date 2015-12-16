@@ -151,10 +151,10 @@ extension CommandRegistry {
 		}
 
 		switch runCommand(verb, arguments: arguments) {
-		case .Some(.Success):
+		case (.Success?):
 			exit(EXIT_SUCCESS)
 
-		case let .Some(.Failure(error)):
+		case let (.Failure(error)?):
 			switch error {
 			case let .UsageError(description):
 				fputs(description + "\n", stderr)
@@ -165,7 +165,7 @@ extension CommandRegistry {
 
 			exit(EXIT_FAILURE)
 
-		case .None:
+		case nil:
 			fputs("Unrecognized command: '\(verb)'. See `\(executableName) help`.\n", stderr)
 			exit(EXIT_FAILURE)
 		}
