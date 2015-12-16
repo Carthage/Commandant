@@ -184,7 +184,8 @@ public final class ArgumentParser {
 	internal func consumeBooleanFlag(flag: Character) -> Bool {
 		for (index, arg) in rawArguments.enumerate() {
 			switch arg {
-			case var .Flag(flags) where flags.contains(flag):
+			case let .Flag(flags) where flags.contains(flag):
+				var flags = flags
 				flags.remove(flag)
 				if flags.isEmpty {
 					rawArguments.removeAtIndex(index)

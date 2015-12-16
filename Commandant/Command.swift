@@ -137,8 +137,10 @@ extension CommandRegistry {
 	/// If a matching command could not be found or a usage error occurred,
 	/// a helpful error message will be written to `stderr`, then the process
 	/// will exit with a failure error code.
-	@noreturn public func main(var arguments arguments: [String], defaultVerb: String, errorHandler: ClientError -> ()) {
+	@noreturn public func main(arguments arguments: [String], defaultVerb: String, errorHandler: ClientError -> ()) {
 		assert(arguments.count >= 1)
+
+		var arguments = arguments
 
 		// Extract the executable name.
 		let executableName = arguments.removeAtIndex(0)
