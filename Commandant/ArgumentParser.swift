@@ -128,12 +128,13 @@ public final class ArgumentParser {
 		var index = 0
 
 		while index < oldArguments.count {
-			defer { index++ }
+			defer { index += 1 }
 
 			let arg = oldArguments[index]
 
 			if arg == .Key(key) {
-				if ++index < oldArguments.count {
+				index += 1
+				if index < oldArguments.count {
 					switch oldArguments[index] {
 					case let .Value(value):
 						foundValue = value
