@@ -39,7 +39,7 @@ public struct CommandWrapper<ClientError: ErrorType> {
 	public let usage: () -> CommandantError<ClientError>
 
 	/// Creates a command that wraps another.
-	private init<C: CommandType where C.Options.ClientError == ClientError>(_ command: C) {
+	private init<C: CommandType where C.ClientError == ClientError, C.Options.ClientError == ClientError>(_ command: C) {
 		verb = command.verb
 		function = command.function
 		run = { (arguments: ArgumentParser) -> Result<(), CommandantError<ClientError>> in
@@ -50,8 +50,9 @@ public struct CommandWrapper<ClientError: ErrorType> {
 			}
 
 			if let options = options.value {
-				command.run(options)
-				return .Success()
+				return command
+					.run(options)
+					.mapError(CommandantError.CommandError)
 			} else {
 				return .Failure(options.error!)
 			}
@@ -87,7 +88,7 @@ public final class CommandRegistry<ClientError: ErrorType> {
 	///
 	/// If another command was already registered with the same `verb`, it will
 	/// be overwritten.
-	public func register<C: CommandType where C.Options.ClientError == ClientError>(command: C) {
+	public func register<C: CommandType where C.ClientError == ClientError, C.Options.ClientError == ClientError>(command: C) {
 		commandsByVerb[command.verb] = CommandWrapper(command)
 	}
 
