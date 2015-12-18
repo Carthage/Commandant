@@ -152,10 +152,10 @@ extension CommandRegistry {
 		}
 
 		switch runCommand(verb, arguments: arguments) {
-		case (.Success?):
+		case .Success?:
 			exit(EXIT_SUCCESS)
 
-		case let (.Failure(error)?):
+		case let .Failure(error)?:
 			switch error {
 			case let .UsageError(description):
 				fputs(description + "\n", stderr)
