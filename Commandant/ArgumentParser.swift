@@ -125,15 +125,20 @@ public final class ArgumentParser {
 		rawArguments.removeAll()
 
 		var foundValue: String?
-		argumentLoop: for var index = 0; index < oldArguments.count; index++ {
+		var index = 0
+
+		while index < oldArguments.count {
+			defer { index += 1 }
+
 			let arg = oldArguments[index]
 
 			if arg == .Key(key) {
-				if ++index < oldArguments.count {
+				index += 1
+				if index < oldArguments.count {
 					switch oldArguments[index] {
 					case let .Value(value):
 						foundValue = value
-						continue argumentLoop
+						continue
 
 					default:
 						break
@@ -152,8 +157,8 @@ public final class ArgumentParser {
 	/// Returns the next positional argument that hasn't yet been returned, or
 	/// nil if there are no more positional arguments.
 	internal func consumePositionalArgument() -> String? {
-		for var index = 0; index < rawArguments.count; index++ {
-			switch rawArguments[index] {
+		for (index, arg) in rawArguments.enumerate() {
+			switch arg {
 			case let .Value(value):
 				rawArguments.removeAtIndex(index)
 				return value
@@ -180,7 +185,8 @@ public final class ArgumentParser {
 	internal func consumeBooleanFlag(flag: Character) -> Bool {
 		for (index, arg) in rawArguments.enumerate() {
 			switch arg {
-			case var .Flag(flags) where flags.contains(flag):
+			case let .Flag(flags) where flags.contains(flag):
+				var flags = flags
 				flags.remove(flag)
 				if flags.isEmpty {
 					rawArguments.removeAtIndex(index)
