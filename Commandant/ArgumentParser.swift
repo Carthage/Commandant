@@ -82,7 +82,7 @@ public final class ArgumentParser {
 		// Remaining arguments are all positional parameters.
 		if params.count == 2 {
 			let positional = params.last!
-			rawArguments.appendContentsOf(positional.map { .Value($0) })
+			rawArguments.appendContentsOf(positional.map(RawArgument.Value))
 		}
 	}
 
