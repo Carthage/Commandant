@@ -129,26 +129,20 @@ public final class ArgumentParser {
 
 		while index < oldArguments.count {
 			defer { index += 1 }
-
 			let arg = oldArguments[index]
 
-			if arg == .Key(key) {
-				index += 1
-				if index < oldArguments.count {
-					switch oldArguments[index] {
-					case let .Value(value):
-						foundValue = value
-						continue
-
-					default:
-						break
-					}
-				}
-
-				return .Failure(missingArgumentError("--\(key)"))
-			} else {
+			guard arg == .Key(key) else {
 				rawArguments.append(arg)
+				continue
 			}
+
+			index += 1
+			if index < oldArguments.count, case let .Value(value) = oldArguments[index] {
+				foundValue = value
+				continue
+			}
+
+			return .Failure(missingArgumentError("--\(key)"))
 		}
 
 		return .Success(foundValue)
@@ -158,13 +152,9 @@ public final class ArgumentParser {
 	/// nil if there are no more positional arguments.
 	internal func consumePositionalArgument() -> String? {
 		for (index, arg) in rawArguments.enumerate() {
-			switch arg {
-			case let .Value(value):
+			if case let .Value(value) = arg {
 				rawArguments.removeAtIndex(index)
 				return value
-
-			default:
-				break
 			}
 		}
 
@@ -184,19 +174,17 @@ public final class ArgumentParser {
 	/// list of arguments remaining.
 	internal func consumeBooleanFlag(flag: Character) -> Bool {
 		for (index, arg) in rawArguments.enumerate() {
-			switch arg {
-			case let .Flag(flags) where flags.contains(flag):
+			if case let .Flag(flags) = arg where flags.contains(flag) {
 				var flags = flags
 				flags.remove(flag)
+
 				if flags.isEmpty {
 					rawArguments.removeAtIndex(index)
 				} else {
 					rawArguments[index] = .Flag(flags)
 				}
-				return true
 
-			default:
-				break
+				return true
 			}
 		}
 
