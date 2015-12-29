@@ -15,8 +15,6 @@ public protocol CommandType {
 	/// The command's options type.
 	typealias Options: OptionsType
 
-	typealias ClientError: ErrorType = Options.ClientError
-	
 	/// The action that users should specify to use this subcommand (e.g.,
 	/// `help`).
 	var verb: String { get }
@@ -26,7 +24,7 @@ public protocol CommandType {
 	var function: String { get }
 
 	/// Runs this subcommand with the given options.
-	func run(options: Options) -> Result<(), ClientError>
+	func run(options: Options) -> Result<(), Options.ClientError>
 }
 
 /// A type-erased command.
@@ -39,7 +37,7 @@ public struct CommandWrapper<ClientError: ErrorType> {
 	public let usage: () -> CommandantError<ClientError>
 
 	/// Creates a command that wraps another.
-	private init<C: CommandType where C.ClientError == ClientError, C.Options.ClientError == ClientError>(_ command: C) {
+	private init<C: CommandType where C.Options.ClientError == ClientError>(_ command: C) {
 		verb = command.verb
 		function = command.function
 		run = { (arguments: ArgumentParser) -> Result<(), CommandantError<ClientError>> in
@@ -88,7 +86,7 @@ public final class CommandRegistry<ClientError: ErrorType> {
 	///
 	/// If another command was already registered with the same `verb`, it will
 	/// be overwritten.
-	public func register<C: CommandType where C.ClientError == ClientError, C.Options.ClientError == ClientError>(command: C) {
+	public func register<C: CommandType where C.Options.ClientError == ClientError>(command: C) {
 		commandsByVerb[command.verb] = CommandWrapper(command)
 	}
 
