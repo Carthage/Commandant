@@ -137,12 +137,11 @@ public final class ArgumentParser {
 			}
 
 			index += 1
-			if index < oldArguments.count, case let .Value(value) = oldArguments[index] {
-				foundValue = value
-				continue
+			guard index < oldArguments.count, case let .Value(value) = oldArguments[index] else {
+				return .Failure(missingArgumentError("--\(key)"))
 			}
 
-			return .Failure(missingArgumentError("--\(key)"))
+			foundValue = value
 		}
 
 		return .Success(foundValue)
