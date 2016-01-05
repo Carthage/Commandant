@@ -35,8 +35,10 @@ public struct HelpCommand<ClientError: ErrorType>: CommandType {
 	public func run(options: Options) -> Result<(), ClientError> {
 		if let verb = options.verb {
 			if let command = self.registry[verb] {
-				print(command.function, terminator: "\n\n")
-				print(command.usage())
+				print(command.function)
+				if let usageError = command.usage() {
+					print("\n\(usageError)")
+				}
 				return .Success(())
 			} else {
 				fputs("Unrecognized command: '\(verb)'\n", stderr)
