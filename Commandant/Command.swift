@@ -49,12 +49,14 @@ public struct CommandWrapper<ClientError: ErrorType> {
 				return .Failure(unrecognizedArgumentsError(remainingArguments))
 			}
 
-			if let options = options.value {
+			switch options {
+			case let .Success(options):
 				return command
 					.run(options)
 					.mapError(CommandantError.CommandError)
-			} else {
-				return .Failure(options.error!)
+
+			case let .Failure(error):
+				return .Failure(error)
 			}
 		}
 		usage = { () -> CommandantError<ClientError> in
