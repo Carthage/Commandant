@@ -36,7 +36,7 @@ public struct CommandWrapper<ClientError: ErrorType> {
 	
 	public let run: ArgumentParser -> Result<(), CommandantError<ClientError>>
 	
-	public let usage: () -> CommandantError<ClientError>
+	public let usage: () -> CommandantError<ClientError>?
 
 	/// Creates a command that wraps another.
 	private init<C: CommandType where C.ClientError == ClientError, C.Options.ClientError == ClientError>(_ command: C) {
@@ -49,16 +49,18 @@ public struct CommandWrapper<ClientError: ErrorType> {
 				return .Failure(unrecognizedArgumentsError(remainingArguments))
 			}
 
-			if let options = options.value {
+			switch options {
+			case let .Success(options):
 				return command
 					.run(options)
 					.mapError(CommandantError.CommandError)
-			} else {
-				return .Failure(options.error!)
+
+			case let .Failure(error):
+				return .Failure(error)
 			}
 		}
-		usage = { () -> CommandantError<ClientError> in
-			return C.Options.evaluate(.Usage).error!
+		usage = { () -> CommandantError<ClientError>? in
+			return C.Options.evaluate(.Usage).error
 		}
 	}
 }
