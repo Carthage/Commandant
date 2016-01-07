@@ -74,18 +74,18 @@ public func <| <T: ArgumentType, ClientError>(mode: CommandMode, argument: Argum
 
 		var values = [T]()
 
-		if let value = T.fromString(firstValue) {
-			values.append(value)
-		} else {
+		guard let value = T.fromString(firstValue) else {
 			return .Failure(argument.invalidUsageError(firstValue))
 		}
 
+		values.append(value)
+
 		while let nextValue = arguments.consumePositionalArgument() {
-			if let value = T.fromString(nextValue) {
-				values.append(value)
-			} else {
+			guard let value = T.fromString(nextValue) else {
 				return .Failure(argument.invalidUsageError(nextValue))
 			}
+
+			values.append(value)
 		}
 
 		return .Success(values)
