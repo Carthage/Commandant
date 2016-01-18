@@ -41,7 +41,7 @@
 		D00CCDD91A20717400109F8C /* Commandant.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Commandant.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D00CCDDD1A20717400109F8C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D00CCDDE1A20717400109F8C /* Commandant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Commandant.h; sourceTree = "<group>"; };
-		D00CCDE41A20717400109F8C /* CommandantTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CommandantTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		D00CCDE41A20717400109F8C /* Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D00CCDEA1A20717400109F8C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D00CCDF81A20719500109F8C /* Common.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Common.xcconfig; sourceTree = "<group>"; };
 		D00CCDFA1A20719500109F8C /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
@@ -99,7 +99,7 @@
 			isa = PBXGroup;
 			children = (
 				D00CCDDB1A20717400109F8C /* Commandant */,
-				D00CCDE81A20717400109F8C /* CommandantTests */,
+				D00CCDE81A20717400109F8C /* Tests */,
 				D00CCDF61A20719500109F8C /* Configuration */,
 				D00CCDDA1A20717400109F8C /* Products */,
 			);
@@ -110,7 +110,7 @@
 			isa = PBXGroup;
 			children = (
 				D00CCDD91A20717400109F8C /* Commandant.framework */,
-				D00CCDE41A20717400109F8C /* CommandantTests.xctest */,
+				D00CCDE41A20717400109F8C /* Tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -135,14 +135,14 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		D00CCDE81A20717400109F8C /* CommandantTests */ = {
+		D00CCDE81A20717400109F8C /* Tests */ = {
 			isa = PBXGroup;
 			children = (
 				CDFC88351C3C0612003AC8F8 /* CommandSpec.swift */,
 				D00CCE281A20741C00109F8C /* OptionSpec.swift */,
 				D00CCDE91A20717400109F8C /* Supporting Files */,
 			);
-			path = CommandantTests;
+			path = Tests;
 			sourceTree = "<group>";
 		};
 		D00CCDE91A20717400109F8C /* Supporting Files */ = {
@@ -275,9 +275,9 @@
 			productReference = D00CCDD91A20717400109F8C /* Commandant.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		D00CCDE31A20717400109F8C /* CommandantTests */ = {
+		D00CCDE31A20717400109F8C /* Tests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = D00CCDF21A20717400109F8C /* Build configuration list for PBXNativeTarget "CommandantTests" */;
+			buildConfigurationList = D00CCDF21A20717400109F8C /* Build configuration list for PBXNativeTarget "Tests" */;
 			buildPhases = (
 				D00CCDE01A20717400109F8C /* Sources */,
 				D00CCDE11A20717400109F8C /* Frameworks */,
@@ -288,9 +288,9 @@
 			dependencies = (
 				D00CCDE71A20717400109F8C /* PBXTargetDependency */,
 			);
-			name = CommandantTests;
-			productName = CommandantTests;
-			productReference = D00CCDE41A20717400109F8C /* CommandantTests.xctest */;
+			name = Tests;
+			productName = Tests;
+			productReference = D00CCDE41A20717400109F8C /* Tests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -325,7 +325,7 @@
 			projectRoot = "";
 			targets = (
 				D00CCDD81A20717400109F8C /* Commandant */,
-				D00CCDE31A20717400109F8C /* CommandantTests */,
+				D00CCDE31A20717400109F8C /* Tests */,
 			);
 		};
 /* End PBXProject section */
@@ -450,7 +450,7 @@
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = CommandantTests/Info.plist;
+				INFOPLIST_FILE = Tests/Info.plist;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.carthage.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -464,7 +464,7 @@
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = CommandantTests/Info.plist;
+				INFOPLIST_FILE = Tests/Info.plist;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.carthage.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -506,7 +506,7 @@
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = CommandantTests/Info.plist;
+				INFOPLIST_FILE = Tests/Info.plist;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.carthage.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -549,7 +549,7 @@
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = CommandantTests/Info.plist;
+				INFOPLIST_FILE = Tests/Info.plist;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.carthage.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -580,7 +580,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		D00CCDF21A20717400109F8C /* Build configuration list for PBXNativeTarget "CommandantTests" */ = {
+		D00CCDF21A20717400109F8C /* Build configuration list for PBXNativeTarget "Tests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D00CCDF31A20717400109F8C /* Debug */,
