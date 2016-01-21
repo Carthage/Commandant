@@ -170,8 +170,42 @@ extension CommandRegistry {
 			exit(EXIT_FAILURE)
 
 		case nil:
+			if let subcommandExecuted = executeSubcommandIfExists(executableName, verb: verb, arguments: arguments) {
+				exit(subcommandExecuted)
+			}
+
 			fputs("Unrecognized command: '\(verb)'. See `\(executableName) help`.\n", stderr)
 			exit(EXIT_FAILURE)
 		}
+	}
+
+	/// Finds and executes a subcommand which exists in your $PATH. The executable
+	/// name must be in the form of `command-verb`.
+	///
+	/// - Returns: The exit status of found subcommand or nil.
+	private func executeSubcommandIfExists(executableName: String, verb: String, arguments: [String]) -> Int32? {
+		let subcommand = "\((executableName as NSString).lastPathComponent)-\(verb)"
+		let paths = NSProcessInfo.processInfo()
+			.environment["PATH"]?
+			.characters.split(":")
+			.map(String.init) ?? []
+
+		for path in paths {
+			let subcommandPath = (path as NSString).stringByAppendingPathComponent(subcommand)
+			guard NSFileManager.defaultManager().isExecutableFileAtPath(subcommandPath) else {
+				continue
+			}
+
+			let task = NSTask()
+			task.launchPath = "/usr/bin/env"
+			task.arguments = [ subcommand ] + arguments
+
+			task.launch()
+			task.waitUntilExit()
+
+			return task.terminationStatus
+		}
+
+		return nil
 	}
 }
