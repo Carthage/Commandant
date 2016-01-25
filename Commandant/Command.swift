@@ -120,6 +120,10 @@ extension CommandRegistry {
 	/// If the chosen command fails, the provided error handler will be invoked,
 	/// then the process will exit with a failure exit code.
 	///
+	/// If a matching command could not be found but there is any `executable-verb`
+	/// style subcommand executable in the caller's `$PATH`, the subcommand will
+	/// be executed.
+	///
 	/// If a matching command could not be found or a usage error occurred,
 	/// a helpful error message will be written to `stderr`, then the process
 	/// will exit with a failure error code.
@@ -136,6 +140,10 @@ extension CommandRegistry {
 	///
 	/// If the chosen command fails, the provided error handler will be invoked,
 	/// then the process will exit with a failure exit code.
+	///
+	/// If a matching command could not be found but there is any `executable-verb`
+	/// style subcommand executable in the caller's `$PATH`, the subcommand will
+	/// be executed.
 	///
 	/// If a matching command could not be found or a usage error occurred,
 	/// a helpful error message will be written to `stderr`, then the process
