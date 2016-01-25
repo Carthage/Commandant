@@ -180,25 +180,16 @@ extension CommandRegistry {
 	}
 
 	/// Finds and executes a subcommand which exists in your $PATH. The executable
-	/// name must be in the form of `command-verb`.
+	/// name must be in the form of `executable-verb`.
 	///
 	/// - Returns: The exit status of found subcommand or nil.
 	private func executeSubcommandIfExists(executableName: String, verb: String, arguments: [String]) -> Int32? {
 		let subcommand = "\((executableName as NSString).lastPathComponent)-\(verb)"
-		let paths = NSProcessInfo.processInfo()
-			.environment["PATH"]?
-			.characters.split(":")
-			.map(String.init) ?? []
 
-		for path in paths {
-			let subcommandPath = (path as NSString).stringByAppendingPathComponent(subcommand)
-			guard NSFileManager.defaultManager().isExecutableFileAtPath(subcommandPath) else {
-				continue
-			}
-
+		func launchTask(path: String, arguments: [String]) -> Int32 {
 			let task = NSTask()
-			task.launchPath = "/usr/bin/env"
-			task.arguments = [ subcommand ] + arguments
+			task.launchPath = path
+			task.arguments = arguments
 
 			task.launch()
 			task.waitUntilExit()
@@ -206,6 +197,10 @@ extension CommandRegistry {
 			return task.terminationStatus
 		}
 
-		return nil
+		guard launchTask("/usr/bin/which", arguments: [ "-s", subcommand ]) == 0 else {
+			return nil
+		}
+
+		return launchTask("/usr/bin/env", arguments: [ subcommand ] + arguments)
 	}
 }
