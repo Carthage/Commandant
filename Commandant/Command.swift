@@ -120,6 +120,10 @@ extension CommandRegistry {
 	/// If the chosen command fails, the provided error handler will be invoked,
 	/// then the process will exit with a failure exit code.
 	///
+	/// If a matching command could not be found but there is any `executable-verb`
+	/// style subcommand executable in the caller's `$PATH`, the subcommand will
+	/// be executed.
+	///
 	/// If a matching command could not be found or a usage error occurred,
 	/// a helpful error message will be written to `stderr`, then the process
 	/// will exit with a failure error code.
@@ -136,6 +140,10 @@ extension CommandRegistry {
 	///
 	/// If the chosen command fails, the provided error handler will be invoked,
 	/// then the process will exit with a failure exit code.
+	///
+	/// If a matching command could not be found but there is any `executable-verb`
+	/// style subcommand executable in the caller's `$PATH`, the subcommand will
+	/// be executed.
 	///
 	/// If a matching command could not be found or a usage error occurred,
 	/// a helpful error message will be written to `stderr`, then the process
@@ -170,8 +178,37 @@ extension CommandRegistry {
 			exit(EXIT_FAILURE)
 
 		case nil:
+			if let subcommandExecuted = executeSubcommandIfExists(executableName, verb: verb, arguments: arguments) {
+				exit(subcommandExecuted)
+			}
+
 			fputs("Unrecognized command: '\(verb)'. See `\(executableName) help`.\n", stderr)
 			exit(EXIT_FAILURE)
 		}
+	}
+
+	/// Finds and executes a subcommand which exists in your $PATH. The executable
+	/// name must be in the form of `executable-verb`.
+	///
+	/// - Returns: The exit status of found subcommand or nil.
+	private func executeSubcommandIfExists(executableName: String, verb: String, arguments: [String]) -> Int32? {
+		let subcommand = "\((executableName as NSString).lastPathComponent)-\(verb)"
+
+		func launchTask(path: String, arguments: [String]) -> Int32 {
+			let task = NSTask()
+			task.launchPath = path
+			task.arguments = arguments
+
+			task.launch()
+			task.waitUntilExit()
+
+			return task.terminationStatus
+		}
+
+		guard launchTask("/usr/bin/which", arguments: [ "-s", subcommand ]) == 0 else {
+			return nil
+		}
+
+		return launchTask("/usr/bin/env", arguments: [ subcommand ] + arguments)
 	}
 }
