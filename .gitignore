@@ -19,3 +19,5 @@ DerivedData
 *.xcscmblueprint
 
 Carthage/Build
+Packages/
+.build/
