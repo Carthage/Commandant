@@ -11,9 +11,9 @@ matrix:
       env: JOB=SPM
       before_install:
         - export SWIFT_VERSION=swift-DEVELOPMENT-SNAPSHOT-2016-01-25-a
-        - curl https://swift.org/builds/development/xcode/$(SWIFT_VERSION)/$(SWIFT_VERSION)-osx.pkg -o swift.pkg
+        - curl https://swift.org/builds/development/xcode/$SWIFT_VERSION/$SWIFT_VERSION-osx.pkg -o swift.pkg
         - sudo installer -pkg swift.pkg -target /
-        - 'export PATH=/Library/Developer/Toolchains/${SWIFT_VERSION}.xctoolchain/usr/bin:"${PATH}"'
+        - export PATH="/Library/Developer/Toolchains/$SWIFT_VERSION.xctoolchain/usr/bin:$PATH"
   exclude:
     - script: placeholder # workaround for https://github.com/travis-ci/travis-ci/issues/4681
 notifications:
