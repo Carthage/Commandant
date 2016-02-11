@@ -45,7 +45,7 @@ public protocol OptionsType {
 
 /// An `OptionsType` that has no options.
 public struct NoOptions<ClientError: ErrorType>: OptionsType {
-	private init() {}
+	public init() {}
 	
 	public static func evaluate(m: CommandMode) -> Result<NoOptions, CommandantError<ClientError>> {
 		return .Success(NoOptions())
