@@ -124,38 +124,16 @@ internal func informativeUsageError<T: ArgumentType, ClientError>(argument: Argu
 /// Constructs an error that describes how to use the option, with the given
 /// example of key (and value, if applicable) usage.
 internal func informativeUsageError<T, ClientError>(keyValueExample: String, option: Option<T>) -> CommandantError<ClientError> {
-	if option.defaultValue != nil {
-		return informativeUsageError("[\(keyValueExample)]", usage: option.usage)
-	} else {
-		return informativeUsageError(keyValueExample, usage: option.usage)
-	}
+	return informativeUsageError("[\(keyValueExample)]", usage: option.usage)
 }
 
 /// Constructs an error that describes how to use the option.
 internal func informativeUsageError<T: ArgumentType, ClientError>(option: Option<T>) -> CommandantError<ClientError> {
-	var example = "--\(option.key) "
-
-	var valueExample = ""
-	if let defaultValue = option.defaultValue {
-		valueExample = "\(defaultValue)"
-	}
-
-	if valueExample.isEmpty {
-		example += "(\(T.name))"
-	} else {
-		example += valueExample
-	}
-
-	return informativeUsageError(example, option: option)
+	return informativeUsageError("--\(option.key) \(option.defaultValue)", option: option)
 }
 
 /// Constructs an error that describes how to use the given boolean option.
 internal func informativeUsageError<ClientError>(option: Option<Bool>) -> CommandantError<ClientError> {
 	let key = option.key
-
-	if let defaultValue = option.defaultValue {
-		return informativeUsageError((defaultValue ? "--no-\(key)" : "--\(key)"), option: option)
-	} else {
-		return informativeUsageError("--(no-)\(key)", option: option)
-	}
+	return informativeUsageError((option.defaultValue ? "--no-\(key)" : "--\(key)"), option: option)
 }

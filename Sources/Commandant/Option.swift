@@ -60,9 +60,7 @@ public struct Option<T> {
 
 	/// The default value for this option. This is the value that will be used
 	/// if the option is never explicitly specified on the command line.
-	///
-	/// If this is nil, this option is always required.
-	public let defaultValue: T?
+	public let defaultValue: T
 
 	/// A human-readable string describing the purpose of this option. This will
 	/// be shown in help messages.
@@ -72,7 +70,7 @@ public struct Option<T> {
 	/// differently from the default).
 	public let usage: String
 
-	public init(key: String, defaultValue: T? = nil, usage: String) {
+	public init(key: String, defaultValue: T, usage: String) {
 		self.key = key
 		self.defaultValue = defaultValue
 		self.usage = usage
@@ -184,10 +182,8 @@ public func <| <T: ArgumentType, ClientError>(mode: CommandMode, option: Option<
 			}
 
 			return .Failure(option.invalidUsageError(stringValue))
-		} else if let defaultValue = option.defaultValue {
-			return .Success(defaultValue)
 		} else {
-			return .Failure(missingArgumentError(option.description))
+			return .Success(option.defaultValue)
 		}
 
 	case .Usage:
@@ -204,10 +200,8 @@ public func <| <ClientError>(mode: CommandMode, option: Option<Bool>) -> Result<
 	case let .Arguments(arguments):
 		if let value = arguments.consumeBooleanKey(option.key) {
 			return .Success(value)
-		} else if let defaultValue = option.defaultValue {
-			return .Success(defaultValue)
 		} else {
-			return .Failure(missingArgumentError(option.description))
+			return .Success(option.defaultValue)
 		}
 
 	case .Usage:
