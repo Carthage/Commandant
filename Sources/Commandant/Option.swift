@@ -75,13 +75,6 @@ public struct Option<T> {
 		self.defaultValue = defaultValue
 		self.usage = usage
 	}
-
-	/// Constructs an `InvalidArgument` error that describes how the option was
-	/// used incorrectly. `value` should be the invalid value given by the user.
-	private func invalidUsageError<ClientError>(value: String) -> CommandantError<ClientError> {
-		let description = "Invalid value for '\(self)': \(value)"
-		return .UsageError(description: description)
-	}
 }
 
 extension Option: CustomStringConvertible {
@@ -157,12 +150,16 @@ public func <*> <T, U, ClientError>(f: Result<(T -> U), CommandantError<ClientEr
 /// Evaluates the given option in the given mode.
 ///
 /// If parsing command line arguments, and no value was specified on the command
-/// line, the option's `defaultValue` is used.
-public func <| <T: ArgumentType, ClientError>(mode: CommandMode, option: Option<T>) -> Result<T, CommandantError<ClientError>> {
+/// line, `nil` is used.
+///
+/// This exists as a separate function because of limitations of Swift. Ideally, `Optional` would
+/// conform to `ArgumentType` if the wrapped type does. Or, the non-`Optional` version of `<|`
+/// would call the `Optional` version. Unfortunately, those don't work.
+private func evaluate<T: ArgumentType, ClientError>(mode: CommandMode, key: String, @autoclosure usageError: () -> CommandantError<ClientError>) -> Result<T?, CommandantError<ClientError>> {
 	switch mode {
 	case let .Arguments(arguments):
 		var stringValue: String?
-		switch arguments.consumeValueForKey(option.key) {
+		switch arguments.consumeValueForKey(key) {
 		case let .Success(value):
 			stringValue = value
 
@@ -180,15 +177,32 @@ public func <| <T: ArgumentType, ClientError>(mode: CommandMode, option: Option<
 			if let value = T.fromString(stringValue) {
 				return .Success(value)
 			}
-
-			return .Failure(option.invalidUsageError(stringValue))
+			
+			let description = "Invalid value for '--\(key)': \(stringValue)"
+			return .Failure(.UsageError(description: description))
 		} else {
-			return .Success(option.defaultValue)
+			return .Success(nil)
 		}
 
 	case .Usage:
-		return .Failure(informativeUsageError(option))
+		return .Failure(usageError())
 	}
+}
+
+/// Evaluates the given option in the given mode.
+///
+/// If parsing command line arguments, and no value was specified on the command
+/// line, the option's `defaultValue` is used.
+public func <| <T: ArgumentType, ClientError>(mode: CommandMode, option: Option<T>) -> Result<T, CommandantError<ClientError>> {
+	return evaluate(mode, key: option.key, usageError: informativeUsageError(option)).map { $0 ?? option.defaultValue }
+}
+
+/// Evaluates the given option in the given mode.
+///
+/// If parsing command line arguments, and no value was specified on the command
+/// line, the option's `defaultValue` is used.
+public func <| <T: ArgumentType, ClientError>(mode: CommandMode, option: Option<T?>) -> Result<T?, CommandantError<ClientError>> {
+	return evaluate(mode, key: option.key, usageError: informativeUsageError(option))
 }
 
 /// Evaluates the given boolean option in the given mode.
