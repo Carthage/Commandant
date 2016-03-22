@@ -150,12 +150,20 @@ public func <*> <T, U, ClientError>(f: Result<(T -> U), CommandantError<ClientEr
 /// Evaluates the given option in the given mode.
 ///
 /// If parsing command line arguments, and no value was specified on the command
-/// line, `nil` is used.
+/// line, the option's `defaultValue` is used.
+public func <| <T: ArgumentType, ClientError>(mode: CommandMode, option: Option<T>) -> Result<T, CommandantError<ClientError>> {
+	let wrapped = Option<T?>(key: option.key, defaultValue: option.defaultValue, usage: option.usage)
+	// Since we are passing a non-nil default value, we can safely unwrap the
+	// result.
+	return (mode <| wrapped).map { $0! }
+}
+
+/// Evaluates the given option in the given mode.
 ///
-/// This exists as a separate function because of limitations of Swift. Ideally, `Optional` would
-/// conform to `ArgumentType` if the wrapped type does. Or, the non-`Optional` version of `<|`
-/// would call the `Optional` version. Unfortunately, those don't work.
-private func evaluate<T: ArgumentType, ClientError>(mode: CommandMode, key: String, @autoclosure usageError: () -> CommandantError<ClientError>) -> Result<T?, CommandantError<ClientError>> {
+/// If parsing command line arguments, and no value was specified on the command
+/// line, `nil` is used.
+public func <| <T: ArgumentType, ClientError>(mode: CommandMode, option: Option<T?>) -> Result<T?, CommandantError<ClientError>> {
+	let key = option.key
 	switch mode {
 	case let .Arguments(arguments):
 		var stringValue: String?
@@ -181,28 +189,12 @@ private func evaluate<T: ArgumentType, ClientError>(mode: CommandMode, key: Stri
 			let description = "Invalid value for '--\(key)': \(stringValue)"
 			return .Failure(.UsageError(description: description))
 		} else {
-			return .Success(nil)
+			return .Success(option.defaultValue)
 		}
 
 	case .Usage:
-		return .Failure(usageError())
+		return .Failure(informativeUsageError(option))
 	}
-}
-
-/// Evaluates the given option in the given mode.
-///
-/// If parsing command line arguments, and no value was specified on the command
-/// line, the option's `defaultValue` is used.
-public func <| <T: ArgumentType, ClientError>(mode: CommandMode, option: Option<T>) -> Result<T, CommandantError<ClientError>> {
-	return evaluate(mode, key: option.key, usageError: informativeUsageError(option)).map { $0 ?? option.defaultValue }
-}
-
-/// Evaluates the given option in the given mode.
-///
-/// If parsing command line arguments, and no value was specified on the command
-/// line, the option's `defaultValue` is used.
-public func <| <T: ArgumentType, ClientError>(mode: CommandMode, option: Option<T?>) -> Result<T?, CommandantError<ClientError>> {
-	return evaluate(mode, key: option.key, usageError: informativeUsageError(option))
 }
 
 /// Evaluates the given boolean option in the given mode.
