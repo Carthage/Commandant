@@ -1,5 +1,5 @@
 language: objective-c
-osx_image: xcode7.2
+osx_image: xcode7.3
 script: placeholder # workaround for https://github.com/travis-ci/travis-ci/issues/4681
 matrix:
   exclude:
