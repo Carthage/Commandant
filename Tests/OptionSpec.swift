@@ -100,8 +100,10 @@ struct TestOptions: OptionsType, Equatable {
 
 	typealias ClientError = NoError
 
-	static func create(a: Int)(b: String)(c: String)(d: String)(e: Bool)(f: Bool)(g: Bool)(h: [String]) -> TestOptions {
-		return self.init(intValue: a, stringValue: b, optionalFilename: d, requiredName: c, enabled: e, force: f, glob: g, arguments: h)
+	static func create(a: Int) -> String -> String -> String -> Bool -> Bool -> Bool -> [String] -> TestOptions {
+		return { b in { c in { d in { e in { f in { g in { h in
+			return self.init(intValue: a, stringValue: b, optionalFilename: d, requiredName: c, enabled: e, force: f, glob: g, arguments: h)
+		} } } } } } }
 	}
 
 	static func evaluate(m: CommandMode) -> Result<TestOptions, CommandantError<NoError>> {
