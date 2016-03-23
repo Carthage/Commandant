@@ -13,9 +13,9 @@ import Result
 public protocol CommandType {
 	
 	/// The command's options type.
-	typealias Options: OptionsType
+	associatedtype Options: OptionsType
 
-	typealias ClientError: ErrorType = Options.ClientError
+	associatedtype ClientError: ErrorType = Options.ClientError
 	
 	/// The action that users should specify to use this subcommand (e.g.,
 	/// `help`).

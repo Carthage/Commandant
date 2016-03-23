@@ -35,7 +35,7 @@ import Result
 ///			}
 ///		}
 public protocol OptionsType {
-	typealias ClientError: ErrorType
+	associatedtype ClientError: ErrorType
 
 	/// Evaluates this set of options in the given mode.
 	///
