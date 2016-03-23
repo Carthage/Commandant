@@ -390,7 +390,6 @@
 			buildSettings = {
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_TESTABILITY = YES;
-				GCC_NO_COMMON_BLOCKS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				ONLY_ACTIVE_ARCH = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -403,7 +402,6 @@
 			baseConfigurationReference = D00CCDFC1A20719500109F8C /* Release.xcconfig */;
 			buildSettings = {
 				CURRENT_PROJECT_VERSION = 1;
-				GCC_NO_COMMON_BLOCKS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -476,7 +474,6 @@
 			baseConfigurationReference = D00CCDFB1A20719500109F8C /* Profile.xcconfig */;
 			buildSettings = {
 				CURRENT_PROJECT_VERSION = 1;
-				GCC_NO_COMMON_BLOCKS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -518,7 +515,6 @@
 			baseConfigurationReference = D00CCDFD1A20719500109F8C /* Test.xcconfig */;
 			buildSettings = {
 				CURRENT_PROJECT_VERSION = 1;
-				GCC_NO_COMMON_BLOCKS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
