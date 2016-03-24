@@ -1,15 +1,21 @@
 language: objective-c
-osx_image: xcode7.3
 script: placeholder # workaround for https://github.com/travis-ci/travis-ci/issues/4681
 matrix:
   exclude:
     - script: placeholder # workaround for https://github.com/travis-ci/travis-ci/issues/4681
   include:
     - script: script/cibuild
+      osx_image: xcode7.2
+      env: JOB=Xcode
+      xcode_workspace: Commandant.xcworkspace
+      xcode_scheme: Commandant
+    - script: script/cibuild
+      osx_image: xcode7.3
       env: JOB=Xcode
       xcode_workspace: Commandant.xcworkspace
       xcode_scheme: Commandant
     - script: swift build
+      osx_image: xcode7.3
       env: JOB=SPM
       before_install:
         - export SWIFT_VERSION=swift-DEVELOPMENT-SNAPSHOT-2016-03-01-a
