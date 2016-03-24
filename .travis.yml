@@ -6,12 +6,12 @@ matrix:
   include:
     - script: script/cibuild
       osx_image: xcode7.2
-      env: JOB=Xcode
+      env: JOB=Xcode7.2
       xcode_workspace: Commandant.xcworkspace
       xcode_scheme: Commandant
     - script: script/cibuild
       osx_image: xcode7.3
-      env: JOB=Xcode
+      env: JOB=Xcode7.3
       xcode_workspace: Commandant.xcworkspace
       xcode_scheme: Commandant
     - script: swift build
@@ -40,4 +40,4 @@ deploy:
   on:
     repo: Carthage/Commandant
     tags: true
-    condition: $JOB = Xcode
+    condition: $JOB = Xcode7.2
