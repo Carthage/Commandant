@@ -61,7 +61,7 @@ public final class ArgumentParser {
 	/// Initializes the generator from a simple list of command-line arguments.
 	public init(_ arguments: [String]) {
 		// The first instance of `--` terminates the option list.
-		let params = arguments.split(maxSplits: 1, omittingEmptySubsequences: true) { $0 == "--" }
+		let params = arguments.split(maxSplits: 1, omittingEmptySubsequences: false) { $0 == "--" }
 
 		// Parse out the keyed and flag options.
 		let options = params.first!
