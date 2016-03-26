@@ -60,9 +60,7 @@ public struct Option<T> {
 
 	/// The default value for this option. This is the value that will be used
 	/// if the option is never explicitly specified on the command line.
-	///
-	/// If this is nil, this option is always required.
-	public let defaultValue: T?
+	public let defaultValue: T
 
 	/// A human-readable string describing the purpose of this option. This will
 	/// be shown in help messages.
@@ -72,17 +70,10 @@ public struct Option<T> {
 	/// differently from the default).
 	public let usage: String
 
-	public init(key: String, defaultValue: T? = nil, usage: String) {
+	public init(key: String, defaultValue: T, usage: String) {
 		self.key = key
 		self.defaultValue = defaultValue
 		self.usage = usage
-	}
-
-	/// Constructs an `InvalidArgument` error that describes how the option was
-	/// used incorrectly. `value` should be the invalid value given by the user.
-	private func invalidUsageError<ClientError>(value: String) -> CommandantError<ClientError> {
-		let description = "Invalid value for '\(self)': \(value)"
-		return .UsageError(description: description)
 	}
 }
 
@@ -161,10 +152,22 @@ public func <*> <T, U, ClientError>(f: Result<(T -> U), CommandantError<ClientEr
 /// If parsing command line arguments, and no value was specified on the command
 /// line, the option's `defaultValue` is used.
 public func <| <T: ArgumentType, ClientError>(mode: CommandMode, option: Option<T>) -> Result<T, CommandantError<ClientError>> {
+	let wrapped = Option<T?>(key: option.key, defaultValue: option.defaultValue, usage: option.usage)
+	// Since we are passing a non-nil default value, we can safely unwrap the
+	// result.
+	return (mode <| wrapped).map { $0! }
+}
+
+/// Evaluates the given option in the given mode.
+///
+/// If parsing command line arguments, and no value was specified on the command
+/// line, `nil` is used.
+public func <| <T: ArgumentType, ClientError>(mode: CommandMode, option: Option<T?>) -> Result<T?, CommandantError<ClientError>> {
+	let key = option.key
 	switch mode {
 	case let .Arguments(arguments):
 		var stringValue: String?
-		switch arguments.consumeValueForKey(option.key) {
+		switch arguments.consumeValueForKey(key) {
 		case let .Success(value):
 			stringValue = value
 
@@ -182,12 +185,11 @@ public func <| <T: ArgumentType, ClientError>(mode: CommandMode, option: Option<
 			if let value = T.fromString(stringValue) {
 				return .Success(value)
 			}
-
-			return .Failure(option.invalidUsageError(stringValue))
-		} else if let defaultValue = option.defaultValue {
-			return .Success(defaultValue)
+			
+			let description = "Invalid value for '--\(key)': \(stringValue)"
+			return .Failure(.UsageError(description: description))
 		} else {
-			return .Failure(missingArgumentError(option.description))
+			return .Success(option.defaultValue)
 		}
 
 	case .Usage:
@@ -204,10 +206,8 @@ public func <| <ClientError>(mode: CommandMode, option: Option<Bool>) -> Result<
 	case let .Arguments(arguments):
 		if let value = arguments.consumeBooleanKey(option.key) {
 			return .Success(value)
-		} else if let defaultValue = option.defaultValue {
-			return .Success(defaultValue)
 		} else {
-			return .Failure(missingArgumentError(option.description))
+			return .Success(option.defaultValue)
 		}
 
 	case .Usage:
