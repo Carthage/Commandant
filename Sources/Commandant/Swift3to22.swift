@@ -25,7 +25,7 @@ import Foundation
 
 	extension CollectionType {
 		internal func split(maxSplits maxSplits: Int = Int.max, omittingEmptySubsequences: Bool = true, @noescape isSeparator: (Generator.Element) throws -> Bool) rethrows -> [SubSequence] {
-			return try split(maxSplits, allowEmptySlices: omittingEmptySubsequences, isSeparator: isSeparator)
+			return try split(maxSplits, allowEmptySlices: !omittingEmptySubsequences, isSeparator: isSeparator)
 		}
 
 	}
