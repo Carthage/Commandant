@@ -15,7 +15,7 @@ public protocol CommandType {
 	/// The command's options type.
 	associatedtype Options: OptionsType
 
-	associatedtype ClientError: ErrorType = Options.ClientError
+	associatedtype ClientError: ClientErrorType = Options.ClientError
 	
 	/// The action that users should specify to use this subcommand (e.g.,
 	/// `help`).
@@ -30,7 +30,7 @@ public protocol CommandType {
 }
 
 /// A type-erased command.
-public struct CommandWrapper<ClientError: ErrorType> {
+public struct CommandWrapper<ClientError: ClientErrorType> {
 	public let verb: String
 	public let function: String
 	
@@ -76,12 +76,12 @@ public enum CommandMode {
 }
 
 /// Maintains the list of commands available to run.
-public final class CommandRegistry<ClientError: ErrorType> {
+public final class CommandRegistry<ClientError: ClientErrorType> {
 	private var commandsByVerb: [String: CommandWrapper<ClientError>] = [:]
 
 	/// All available commands.
 	public var commands: [CommandWrapper<ClientError>] {
-		return commandsByVerb.values.sort { return $0.verb < $1.verb }
+		return commandsByVerb.values.sorted { return $0.verb < $1.verb }
 	}
 
 	public init() {}
@@ -154,12 +154,12 @@ extension CommandRegistry {
 		var arguments = arguments
 
 		// Extract the executable name.
-		let executableName = arguments.removeAtIndex(0)
+		let executableName = arguments.remove(at: 0)
 
 		let verb = arguments.first ?? defaultVerb
 		if arguments.count > 0 {
 			// Remove the command name.
-			arguments.removeAtIndex(0)
+			arguments.remove(at: 0)
 		}
 
 		switch runCommand(verb, arguments: arguments) {
@@ -192,7 +192,7 @@ extension CommandRegistry {
 	///
 	/// - Returns: The exit status of found subcommand or nil.
 	private func executeSubcommandIfExists(executableName: String, verb: String, arguments: [String]) -> Int32? {
-		let subcommand = "\((executableName as NSString).lastPathComponent)-\(verb)"
+		let subcommand = "\(NSString(string: executableName).lastPathComponent)-\(verb)"
 
 		func launchTask(path: String, arguments: [String]) -> Int32 {
 			let task = NSTask()

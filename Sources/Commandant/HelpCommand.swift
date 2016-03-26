@@ -18,7 +18,7 @@ import Result
 /// 	let commands: CommandRegistry<MyErrorType> = …
 /// 	let helpCommand = HelpCommand(registry: commands)
 /// 	commands.register(helpCommand)
-public struct HelpCommand<ClientError: ErrorType>: CommandType {
+public struct HelpCommand<ClientError: ClientErrorType>: CommandType {
 	public typealias Options = HelpOptions<ClientError>
 
 	public let verb = "help"
@@ -47,10 +47,10 @@ public struct HelpCommand<ClientError: ErrorType>: CommandType {
 
 		print("Available commands:\n")
 
-		let maxVerbLength = self.registry.commands.map { $0.verb.characters.count }.maxElement() ?? 0
+		let maxVerbLength = self.registry.commands.map { $0.verb.characters.count }.max() ?? 0
 
 		for command in self.registry.commands {
-			let padding = Repeat<Character>(count: maxVerbLength - command.verb.characters.count, repeatedValue: " ")
+			let padding = repeatElement(Character(" "), count: maxVerbLength - command.verb.characters.count)
 			print("   \(command.verb)\(String(padding))   \(command.function)")
 		}
 
@@ -58,7 +58,7 @@ public struct HelpCommand<ClientError: ErrorType>: CommandType {
 	}
 }
 
-public struct HelpOptions<ClientError: ErrorType>: OptionsType {
+public struct HelpOptions<ClientError: ClientErrorType>: OptionsType {
 	private let verb: String?
 	
 	private init(verb: String?) {

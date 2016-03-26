@@ -61,11 +61,11 @@ public final class ArgumentParser {
 	/// Initializes the generator from a simple list of command-line arguments.
 	public init(_ arguments: [String]) {
 		// The first instance of `--` terminates the option list.
-		let params = arguments.split(1, allowEmptySlices: true) { $0 == "--" }
+		let params = arguments.split(maxSplits: 1, omittingEmptySubsequences: true) { $0 == "--" }
 
 		// Parse out the keyed and flag options.
 		let options = params.first!
-		rawArguments.appendContentsOf(options.map { arg in
+		rawArguments.append(contentsOf: options.map { arg in
 			if arg.hasPrefix("-") {
 				// Do we have `--{key}` or `-{flags}`.
 				let opt = arg.characters.dropFirst()
@@ -82,7 +82,7 @@ public final class ArgumentParser {
 		// Remaining arguments are all positional parameters.
 		if params.count == 2 {
 			let positional = params.last!
-			rawArguments.appendContentsOf(positional.map(RawArgument.Value))
+			rawArguments.append(contentsOf: positional.map(RawArgument.Value))
 		}
 	}
 
@@ -150,9 +150,9 @@ public final class ArgumentParser {
 	/// Returns the next positional argument that hasn't yet been returned, or
 	/// nil if there are no more positional arguments.
 	internal func consumePositionalArgument() -> String? {
-		for (index, arg) in rawArguments.enumerate() {
+		for (index, arg) in rawArguments.enumerated() {
 			if case let .Value(value) = arg {
-				rawArguments.removeAtIndex(index)
+				rawArguments.remove(at: index)
 				return value
 			}
 		}
@@ -172,13 +172,13 @@ public final class ArgumentParser {
 	/// Returns whether the given flag was specified and removes it from the
 	/// list of arguments remaining.
 	internal func consumeBooleanFlag(flag: Character) -> Bool {
-		for (index, arg) in rawArguments.enumerate() {
+		for (index, arg) in rawArguments.enumerated() {
 			if case let .Flag(flags) = arg where flags.contains(flag) {
 				var flags = flags
 				flags.remove(flag)
 
 				if flags.isEmpty {
-					rawArguments.removeAtIndex(index)
+					rawArguments.remove(at: index)
 				} else {
 					rawArguments[index] = .Flag(flags)
 				}
