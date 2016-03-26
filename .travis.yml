@@ -13,7 +13,7 @@ matrix:
       osx_image: xcode7.3
       env: JOB=SPM
       before_install:
-        - export SWIFT_VERSION=swift-DEVELOPMENT-SNAPSHOT-2016-03-01-a
+        - export SWIFT_VERSION=swift-DEVELOPMENT-SNAPSHOT-2016-03-24-a
         - curl https://swift.org/builds/development/xcode/$SWIFT_VERSION/$SWIFT_VERSION-osx.pkg -o swift.pkg
         - sudo installer -pkg swift.pkg -target /
         - export PATH="/Library/Developer/Toolchains/$SWIFT_VERSION.xctoolchain/usr/bin:$PATH"
