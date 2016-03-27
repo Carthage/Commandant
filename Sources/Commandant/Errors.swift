@@ -9,11 +9,17 @@
 import Foundation
 import Result
 
+#if swift(>=3)
+	public typealias ClientErrorType = ErrorProtocol
+#else
+	public typealias ClientErrorType = ErrorType
+#endif
+
 /// Possible errors that can originate from Commandant.
 ///
 /// `ClientError` should be the type of error (if any) that can occur when
 /// running commands.
-public enum CommandantError<ClientError>: ErrorType {
+public enum CommandantError<ClientError>: ClientErrorType {
 	/// An option was used incorrectly.
 	case UsageError(description: String)
 
@@ -43,7 +49,7 @@ internal func missingArgumentError<ClientError>(argumentName: String) -> Command
 /// Constructs an error by combining the example of key (and value, if applicable)
 /// with the usage description.
 internal func informativeUsageError<ClientError>(keyValueExample: String, usage: String) -> CommandantError<ClientError> {
-	let lines = usage.componentsSeparatedByCharactersInSet(NSCharacterSet.newlineCharacterSet())
+	let lines = usage.componentsSeparatedByCharacters(in: NSCharacterSet.newline())
 
 	return .UsageError(description: lines.reduce(keyValueExample) { previous, value in
 		return previous + "\n\t" + value
@@ -68,7 +74,7 @@ internal func combineUsageErrors<ClientError>(lhs: CommandantError<ClientError>,
 
 /// Constructs an error that indicates unrecognized arguments remains.
 internal func unrecognizedArgumentsError<ClientError>(options: [String]) -> CommandantError<ClientError> {
-	return .UsageError(description: "Unrecognized arguments: " + options.joinWithSeparator(", "))
+	return .UsageError(description: "Unrecognized arguments: " + options.joined(separator: ", "))
 }
 
 // MARK: Argument
