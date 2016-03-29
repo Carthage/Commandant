@@ -9,6 +9,14 @@
 import Foundation
 import Result
 
+#if !os(Linux)
+	extension String {
+		func bridge() -> NSString {
+			return self as NSString
+		}
+	}
+#endif
+
 /// Represents a subcommand that can be executed with its own set of arguments.
 public protocol CommandType {
 	
@@ -192,7 +200,7 @@ extension CommandRegistry {
 	///
 	/// - Returns: The exit status of found subcommand or nil.
 	private func executeSubcommandIfExists(executableName: String, verb: String, arguments: [String]) -> Int32? {
-		let subcommand = "\((executableName as NSString).lastPathComponent)-\(verb)"
+		let subcommand = "\((executableName.bridge()).lastPathComponent)-\(verb)"
 
 		func launchTask(path: String, arguments: [String]) -> Int32 {
 			let task = NSTask()
