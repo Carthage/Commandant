@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6C29EE8B1CA6241B0005DA40 /* Swift3to22.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C29EE8A1CA6241B0005DA40 /* Swift3to22.swift */; };
 		CD2ED3411C1E6C5D0076092B /* Argument.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD2ED3401C1E6C5D0076092B /* Argument.swift */; };
 		CD2ED3431C1E6D540076092B /* ArgumentType.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD2ED3421C1E6D540076092B /* ArgumentType.swift */; };
 		CDFC88361C3C0612003AC8F8 /* CommandSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDFC88351C3C0612003AC8F8 /* CommandSpec.swift */; };
@@ -35,6 +36,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		6C29EE8A1CA6241B0005DA40 /* Swift3to22.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = Swift3to22.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		CD2ED3401C1E6C5D0076092B /* Argument.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Argument.swift; sourceTree = "<group>"; };
 		CD2ED3421C1E6D540076092B /* ArgumentType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArgumentType.swift; sourceTree = "<group>"; };
 		CDFC88351C3C0612003AC8F8 /* CommandSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommandSpec.swift; sourceTree = "<group>"; };
@@ -231,6 +233,7 @@
 				D00CCE261A20741300109F8C /* Command.swift */,
 				D00CCE2A1A20748500109F8C /* Errors.swift */,
 				D00CCE2E1A2075F700109F8C /* Option.swift */,
+				6C29EE8A1CA6241B0005DA40 /* Swift3to22.swift */,
 				D8169D861ACB942D00923FB0 /* Switch.swift */,
 			);
 			name = Core;
@@ -355,6 +358,7 @@
 			files = (
 				CD2ED3411C1E6C5D0076092B /* Argument.swift in Sources */,
 				D0BF14FB1A4C8957003147BC /* HelpCommand.swift in Sources */,
+				6C29EE8B1CA6241B0005DA40 /* Swift3to22.swift in Sources */,
 				CD2ED3431C1E6D540076092B /* ArgumentType.swift in Sources */,
 				D00CCE2F1A2075F700109F8C /* Option.swift in Sources */,
 				D00CCE2B1A20748500109F8C /* Errors.swift in Sources */,
