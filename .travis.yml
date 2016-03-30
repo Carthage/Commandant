@@ -15,28 +15,15 @@ matrix:
       osx_image: xcode7.3
       language: objective-c
       env: JOB=SPM
-      before_install:
-        - export SWIFT_VERSION=swift-DEVELOPMENT-SNAPSHOT-2016-03-24-a
-        - curl https://swift.org/builds/development/xcode/$SWIFT_VERSION/$SWIFT_VERSION-osx.pkg -o swift.pkg
-        - sudo installer -pkg swift.pkg -target /
-        - export PATH="/Library/Developer/Toolchains/$SWIFT_VERSION.xctoolchain/usr/bin:$PATH"
+      install:
+        - eval "$(curl -sL https://gist.githubusercontent.com/kylef/5c0475ff02b7c7671d2a/raw/02090c7ede5a637b76e6df1710e83cd0bbe7dcdf/swiftenv-install.sh)"
     - script: swift build
       env: JOB=Linux
       sudo: required
       dist: trusty
       language: generic
-      before_install:
-        - wget -q -O - https://swift.org/keys/all-keys.asc | gpg --import -
-        - cd ..
-        - gpg --keyserver hkp://pool.sks-keyservers.net --refresh-keys Swift
-        - export SWIFT_SNAPSHOT=swift-DEVELOPMENT-SNAPSHOT-2016-03-24-a
-        - export SWIFT_URL=https://swift.org/builds/development/ubuntu1404/$SWIFT_SNAPSHOT/$SWIFT_SNAPSHOT-ubuntu14.04.tar.gz
-        - wget $SWIFT_URL
-        - wget $SWIFT_URL.sig
-        - gpg --verify $SWIFT_SNAPSHOT-ubuntu14.04.tar.gz.sig
-        - tar xzf $SWIFT_SNAPSHOT-ubuntu14.04.tar.gz
-        - export PATH="${PWD}/${SWIFT_SNAPSHOT}-ubuntu14.04/usr/bin:${PATH}"
-        - cd Commandant
+      install:
+        - eval "$(curl -sL https://gist.githubusercontent.com/kylef/5c0475ff02b7c7671d2a/raw/02090c7ede5a637b76e6df1710e83cd0bbe7dcdf/swiftenv-install.sh)"
 
 notifications:
   email: false
