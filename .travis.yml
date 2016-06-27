@@ -10,6 +10,13 @@ matrix:
       env: JOB=Xcode7.3
       xcode_workspace: Commandant.xcworkspace
       xcode_scheme: Commandant
+    - script: script/cibuild
+      os: osx
+      osx_image: xcode8
+      language: objective-c
+      env: JOB=Xcode8
+      xcode_workspace: Commandant.xcworkspace
+      xcode_scheme: Commandant
     - script: swift build
       os: osx
       osx_image: xcode7.3
