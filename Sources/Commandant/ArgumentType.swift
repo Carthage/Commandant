@@ -12,13 +12,13 @@ public protocol ArgumentType {
 	static var name: String { get }
 
 	/// Attempts to parse a value from the given command-line argument.
-	static func fromString(string: String) -> Self?
+	static func fromString(_ string: String) -> Self?
 }
 
 extension Int: ArgumentType {
 	public static let name = "integer"
 
-	public static func fromString(string: String) -> Int? {
+	public static func fromString(_ string: String) -> Int? {
 		return Int(string)
 	}
 }
@@ -26,7 +26,7 @@ extension Int: ArgumentType {
 extension String: ArgumentType {
 	public static let name = "string"
 
-	public static func fromString(string: String) -> String? {
+	public static func fromString(_ string: String) -> String? {
 		return string
 	}
 }
