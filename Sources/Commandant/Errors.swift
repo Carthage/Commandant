@@ -49,7 +49,11 @@ internal func missingArgumentError<ClientError>(_ argumentName: String) -> Comma
 /// Constructs an error by combining the example of key (and value, if applicable)
 /// with the usage description.
 internal func informativeUsageError<ClientError>(_ keyValueExample: String, usage: String) -> CommandantError<ClientError> {
+#if os(Linux)
+	let lines = usage.components(separatedBy: NSCharacterSet.newlines())
+#else
 	let lines = usage.components(separatedBy: .newlines)
+#endif
 
 	return .usageError(description: lines.reduce(keyValueExample) { previous, value in
 		return previous + "\n\t" + value

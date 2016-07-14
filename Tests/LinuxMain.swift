@@ -1,9 +1,9 @@
 import XCTest
 import Quick
 
-@testable import QuickTestSuite
+@testable import CommandantTestSuite
 
 Quick.QCKMain([
 	CommandWrapperSpec.self,
 	OptionsTypeSpec.self,
-	])
+])
