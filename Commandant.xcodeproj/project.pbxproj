@@ -37,6 +37,7 @@
 
 /* Begin PBXFileReference section */
 		6C29EE8A1CA6241B0005DA40 /* Swift3to22.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = Swift3to22.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		6CAD549C1D371A4E00A2D031 /* LinuxMain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LinuxMain.swift; path = Tests/LinuxMain.swift; sourceTree = SOURCE_ROOT; };
 		CD2ED3401C1E6C5D0076092B /* Argument.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Argument.swift; sourceTree = "<group>"; };
 		CD2ED3421C1E6D540076092B /* ArgumentType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArgumentType.swift; sourceTree = "<group>"; };
 		CDFC88351C3C0612003AC8F8 /* CommandSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommandSpec.swift; sourceTree = "<group>"; };
@@ -144,8 +145,10 @@
 				CDFC88351C3C0612003AC8F8 /* CommandSpec.swift */,
 				D00CCE281A20741C00109F8C /* OptionSpec.swift */,
 				D00CCDE91A20717400109F8C /* Supporting Files */,
+				6CAD549C1D371A4E00A2D031 /* LinuxMain.swift */,
 			);
-			path = Tests;
+			name = Tests;
+			path = Tests/Commandant;
 			sourceTree = "<group>";
 		};
 		D00CCDE91A20717400109F8C /* Supporting Files */ = {
@@ -459,7 +462,7 @@
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = Tests/Info.plist;
+				INFOPLIST_FILE = Tests/Commandant/Info.plist;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.carthage.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
@@ -474,7 +477,7 @@
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = Tests/Info.plist;
+				INFOPLIST_FILE = Tests/Commandant/Info.plist;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.carthage.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
@@ -518,7 +521,7 @@
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = Tests/Info.plist;
+				INFOPLIST_FILE = Tests/Commandant/Info.plist;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.carthage.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
@@ -563,7 +566,7 @@
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = Tests/Info.plist;
+				INFOPLIST_FILE = Tests/Commandant/Info.plist;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.carthage.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
