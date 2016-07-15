@@ -14,7 +14,7 @@ matrix:
       osx_image: xcode8
       language: objective-c
       env: JOB=Xcode8
-    - script: swift build
+    - script: SWIFT_GIT=`xcrun --find git` swift build
       os: osx
       osx_image: xcode8
       language: objective-c
