@@ -9,13 +9,11 @@
 import Foundation
 import Result
 
-public typealias ClientErrorType = ErrorProtocol
-
 /// Possible errors that can originate from Commandant.
 ///
 /// `ClientError` should be the type of error (if any) that can occur when
 /// running commands.
-public enum CommandantError<ClientError>: ClientErrorType {
+public enum CommandantError<ClientError>: ErrorProtocol {
 	/// An option was used incorrectly.
 	case usageError(description: String)
 
@@ -148,3 +146,7 @@ internal func informativeUsageError<ClientError>(_ option: Option<Bool>) -> Comm
 	let key = option.key
 	return informativeUsageError((option.defaultValue ? "--no-\(key)" : "--\(key)"), option: option)
 }
+
+// MARK: - migration support
+@available(*, unavailable, message: "Use ErrorProtocol instead of ClientErrorType")
+public typealias ClientErrorType = ErrorProtocol

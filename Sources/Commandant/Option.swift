@@ -35,7 +35,7 @@ import Result
 ///			}
 ///		}
 public protocol OptionsType {
-	associatedtype ClientError: ClientErrorType
+	associatedtype ClientError: ErrorProtocol
 
 	/// Evaluates this set of options in the given mode.
 	///
@@ -44,7 +44,7 @@ public protocol OptionsType {
 }
 
 /// An `OptionsType` that has no options.
-public struct NoOptions<ClientError: ClientErrorType>: OptionsType {
+public struct NoOptions<ClientError: ErrorProtocol>: OptionsType {
 	public init() {}
 	
 	public static func evaluate(_ m: CommandMode) -> Result<NoOptions, CommandantError<ClientError>> {
