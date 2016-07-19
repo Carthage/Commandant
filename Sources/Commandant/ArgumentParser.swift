@@ -96,7 +96,7 @@ public final class ArgumentParser {
 	///
 	/// If the key is found, it is then removed from the list of arguments
 	/// remaining to be parsed.
-	internal func consumeBooleanKey(_ key: String) -> Bool? {
+	internal func consumeBoolean(forKey key: String) -> Bool? {
 		let oldArguments = rawArguments
 		rawArguments.removeAll()
 
@@ -120,7 +120,7 @@ public final class ArgumentParser {
 	///
 	/// If a value is found, the key and the value are both removed from the
 	/// list of arguments remaining to be parsed.
-	internal func consumeValueForKey(_ key: String) -> Result<String?, CommandantError<NoError>> {
+	internal func consumeValue(forKey key: String) -> Result<String?, CommandantError<NoError>> {
 		let oldArguments = rawArguments
 		rawArguments.removeAll()
 
@@ -162,7 +162,7 @@ public final class ArgumentParser {
 
 	/// Returns whether the given key was specified and removes it from the
 	/// list of arguments remaining.
-	internal func consumeKey(_ key: String) -> Bool {
+	internal func consume(key: String) -> Bool {
 		let oldArguments = rawArguments
 		rawArguments = oldArguments.filter { $0 != .key(key) }
 
@@ -171,7 +171,7 @@ public final class ArgumentParser {
 
 	/// Returns whether the given flag was specified and removes it from the
 	/// list of arguments remaining.
-	internal func consumeBooleanFlag(_ flag: Character) -> Bool {
+	internal func consumeBoolean(flag: Character) -> Bool {
 		for (index, arg) in rawArguments.enumerated() {
 			if case let .flag(flags) = arg where flags.contains(flag) {
 				var flags = flags

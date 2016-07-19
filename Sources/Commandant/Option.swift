@@ -167,7 +167,7 @@ public func <| <T: ArgumentType, ClientError>(mode: CommandMode, option: Option<
 	switch mode {
 	case let .arguments(arguments):
 		var stringValue: String?
-		switch arguments.consumeValueForKey(key) {
+		switch arguments.consumeValue(forKey: key) {
 		case let .success(value):
 			stringValue = value
 
@@ -204,7 +204,7 @@ public func <| <T: ArgumentType, ClientError>(mode: CommandMode, option: Option<
 public func <| <ClientError>(mode: CommandMode, option: Option<Bool>) -> Result<Bool, CommandantError<ClientError>> {
 	switch mode {
 	case let .arguments(arguments):
-		if let value = arguments.consumeBooleanKey(option.key) {
+		if let value = arguments.consumeBoolean(forKey: option.key) {
 			return .success(value)
 		} else {
 			return .success(option.defaultValue)

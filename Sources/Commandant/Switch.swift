@@ -52,9 +52,9 @@ extension Switch: CustomStringConvertible {
 public func <| <ClientError> (mode: CommandMode, option: Switch) -> Result<Bool, CommandantError<ClientError>> {
 	switch mode {
 	case let .arguments(arguments):
-		var enabled = arguments.consumeKey(option.key)
+		var enabled = arguments.consume(key: option.key)
 		if let flag = option.flag {
-			enabled = arguments.consumeBooleanFlag(flag)
+			enabled = arguments.consumeBoolean(flag: flag)
 		}
 		return .success(enabled)
 
