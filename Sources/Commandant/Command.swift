@@ -10,10 +10,10 @@ import Foundation
 import Result
 
 /// Represents a subcommand that can be executed with its own set of arguments.
-public protocol CommandType {
+public protocol CommandProtocol {
 	
 	/// The command's options type.
-	associatedtype Options: OptionsType
+	associatedtype Options: OptionsProtocol
 
 	associatedtype ClientError: ErrorProtocol = Options.ClientError
 	
@@ -39,7 +39,7 @@ public struct CommandWrapper<ClientError: ErrorProtocol> {
 	public let usage: () -> CommandantError<ClientError>?
 
 	/// Creates a command that wraps another.
-	private init<C: CommandType where C.ClientError == ClientError, C.Options.ClientError == ClientError>(_ command: C) {
+	private init<C: CommandProtocol where C.ClientError == ClientError, C.Options.ClientError == ClientError>(_ command: C) {
 		verb = command.verb
 		function = command.function
 		run = { (arguments: ArgumentParser) -> Result<(), CommandantError<ClientError>> in
@@ -90,7 +90,7 @@ public final class CommandRegistry<ClientError: ErrorProtocol> {
 	///
 	/// If another command was already registered with the same `verb`, it will
 	/// be overwritten.
-	public func register<C: CommandType where C.ClientError == ClientError, C.Options.ClientError == ClientError>(_ command: C) {
+	public func register<C: CommandProtocol where C.ClientError == ClientError, C.Options.ClientError == ClientError>(_ command: C) {
 		commandsByVerb[command.verb] = CommandWrapper(command)
 	}
 
@@ -212,3 +212,7 @@ extension CommandRegistry {
 		return launchTask("/usr/bin/env", arguments: [ subcommand ] + arguments)
 	}
 }
+
+// MARK: - migration support
+@available(*, unavailable, renamed: "CommandProtocol")
+public typealias CommandType = CommandProtocol

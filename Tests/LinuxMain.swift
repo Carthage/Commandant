@@ -5,5 +5,5 @@ import Quick
 
 Quick.QCKMain([
 	CommandWrapperSpec.self,
-	OptionsTypeSpec.self,
+	OptionsProtocolSpec.self,
 ])

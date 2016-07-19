@@ -88,7 +88,7 @@ internal func informativeUsageError<T, ClientError>(_ valueExample: String, argu
 }
 
 /// Constructs an error that describes how to use the argument.
-internal func informativeUsageError<T: ArgumentType, ClientError>(_ argument: Argument<T>) -> CommandantError<ClientError> {
+internal func informativeUsageError<T: ArgumentProtocol, ClientError>(_ argument: Argument<T>) -> CommandantError<ClientError> {
 	var example = ""
 
 	var valueExample = ""
@@ -106,7 +106,7 @@ internal func informativeUsageError<T: ArgumentType, ClientError>(_ argument: Ar
 }
 
 /// Constructs an error that describes how to use the argument list.
-internal func informativeUsageError<T: ArgumentType, ClientError>(_ argument: Argument<[T]>) -> CommandantError<ClientError> {
+internal func informativeUsageError<T: ArgumentProtocol, ClientError>(_ argument: Argument<[T]>) -> CommandantError<ClientError> {
 	var example = ""
 
 	var valueExample = ""
@@ -132,12 +132,12 @@ internal func informativeUsageError<T, ClientError>(_ keyValueExample: String, o
 }
 
 /// Constructs an error that describes how to use the option.
-internal func informativeUsageError<T: ArgumentType, ClientError>(_ option: Option<T>) -> CommandantError<ClientError> {
+internal func informativeUsageError<T: ArgumentProtocol, ClientError>(_ option: Option<T>) -> CommandantError<ClientError> {
 	return informativeUsageError("--\(option.key) \(option.defaultValue)", option: option)
 }
 
 /// Constructs an error that describes how to use the option.
-internal func informativeUsageError<T: ArgumentType, ClientError>(_ option: Option<T?>) -> CommandantError<ClientError> {
+internal func informativeUsageError<T: ArgumentProtocol, ClientError>(_ option: Option<T?>) -> CommandantError<ClientError> {
 	return informativeUsageError("--\(option.key) (\(T.name))", option: option)
 }
 
