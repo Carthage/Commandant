@@ -401,7 +401,7 @@
 				ENABLE_TESTABILITY = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				ONLY_ACTIVE_ARCH = YES;
-				SWIFT_VERSION = 2.3;
+				SWIFT_VERSION = 3.0;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -413,7 +413,7 @@
 			buildSettings = {
 				CURRENT_PROJECT_VERSION = 1;
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
-				SWIFT_VERSION = 2.3;
+				SWIFT_VERSION = 3.0;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -433,7 +433,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.carthage.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -450,7 +449,6 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.carthage.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
@@ -465,7 +463,6 @@
 				INFOPLIST_FILE = Tests/Commandant/Info.plist;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.carthage.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -480,7 +477,6 @@
 				INFOPLIST_FILE = Tests/Commandant/Info.plist;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.carthage.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
@@ -490,7 +486,7 @@
 			buildSettings = {
 				CURRENT_PROJECT_VERSION = 1;
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
-				SWIFT_VERSION = 2.3;
+				SWIFT_VERSION = 3.0;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -509,7 +505,6 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.carthage.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
 			};
 			name = Profile;
 		};
@@ -524,7 +519,6 @@
 				INFOPLIST_FILE = Tests/Commandant/Info.plist;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.carthage.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
 			};
 			name = Profile;
 		};
@@ -534,7 +528,7 @@
 			buildSettings = {
 				CURRENT_PROJECT_VERSION = 1;
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
-				SWIFT_VERSION = 2.3;
+				SWIFT_VERSION = 3.0;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -554,7 +548,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.carthage.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
 			};
 			name = Test;
 		};
@@ -569,7 +562,6 @@
 				INFOPLIST_FILE = Tests/Commandant/Info.plist;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.carthage.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
 			};
 			name = Test;
 		};
