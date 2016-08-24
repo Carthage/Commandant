@@ -39,7 +39,7 @@ private func ==(lhs: RawArgument, rhs: RawArgument) -> Bool {
 }
 
 extension RawArgument: CustomStringConvertible {
-	private var description: String {
+	fileprivate var description: String {
 		switch self {
 		case let .key(key):
 			return "--\(key)"
@@ -173,7 +173,7 @@ public final class ArgumentParser {
 	/// list of arguments remaining.
 	internal func consumeBoolean(flag: Character) -> Bool {
 		for (index, arg) in rawArguments.enumerated() {
-			if case let .flag(flags) = arg where flags.contains(flag) {
+			if case let .flag(flags) = arg, flags.contains(flag) {
 				var flags = flags
 				flags.remove(flag)
 

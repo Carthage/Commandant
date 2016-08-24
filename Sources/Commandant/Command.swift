@@ -15,7 +15,7 @@ public protocol CommandType {
 	/// The command's options type.
 	associatedtype Options: OptionsType
 
-	associatedtype ClientError: ErrorProtocol = Options.ClientError
+	associatedtype ClientError: Error = Options.ClientError
 	
 	/// The action that users should specify to use this subcommand (e.g.,
 	/// `help`).
@@ -30,7 +30,7 @@ public protocol CommandType {
 }
 
 /// A type-erased command.
-public struct CommandWrapper<ClientError: ErrorProtocol> {
+public struct CommandWrapper<ClientError: Error> {
 	public let verb: String
 	public let function: String
 	
@@ -39,7 +39,7 @@ public struct CommandWrapper<ClientError: ErrorProtocol> {
 	public let usage: () -> CommandantError<ClientError>?
 
 	/// Creates a command that wraps another.
-	private init<C: CommandType where C.ClientError == ClientError, C.Options.ClientError == ClientError>(_ command: C) {
+	fileprivate init<C: CommandType>(_ command: C) where C.ClientError == ClientError, C.Options.ClientError == ClientError {
 		verb = command.verb
 		function = command.function
 		run = { (arguments: ArgumentParser) -> Result<(), CommandantError<ClientError>> in
@@ -76,7 +76,7 @@ public enum CommandMode {
 }
 
 /// Maintains the list of commands available to run.
-public final class CommandRegistry<ClientError: ErrorProtocol> {
+public final class CommandRegistry<ClientError: Error> {
 	private var commandsByVerb: [String: CommandWrapper<ClientError>] = [:]
 
 	/// All available commands.
@@ -90,7 +90,7 @@ public final class CommandRegistry<ClientError: ErrorProtocol> {
 	///
 	/// If another command was already registered with the same `verb`, it will
 	/// be overwritten.
-	public func register<C: CommandType where C.ClientError == ClientError, C.Options.ClientError == ClientError>(_ command: C) {
+	public func register<C: CommandType>(_ command: C) where C.ClientError == ClientError, C.Options.ClientError == ClientError {
 		commandsByVerb[command.verb] = CommandWrapper(command)
 	}
 
@@ -110,7 +110,7 @@ public final class CommandRegistry<ClientError: ErrorProtocol> {
 }
 
 extension CommandRegistry {
-	/// Hands off execution to the CommandRegistry, by parsing Process.arguments
+	/// Hands off execution to the CommandRegistry, by parsing CommandLine.arguments
 	/// and then running whichever command has been identified in the argument
 	/// list.
 	///
@@ -127,8 +127,8 @@ extension CommandRegistry {
 	/// If a matching command could not be found or a usage error occurred,
 	/// a helpful error message will be written to `stderr`, then the process
 	/// will exit with a failure error code.
-	@noreturn public func main(defaultVerb: String, errorHandler: (ClientError) -> ()) {
-		main(arguments: Process.arguments, defaultVerb: defaultVerb, errorHandler: errorHandler)
+	public func main(defaultVerb: String, errorHandler: (ClientError) -> ()) -> Never  {
+		main(arguments: CommandLine.arguments, defaultVerb: defaultVerb, errorHandler: errorHandler)
 	}
 	
 	/// Hands off execution to the CommandRegistry, by parsing `arguments`
@@ -148,7 +148,7 @@ extension CommandRegistry {
 	/// If a matching command could not be found or a usage error occurred,
 	/// a helpful error message will be written to `stderr`, then the process
 	/// will exit with a failure error code.
-	@noreturn public func main(arguments: [String], defaultVerb: String, errorHandler: (ClientError) -> ()) {
+	public func main(arguments: [String], defaultVerb: String, errorHandler: (ClientError) -> ()) -> Never  {
 		assert(arguments.count >= 1)
 
 		var arguments = arguments
@@ -195,7 +195,7 @@ extension CommandRegistry {
 		let subcommand = "\(NSString(string: executableName).lastPathComponent)-\(verb)"
 
 		func launchTask(_ path: String, arguments: [String]) -> Int32 {
-			let task = Task()
+			let task = Process()
 			task.launchPath = path
 			task.arguments = arguments
 

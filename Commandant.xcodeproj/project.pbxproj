@@ -148,7 +148,7 @@
 				6CAD549C1D371A4E00A2D031 /* LinuxMain.swift */,
 			);
 			name = Tests;
-			path = Tests/Commandant;
+			path = Tests/CommandantTests;
 			sourceTree = "<group>";
 		};
 		D00CCDE91A20717400109F8C /* Supporting Files */ = {
@@ -460,7 +460,7 @@
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = Tests/Commandant/Info.plist;
+				INFOPLIST_FILE = Tests/CommandantTests/Info.plist;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.carthage.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -474,7 +474,7 @@
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = Tests/Commandant/Info.plist;
+				INFOPLIST_FILE = Tests/CommandantTests/Info.plist;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.carthage.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -516,7 +516,7 @@
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = Tests/Commandant/Info.plist;
+				INFOPLIST_FILE = Tests/CommandantTests/Info.plist;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.carthage.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -559,7 +559,7 @@
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = Tests/Commandant/Info.plist;
+				INFOPLIST_FILE = Tests/CommandantTests/Info.plist;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.carthage.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};

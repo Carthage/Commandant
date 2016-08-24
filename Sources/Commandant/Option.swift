@@ -35,7 +35,7 @@ import Result
 ///			}
 ///		}
 public protocol OptionsType {
-	associatedtype ClientError: ErrorProtocol
+	associatedtype ClientError: Error
 
 	/// Evaluates this set of options in the given mode.
 	///
@@ -44,7 +44,7 @@ public protocol OptionsType {
 }
 
 /// An `OptionsType` that has no options.
-public struct NoOptions<ClientError: ErrorProtocol>: OptionsType {
+public struct NoOptions<ClientError: Error>: OptionsType {
 	public init() {}
 	
 	public static func evaluate(_ m: CommandMode) -> Result<NoOptions, CommandantError<ClientError>> {
@@ -109,14 +109,9 @@ extension Option: CustomStringConvertible {
 	OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 	WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
-infix operator <*> {
-	associativity left
-}
+infix operator <*> : LogicalDisjunctionPrecedence
 
-infix operator <| {
-	associativity left
-	precedence 150
-}
+infix operator <| : MultiplicationPrecedence
 
 /// Applies `f` to the value in the given result.
 ///

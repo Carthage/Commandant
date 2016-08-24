@@ -25,7 +25,7 @@ public struct Argument<T> {
 		self.usage = usage
 	}
 
-	private func invalidUsageError<ClientError>(_ value: String) -> CommandantError<ClientError> {
+	fileprivate func invalidUsageError<ClientError>(_ value: String) -> CommandantError<ClientError> {
 		let description = "Invalid value for '\(self)': \(value)"
 		return .usageError(description: description)
 	}

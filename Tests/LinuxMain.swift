@@ -1,7 +1,7 @@
 import XCTest
 import Quick
 
-@testable import CommandantTestSuite
+@testable import CommandantTests
 
 Quick.QCKMain([
 	CommandWrapperSpec.self,

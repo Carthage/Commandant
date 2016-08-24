@@ -13,7 +13,7 @@ import Result
 ///
 /// `ClientError` should be the type of error (if any) that can occur when
 /// running commands.
-public enum CommandantError<ClientError>: ErrorProtocol {
+public enum CommandantError<ClientError>: Error {
 	/// An option was used incorrectly.
 	case usageError(description: String)
 
@@ -28,7 +28,7 @@ extension CommandantError: CustomStringConvertible {
 			return description
 
 		case let .commandError(error):
-			return String(error)
+			return String(describing: error)
 		}
 	}
 }
@@ -149,4 +149,4 @@ internal func informativeUsageError<ClientError>(_ option: Option<Bool>) -> Comm
 
 // MARK: - migration support
 @available(*, unavailable, message: "Use ErrorProtocol instead of ClientErrorType")
-public typealias ClientErrorType = ErrorProtocol
+public typealias ClientErrorType = Error

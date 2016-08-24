@@ -18,7 +18,7 @@ import Result
 /// 	let commands: CommandRegistry<MyErrorType> = …
 /// 	let helpCommand = HelpCommand(registry: commands)
 /// 	commands.register(helpCommand)
-public struct HelpCommand<ClientError: ErrorProtocol>: CommandType {
+public struct HelpCommand<ClientError: Error>: CommandType {
 	public typealias Options = HelpOptions<ClientError>
 
 	public let verb = "help"
@@ -58,8 +58,8 @@ public struct HelpCommand<ClientError: ErrorProtocol>: CommandType {
 	}
 }
 
-public struct HelpOptions<ClientError: ErrorProtocol>: OptionsType {
-	private let verb: String?
+public struct HelpOptions<ClientError: Error>: OptionsType {
+	fileprivate let verb: String?
 	
 	private init(verb: String?) {
 		self.verb = verb
