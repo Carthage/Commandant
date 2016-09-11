@@ -9,46 +9,46 @@
 import Foundation
 
 #if !swift(>=3)
-	internal func repeatElement<T>(element: T, count: Int) -> Repeat<T> {
-		return Repeat(count: count, repeatedValue: element)
+	internal func repeatElement<T>(_ element: T, count: Int) -> Repeated<T> {
+		return Repeated(count: count, repeatedValue: element)
 	}
 
 	extension Array {
-		internal mutating func append<C : CollectionType where C.Generator.Element == Element>(contentsOf newElements: C) {
-			appendContentsOf(newElements)
+		internal mutating func append<C : Collection where C.Iterator.Element == Element>(contentsOf newElements: C) {
+			self.append(contentsOf: newElements)
 		}
 
 		internal mutating func remove(at index: Int) -> Element {
-			return removeAtIndex(index)
+			return self.remove(at: index)
 		}
 	}
 
-	extension CollectionType {
-		internal func split(maxSplits maxSplits: Int = Int.max, omittingEmptySubsequences: Bool = true, @noescape isSeparator: (Generator.Element) throws -> Bool) rethrows -> [SubSequence] {
-			return try split(maxSplits, allowEmptySlices: !omittingEmptySubsequences, isSeparator: isSeparator)
+	extension Collection {
+		internal func split(maxSplits maxSplits: Int = Int.max, omittingEmptySubsequences: Bool = true, @noescape isSeparator: (Iterator.Element) throws -> Bool) rethrows -> [SubSequence] {
+			return try split(maxSplits: maxSplits, omittingEmptySubsequences: !(!omittingEmptySubsequences), whereSeparator: isSeparator)
 		}
 
 	}
 
-	extension SequenceType {
-		internal func enumerated() -> EnumerateSequence<Self> {
-			return enumerate()
+	extension Sequence {
+		internal func enumerated() -> EnumeratedSequence<Self> {
+			return self.enumerated()
 		}
 
-		internal func sorted(@noescape isOrderedBefore isOrderedBefore: (Generator.Element, Generator.Element) -> Bool) -> [Generator.Element] {
-			return sort(isOrderedBefore)
-		}
-	}
-
-	extension SequenceType where Generator.Element : Comparable {
-		internal func max() -> Generator.Element? {
-			return maxElement()
+		internal func sorted(@noescape isOrderedBefore: (Iterator.Element, Iterator.Element) -> Bool) -> [Iterator.Element] {
+			return self.sorted(by: isOrderedBefore)
 		}
 	}
 
-	extension SequenceType where Generator.Element == String {
-		internal func joined(separator separator: String) -> String {
-			return joinWithSeparator(separator)
+	extension Sequence where Iterator.Element : Comparable {
+		internal func max() -> Iterator.Element? {
+			return self.max()
+		}
+	}
+
+	extension Sequence where Iterator.Element == String {
+		internal func joined(separator: String) -> String {
+			return self.joined(separator: separator)
 		}
 	}
 
@@ -56,15 +56,15 @@ import Foundation
 
 // swift-corelibs-foundation is still written in Swift 2 API.
 #if !swift(>=3) || os(Linux)
-	extension NSCharacterSet {
-		class func newline() -> NSCharacterSet {
-			return newlineCharacterSet()
+	extension CharacterSet {
+		class func newline() -> CharacterSet {
+			return newlines
 		}
 	}
 
 	extension String {
-		func componentsSeparatedByCharacters(in separator: NSCharacterSet) -> [String] {
-			return componentsSeparatedByCharactersInSet(separator)
+		func componentsSeparatedByCharacters(in separator: CharacterSet) -> [String] {
+			return components(separatedBy: separator)
 		}
 	}
 #endif

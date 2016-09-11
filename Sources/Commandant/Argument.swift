@@ -25,9 +25,9 @@ public struct Argument<T> {
 		self.usage = usage
 	}
 
-	private func invalidUsageError<ClientError>(value: String) -> CommandantError<ClientError> {
+	fileprivate func invalidUsageError<ClientError>(_ value: String) -> CommandantError<ClientError> {
 		let description = "Invalid value for '\(self)': \(value)"
-		return .UsageError(description: description)
+		return .usageError(description: description)
 	}
 }
 
@@ -37,23 +37,23 @@ public struct Argument<T> {
 /// line, the argument's `defaultValue` is used.
 public func <| <T: ArgumentType, ClientError>(mode: CommandMode, argument: Argument<T>) -> Result<T, CommandantError<ClientError>> {
 	switch mode {
-	case let .Arguments(arguments):
+	case let .arguments(arguments):
 		guard let stringValue = arguments.consumePositionalArgument() else {
 			if let defaultValue = argument.defaultValue {
-				return .Success(defaultValue)
+				return .success(defaultValue)
 			} else {
-				return .Failure(missingArgumentError(argument.usage))
+				return .failure(missingArgumentError(argument.usage))
 			}
 		}
 
 		if let value = T.fromString(stringValue) {
-			return .Success(value)
+			return .success(value)
 		} else {
-			return .Failure(argument.invalidUsageError(stringValue))
+			return .failure(argument.invalidUsageError(stringValue))
 		}
 
-	case .Usage:
-		return .Failure(informativeUsageError(argument))
+	case .usage:
+		return .failure(informativeUsageError(argument))
 	}
 }
 
@@ -63,34 +63,34 @@ public func <| <T: ArgumentType, ClientError>(mode: CommandMode, argument: Argum
 /// line, the argument's `defaultValue` is used.
 public func <| <T: ArgumentType, ClientError>(mode: CommandMode, argument: Argument<[T]>) -> Result<[T], CommandantError<ClientError>> {
 	switch mode {
-	case let .Arguments(arguments):
+	case let .arguments(arguments):
 		guard let firstValue = arguments.consumePositionalArgument() else {
 			if let defaultValue = argument.defaultValue {
-				return .Success(defaultValue)
+				return .success(defaultValue)
 			} else {
-				return .Failure(missingArgumentError(argument.usage))
+				return .failure(missingArgumentError(argument.usage))
 			}
 		}
 
 		var values = [T]()
 
 		guard let value = T.fromString(firstValue) else {
-			return .Failure(argument.invalidUsageError(firstValue))
+			return .failure(argument.invalidUsageError(firstValue))
 		}
 
 		values.append(value)
 
 		while let nextValue = arguments.consumePositionalArgument() {
 			guard let value = T.fromString(nextValue) else {
-				return .Failure(argument.invalidUsageError(nextValue))
+				return .failure(argument.invalidUsageError(nextValue))
 			}
 
 			values.append(value)
 		}
 
-		return .Success(values)
+		return .success(values)
 
-	case .Usage:
-		return .Failure(informativeUsageError(argument))
+	case .usage:
+		return .failure(informativeUsageError(argument))
 	}
 }
