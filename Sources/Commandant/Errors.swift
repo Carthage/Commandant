@@ -9,11 +9,7 @@
 import Foundation
 import Result
 
-#if swift(>=3)
-	public typealias ClientErrorType = Error
-#else
-	public typealias ClientErrorType = ErrorProtocol
-#endif
+public typealias ClientErrorType = Error
 
 /// Possible errors that can originate from Commandant.
 ///
