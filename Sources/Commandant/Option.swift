@@ -177,7 +177,7 @@ public func <| <T: ArgumentType, ClientError>(mode: CommandMode, option: Option<
 		}
 
 		if let stringValue = stringValue {
-			if let value = T.fromString(stringValue) {
+			if let value = T.from(string: stringValue) {
 				return .success(value)
 			}
 			

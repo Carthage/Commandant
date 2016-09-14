@@ -98,8 +98,13 @@ public final class CommandRegistry<ClientError: ClientErrorType> {
 	/// arguments.
 	///
 	/// Returns the results of the execution, or nil if no such command exists.
-	public func runCommand(_ verb: String, arguments: [String]) -> Result<(), CommandantError<ClientError>>? {
+	public func run(command verb: String, arguments: [String]) -> Result<(), CommandantError<ClientError>>? {
 		return self[verb]?.run(ArgumentParser(arguments))
+	}
+	
+	@available(*, deprecated, renamed: "run(command:arguments:)")
+	public func runCommand(_ verb: String, arguments: [String]) -> Result<(), CommandantError<ClientError>>? {
+		fatalError()
 	}
 
 	/// Returns the command matching the given verb, or nil if no such command
@@ -161,8 +166,8 @@ extension CommandRegistry {
 			// Remove the command name.
 			arguments.remove(at: 0)
 		}
-
-		switch runCommand(verb, arguments: arguments) {
+		
+		switch run(command: verb, arguments: arguments) {
 		case .success?:
 			exit(EXIT_SUCCESS)
 
