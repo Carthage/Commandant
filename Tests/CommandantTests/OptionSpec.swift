@@ -12,7 +12,7 @@ import Nimble
 import Quick
 import Result
 
-class OptionsTypeSpec: QuickSpec {
+class OptionsProtocolSpec: QuickSpec {
 	override func spec() {
 		describe("CommandMode.Arguments") {
 			func tryArguments(_ arguments: String...) -> Result<TestOptions, CommandantError<NoError>> {
@@ -88,7 +88,7 @@ class OptionsTypeSpec: QuickSpec {
 	}
 }
 
-struct TestOptions: OptionsType, Equatable {
+struct TestOptions: OptionsProtocol, Equatable {
 	let intValue: Int
 	let stringValue: String
 	let optionalStringValue: String?

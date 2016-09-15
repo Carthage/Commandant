@@ -28,7 +28,7 @@ class CommandWrapperSpec: QuickSpec {
 	}
 }
 
-struct NoOptionsCommand: CommandType {
+struct NoOptionsCommand: CommandProtocol {
 	var verb: String { return "verb" }
 	var function: String { return "function" }
 

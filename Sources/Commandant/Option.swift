@@ -17,7 +17,7 @@ import Result
 ///
 /// Example:
 ///
-///		struct LogOptions: OptionsType {
+///		struct LogOptions: OptionsProtocol {
 ///			let verbosity: Int
 ///			let outputFilename: String
 ///			let logName: String
@@ -34,7 +34,7 @@ import Result
 ///					<*> m <| Option(usage: "the log to read")
 ///			}
 ///		}
-public protocol OptionsType {
+public protocol OptionsProtocol {
 	associatedtype ClientError: Error
 
 	/// Evaluates this set of options in the given mode.
@@ -43,8 +43,8 @@ public protocol OptionsType {
 	static func evaluate(_ m: CommandMode) -> Result<Self, CommandantError<ClientError>>
 }
 
-/// An `OptionsType` that has no options.
-public struct NoOptions<ClientError: Error>: OptionsType {
+/// An `OptionsProtocol` that has no options.
+public struct NoOptions<ClientError: Error>: OptionsProtocol {
 	public init() {}
 	
 	public static func evaluate(_ m: CommandMode) -> Result<NoOptions, CommandantError<ClientError>> {
@@ -116,7 +116,7 @@ infix operator <| : MultiplicationPrecedence
 /// Applies `f` to the value in the given result.
 ///
 /// In the context of command-line option parsing, this is used to chain
-/// together the parsing of multiple arguments. See OptionsType for an example.
+/// together the parsing of multiple arguments. See OptionsProtocol for an example.
 public func <*> <T, U, ClientError>(f: (T) -> U, value: Result<T, CommandantError<ClientError>>) -> Result<U, CommandantError<ClientError>> {
 	return value.map(f)
 }
@@ -124,7 +124,7 @@ public func <*> <T, U, ClientError>(f: (T) -> U, value: Result<T, CommandantErro
 /// Applies the function in `f` to the value in the given result.
 ///
 /// In the context of command-line option parsing, this is used to chain
-/// together the parsing of multiple arguments. See OptionsType for an example.
+/// together the parsing of multiple arguments. See OptionsProtocol for an example.
 public func <*> <T, U, ClientError>(f: Result<((T) -> U), CommandantError<ClientError>>, value: Result<T, CommandantError<ClientError>>) -> Result<U, CommandantError<ClientError>> {
 	switch (f, value) {
 	case let (.failure(left), .failure(right)):
@@ -146,7 +146,7 @@ public func <*> <T, U, ClientError>(f: Result<((T) -> U), CommandantError<Client
 ///
 /// If parsing command line arguments, and no value was specified on the command
 /// line, the option's `defaultValue` is used.
-public func <| <T: ArgumentType, ClientError>(mode: CommandMode, option: Option<T>) -> Result<T, CommandantError<ClientError>> {
+public func <| <T: ArgumentProtocol, ClientError>(mode: CommandMode, option: Option<T>) -> Result<T, CommandantError<ClientError>> {
 	let wrapped = Option<T?>(key: option.key, defaultValue: option.defaultValue, usage: option.usage)
 	// Since we are passing a non-nil default value, we can safely unwrap the
 	// result.
@@ -157,7 +157,7 @@ public func <| <T: ArgumentType, ClientError>(mode: CommandMode, option: Option<
 ///
 /// If parsing command line arguments, and no value was specified on the command
 /// line, `nil` is used.
-public func <| <T: ArgumentType, ClientError>(mode: CommandMode, option: Option<T?>) -> Result<T?, CommandantError<ClientError>> {
+public func <| <T: ArgumentProtocol, ClientError>(mode: CommandMode, option: Option<T?>) -> Result<T?, CommandantError<ClientError>> {
 	let key = option.key
 	switch mode {
 	case let .arguments(arguments):
@@ -177,7 +177,7 @@ public func <| <T: ArgumentType, ClientError>(mode: CommandMode, option: Option<
 		}
 
 		if let stringValue = stringValue {
-			if let value = T.fromString(stringValue) {
+			if let value = T.from(string: stringValue) {
 				return .success(value)
 			}
 			
@@ -209,3 +209,7 @@ public func <| <ClientError>(mode: CommandMode, option: Option<Bool>) -> Result<
 		return .failure(informativeUsageError(option))
 	}
 }
+
+// MARK: - migration support
+@available(*, unavailable, renamed: "OptionsProtocol")
+public typealias OptionsType = OptionsProtocol
