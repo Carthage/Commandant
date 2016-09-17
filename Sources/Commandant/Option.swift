@@ -46,7 +46,7 @@ public protocol OptionsType {
 /// An `OptionsType` that has no options.
 public struct NoOptions<ClientError: ClientErrorType>: OptionsType {
 	public init() {}
-	
+
 	public static func evaluate(_ m: CommandMode) -> Result<NoOptions, CommandantError<ClientError>> {
 		return .success(NoOptions())
 	}
@@ -180,7 +180,7 @@ public func <| <T: ArgumentType, ClientError>(mode: CommandMode, option: Option<
 			if let value = T.from(string: stringValue) {
 				return .success(value)
 			}
-			
+
 			let description = "Invalid value for '--\(key)': \(stringValue)"
 			return .failure(.usageError(description: description))
 		} else {

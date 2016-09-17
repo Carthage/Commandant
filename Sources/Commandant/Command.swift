@@ -11,12 +11,12 @@ import Result
 
 /// Represents a subcommand that can be executed with its own set of arguments.
 public protocol CommandType {
-	
+
 	/// The command's options type.
 	associatedtype Options: OptionsType
 
 	associatedtype ClientError: ClientErrorType = Options.ClientError
-	
+
 	/// The action that users should specify to use this subcommand (e.g.,
 	/// `help`).
 	var verb: String { get }
@@ -33,9 +33,9 @@ public protocol CommandType {
 public struct CommandWrapper<ClientError: ClientErrorType> {
 	public let verb: String
 	public let function: String
-	
+
 	public let run: (ArgumentParser) -> Result<(), CommandantError<ClientError>>
-	
+
 	public let usage: () -> CommandantError<ClientError>?
 
 	/// Creates a command that wraps another.
@@ -101,7 +101,7 @@ public final class CommandRegistry<ClientError: ClientErrorType> {
 	public func run(command verb: String, arguments: [String]) -> Result<(), CommandantError<ClientError>>? {
 		return self[verb]?.run(ArgumentParser(arguments))
 	}
-	
+
 	@available(*, deprecated, renamed: "run(command:arguments:)")
 	public func runCommand(_ verb: String, arguments: [String]) -> Result<(), CommandantError<ClientError>>? {
 		fatalError()
@@ -132,10 +132,10 @@ extension CommandRegistry {
 	/// If a matching command could not be found or a usage error occurred,
 	/// a helpful error message will be written to `stderr`, then the process
 	/// will exit with a failure error code.
-	public func main(defaultVerb: String, errorHandler: (ClientError) -> ()) -> Never  {
+	public func main(defaultVerb: String, errorHandler: (ClientError) -> ()) -> Never {
 		main(arguments: CommandLine.arguments, defaultVerb: defaultVerb, errorHandler: errorHandler)
 	}
-	
+
 	/// Hands off execution to the CommandRegistry, by parsing `arguments`
 	/// and then running whichever command has been identified in the argument
 	/// list.
@@ -153,7 +153,7 @@ extension CommandRegistry {
 	/// If a matching command could not be found or a usage error occurred,
 	/// a helpful error message will be written to `stderr`, then the process
 	/// will exit with a failure error code.
-	public func main(arguments: [String], defaultVerb: String, errorHandler: (ClientError) -> ()) -> Never  {
+	public func main(arguments: [String], defaultVerb: String, errorHandler: (ClientError) -> ()) -> Never {
 		assert(arguments.count >= 1)
 
 		var arguments = arguments
@@ -166,7 +166,7 @@ extension CommandRegistry {
 			// Remove the command name.
 			arguments.remove(at: 0)
 		}
-		
+
 		switch run(command: verb, arguments: arguments) {
 		case .success?:
 			exit(EXIT_SUCCESS)
