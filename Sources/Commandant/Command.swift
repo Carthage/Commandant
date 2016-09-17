@@ -77,7 +77,7 @@ public enum CommandMode {
 
 /// Maintains the list of commands available to run.
 public final class CommandRegistry<ClientError: ClientErrorType> {
-	fileprivate var commandsByVerb: [String: CommandWrapper<ClientError>] = [:]
+	private var commandsByVerb: [String: CommandWrapper<ClientError>] = [:]
 
 	/// All available commands.
 	public var commands: [CommandWrapper<ClientError>] {
@@ -196,7 +196,7 @@ extension CommandRegistry {
 	/// name must be in the form of `executable-verb`.
 	///
 	/// - Returns: The exit status of found subcommand or nil.
-	fileprivate func executeSubcommandIfExists(_ executableName: String, verb: String, arguments: [String]) -> Int32? {
+	private func executeSubcommandIfExists(_ executableName: String, verb: String, arguments: [String]) -> Int32? {
 		let subcommand = "\(NSString(string: executableName).lastPathComponent)-\(verb)"
 
 		func launchTask(_ path: String, arguments: [String]) -> Int32 {

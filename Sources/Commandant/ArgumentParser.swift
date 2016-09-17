@@ -56,7 +56,7 @@ extension RawArgument: CustomStringConvertible {
 /// Destructively parses a list of command-line arguments.
 public final class ArgumentParser {
 	/// The remaining arguments to be extracted, in their raw form.
-	fileprivate var rawArguments: [RawArgument] = []
+	private var rawArguments: [RawArgument] = []
 
 	/// Initializes the generator from a simple list of command-line arguments.
 	public init(_ arguments: [String]) {

@@ -24,7 +24,7 @@ public struct HelpCommand<ClientError: ClientErrorType>: CommandType {
 	public let verb = "help"
 	public let function = "Display general or command-specific help"
 
-	fileprivate let registry: CommandRegistry<ClientError>
+	private let registry: CommandRegistry<ClientError>
 
 	/// Initializes the command to provide help from the given registry of
 	/// commands.
@@ -61,11 +61,11 @@ public struct HelpCommand<ClientError: ClientErrorType>: CommandType {
 public struct HelpOptions<ClientError: ClientErrorType>: OptionsType {
 	fileprivate let verb: String?
 	
-	fileprivate init(verb: String?) {
+	private init(verb: String?) {
 		self.verb = verb
 	}
 
-	fileprivate static func create(_ verb: String) -> HelpOptions {
+	private static func create(_ verb: String) -> HelpOptions {
 		return self.init(verb: (verb == "" ? nil : verb))
 	}
 
