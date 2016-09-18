@@ -18,16 +18,18 @@ public protocol ArgumentType {
 	static func fromString(_ string: String) -> Self?
 }
 
+extension ArgumentType {
+	@available(*, deprecated, renamed: "from(string:)")
+	public static func fromString(_ string: String) -> Self? {
+		fatalError()
+	}
+}
+
 extension Int: ArgumentType {
 	public static let name = "integer"
 
 	public static func from(string: String) -> Int? {
 	      return Int(string)
-	}
-
-	@available(*, deprecated, renamed: "from(string:)")
-	public static func fromString(_ string: String) -> Int? {
-	      fatalError()
 	}
 }
 
@@ -36,10 +38,5 @@ extension String: ArgumentType {
 
 	public static func from(string: String) -> String? {
 	      return string
-	}
-
-	@available(*, deprecated, renamed: "from(string:)")
-	public static func fromString(_ string: String) -> String? {
-	      fatalError()
 	}
 }

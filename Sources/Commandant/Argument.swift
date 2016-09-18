@@ -45,7 +45,6 @@ public func <| <T: ArgumentType, ClientError>(mode: CommandMode, argument: Argum
 				return .failure(missingArgumentError(argument.usage))
 			}
 		}
-
 		if let value = T.from(string: stringValue) {
 			return .success(value)
 		} else {
