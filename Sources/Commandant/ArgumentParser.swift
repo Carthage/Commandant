@@ -12,25 +12,25 @@ import Result
 /// Represents an argument passed on the command line.
 private enum RawArgument: Equatable {
 	/// A key corresponding to an option (e.g., `verbose` for `--verbose`).
-	case Key(String)
+	case key(String)
 
 	/// A value, either associated with an option or passed as a positional
 	/// argument.
-	case Value(String)
+	case value(String)
 
 	/// One or more flag arguments (e.g 'r' and 'f' for `-rf`)
-	case Flag(Set<Character>)
+	case flag(Set<Character>)
 }
 
 private func ==(lhs: RawArgument, rhs: RawArgument) -> Bool {
 	switch (lhs, rhs) {
-	case let (.Key(left), .Key(right)):
+	case let (.key(left), .key(right)):
 		return left == right
 
-	case let (.Value(left), .Value(right)):
+	case let (.value(left), .value(right)):
 		return left == right
 
-	case let (.Flag(left), .Flag(right)):
+	case let (.flag(left), .flag(right)):
 		return left == right
 
 	default:
@@ -39,15 +39,15 @@ private func ==(lhs: RawArgument, rhs: RawArgument) -> Bool {
 }
 
 extension RawArgument: CustomStringConvertible {
-	private var description: String {
+	fileprivate var description: String {
 		switch self {
-		case let .Key(key):
+		case let .key(key):
 			return "--\(key)"
 
-		case let .Value(value):
+		case let .value(value):
 			return "\"\(value)\""
 
-		case let .Flag(flags):
+		case let .flag(flags):
 			return "-\(String(flags))"
 		}
 	}
@@ -70,19 +70,19 @@ public final class ArgumentParser {
 				// Do we have `--{key}` or `-{flags}`.
 				let opt = arg.characters.dropFirst()
 				if opt.first == "-" {
-					return .Key(String(opt.dropFirst()))
+					return .key(String(opt.dropFirst()))
 				} else {
-					return .Flag(Set(opt))
+					return .flag(Set(opt))
 				}
 			} else {
-				return .Value(arg)
+				return .value(arg)
 			}
 		})
 
 		// Remaining arguments are all positional parameters.
 		if params.count == 2 {
 			let positional = params.last!
-			rawArguments.append(contentsOf: positional.map(RawArgument.Value))
+			rawArguments.append(contentsOf: positional.map(RawArgument.value))
 		}
 	}
 
@@ -96,15 +96,15 @@ public final class ArgumentParser {
 	///
 	/// If the key is found, it is then removed from the list of arguments
 	/// remaining to be parsed.
-	internal func consumeBooleanKey(key: String) -> Bool? {
+	internal func consumeBooleanKey(_ key: String) -> Bool? {
 		let oldArguments = rawArguments
 		rawArguments.removeAll()
 
 		var result: Bool?
 		for arg in oldArguments {
-			if arg == .Key(key) {
+			if arg == .key(key) {
 				result = true
-			} else if arg == .Key("no-\(key)") {
+			} else if arg == .key("no-\(key)") {
 				result = false
 			} else {
 				rawArguments.append(arg)
@@ -120,7 +120,7 @@ public final class ArgumentParser {
 	///
 	/// If a value is found, the key and the value are both removed from the
 	/// list of arguments remaining to be parsed.
-	internal func consumeValueForKey(key: String) -> Result<String?, CommandantError<NoError>> {
+	internal func consumeValueForKey(_ key: String) -> Result<String?, CommandantError<NoError>> {
 		let oldArguments = rawArguments
 		rawArguments.removeAll()
 
@@ -131,27 +131,27 @@ public final class ArgumentParser {
 			defer { index += 1 }
 			let arg = oldArguments[index]
 
-			guard arg == .Key(key) else {
+			guard arg == .key(key) else {
 				rawArguments.append(arg)
 				continue
 			}
 
 			index += 1
-			guard index < oldArguments.count, case let .Value(value) = oldArguments[index] else {
-				return .Failure(missingArgumentError("--\(key)"))
+			guard index < oldArguments.count, case let .value(value) = oldArguments[index] else {
+				return .failure(missingArgumentError("--\(key)"))
 			}
 
 			foundValue = value
 		}
 
-		return .Success(foundValue)
+		return .success(foundValue)
 	}
 
 	/// Returns the next positional argument that hasn't yet been returned, or
 	/// nil if there are no more positional arguments.
 	internal func consumePositionalArgument() -> String? {
 		for (index, arg) in rawArguments.enumerated() {
-			if case let .Value(value) = arg {
+			if case let .value(value) = arg {
 				rawArguments.remove(at: index)
 				return value
 			}
@@ -162,25 +162,25 @@ public final class ArgumentParser {
 
 	/// Returns whether the given key was specified and removes it from the
 	/// list of arguments remaining.
-	internal func consumeKey(key: String) -> Bool {
+	internal func consumeKey(_ key: String) -> Bool {
 		let oldArguments = rawArguments
-		rawArguments = oldArguments.filter { $0 != .Key(key) }
+		rawArguments = oldArguments.filter { $0 != .key(key) }
 
 		return rawArguments.count < oldArguments.count
 	}
 
 	/// Returns whether the given flag was specified and removes it from the
 	/// list of arguments remaining.
-	internal func consumeBooleanFlag(flag: Character) -> Bool {
+	internal func consumeBooleanFlag(_ flag: Character) -> Bool {
 		for (index, arg) in rawArguments.enumerated() {
-			if case let .Flag(flags) = arg where flags.contains(flag) {
+			if case let .flag(flags) = arg, flags.contains(flag) {
 				var flags = flags
 				flags.remove(flag)
 
 				if flags.isEmpty {
 					rawArguments.remove(at: index)
 				} else {
-					rawArguments[index] = .Flag(flags)
+					rawArguments[index] = .flag(flags)
 				}
 
 				return true

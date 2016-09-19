@@ -12,21 +12,31 @@ public protocol ArgumentType {
 	static var name: String { get }
 
 	/// Attempts to parse a value from the given command-line argument.
-	static func fromString(string: String) -> Self?
+	static func from(string: String) -> Self?
+
+	@available(*, deprecated, renamed: "from(string:)")
+	static func fromString(_ string: String) -> Self?
+}
+
+extension ArgumentType {
+	@available(*, deprecated, renamed: "from(string:)")
+	public static func fromString(_ string: String) -> Self? {
+		fatalError()
+	}
 }
 
 extension Int: ArgumentType {
 	public static let name = "integer"
 
-	public static func fromString(string: String) -> Int? {
-		return Int(string)
+	public static func from(string: String) -> Int? {
+	      return Int(string)
 	}
 }
 
 extension String: ArgumentType {
 	public static let name = "string"
 
-	public static func fromString(string: String) -> String? {
-		return string
+	public static func from(string: String) -> String? {
+	      return string
 	}
 }
