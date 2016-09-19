@@ -9,13 +9,11 @@
 import Foundation
 import Result
 
-public typealias ClientErrorType = Error
-
 /// Possible errors that can originate from Commandant.
 ///
 /// `ClientError` should be the type of error (if any) that can occur when
 /// running commands.
-public enum CommandantError<ClientError>: ClientErrorType {
+public enum CommandantError<ClientError>: Error {
 	/// An option was used incorrectly.
 	case usageError(description: String)
 

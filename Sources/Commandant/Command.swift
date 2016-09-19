@@ -15,7 +15,7 @@ public protocol CommandType {
 	/// The command's options type.
 	associatedtype Options: OptionsType
 
-	associatedtype ClientError: ClientErrorType = Options.ClientError
+	associatedtype ClientError: Error = Options.ClientError
 
 	/// The action that users should specify to use this subcommand (e.g.,
 	/// `help`).
@@ -30,7 +30,7 @@ public protocol CommandType {
 }
 
 /// A type-erased command.
-public struct CommandWrapper<ClientError: ClientErrorType> {
+public struct CommandWrapper<ClientError: Error> {
 	public let verb: String
 	public let function: String
 
@@ -76,7 +76,7 @@ public enum CommandMode {
 }
 
 /// Maintains the list of commands available to run.
-public final class CommandRegistry<ClientError: ClientErrorType> {
+public final class CommandRegistry<ClientError: Error> {
 	private var commandsByVerb: [String: CommandWrapper<ClientError>] = [:]
 
 	/// All available commands.
