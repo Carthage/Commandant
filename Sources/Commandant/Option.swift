@@ -117,7 +117,7 @@ infix operator <| : MultiplicationPrecedence
 ///
 /// In the context of command-line option parsing, this is used to chain
 /// together the parsing of multiple arguments. See OptionsType for an example.
-public func <*> <T, U, ClientError>(f: @escaping (T) -> U, value: Result<T, CommandantError<ClientError>>) -> Result<U, CommandantError<ClientError>> {
+public func <*> <T, U, ClientError>(f: (T) -> U, value: Result<T, CommandantError<ClientError>>) -> Result<U, CommandantError<ClientError>> {
 	return value.map(f)
 }
 
