@@ -12,11 +12,11 @@ import Nimble
 import Quick
 import Result
 
-class OptionsTypeSpec: QuickSpec {
+class OptionsProtocolSpec: QuickSpec {
 	override func spec() {
 		describe("CommandMode.Arguments") {
-			func tryArguments(arguments: String...) -> Result<TestOptions, CommandantError<NoError>> {
-				return TestOptions.evaluate(.Arguments(ArgumentParser(arguments)))
+			func tryArguments(_ arguments: String...) -> Result<TestOptions, CommandantError<NoError>> {
+				return TestOptions.evaluate(.arguments(ArgumentParser(arguments)))
 			}
 
 			it("should fail if a required argument is missing") {
@@ -78,7 +78,7 @@ class OptionsTypeSpec: QuickSpec {
 
 		describe("CommandMode.Usage") {
 			it("should return an error containing usage information") {
-				let error = TestOptions.evaluate(.Usage).error
+				let error = TestOptions.evaluate(.usage).error
 				expect(error?.description).to(contain("intValue"))
 				expect(error?.description).to(contain("stringValue"))
 				expect(error?.description).to(contain("name you're required to"))
@@ -88,7 +88,7 @@ class OptionsTypeSpec: QuickSpec {
 	}
 }
 
-struct TestOptions: OptionsType, Equatable {
+struct TestOptions: OptionsProtocol, Equatable {
 	let intValue: Int
 	let stringValue: String
 	let optionalStringValue: String?
@@ -101,13 +101,13 @@ struct TestOptions: OptionsType, Equatable {
 
 	typealias ClientError = NoError
 
-	static func create(a: Int) -> String -> String? -> String -> String -> Bool -> Bool -> Bool -> [String] -> TestOptions {
+	static func create(_ a: Int) -> (String) -> (String?) -> (String) -> (String) -> (Bool) -> (Bool) -> (Bool) -> ([String]) -> TestOptions {
 		return { b in { c in { d in { e in { f in { g in { h in { i in
 			return self.init(intValue: a, stringValue: b, optionalStringValue: c, optionalFilename: e, requiredName: d, enabled: f, force: g, glob: h, arguments: i)
 		} } } } } } } }
 	}
 
-	static func evaluate(m: CommandMode) -> Result<TestOptions, CommandantError<NoError>> {
+	static func evaluate(_ m: CommandMode) -> Result<TestOptions, CommandantError<NoError>> {
 		return create
 			<*> m <| Option(key: "intValue", defaultValue: 42, usage: "Some integer value")
 			<*> m <| Option(key: "stringValue", defaultValue: "foobar", usage: "Some string value")

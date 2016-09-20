@@ -51,14 +51,14 @@ extension Switch: CustomStringConvertible {
 /// line, the option's `defaultValue` is used.
 public func <| <ClientError> (mode: CommandMode, option: Switch) -> Result<Bool, CommandantError<ClientError>> {
 	switch mode {
-	case let .Arguments(arguments):
-		var enabled = arguments.consumeKey(option.key)
+	case let .arguments(arguments):
+		var enabled = arguments.consume(key: option.key)
 		if let flag = option.flag {
-			enabled = arguments.consumeBooleanFlag(flag)
+			enabled = arguments.consumeBoolean(flag: flag)
 		}
-		return .Success(enabled)
+		return .success(enabled)
 
-	case .Usage:
-		return .Failure(informativeUsageError(option.description, usage: option.usage))
+	case .usage:
+		return .failure(informativeUsageError(option.description, usage: option.usage))
 	}
 }
