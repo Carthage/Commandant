@@ -98,7 +98,7 @@ public final class CommandRegistry<ClientError: Error> {
 	/// arguments.
 	///
 	/// Returns the results of the execution, or nil if no such command exists.
-	public func runCommand(_ verb: String, arguments: [String]) -> Result<(), CommandantError<ClientError>>? {
+	public func run(command verb: String, arguments: [String]) -> Result<(), CommandantError<ClientError>>? {
 		return self[verb]?.run(ArgumentParser(arguments))
 	}
 
@@ -162,7 +162,7 @@ extension CommandRegistry {
 			arguments.remove(at: 0)
 		}
 
-		switch runCommand(verb, arguments: arguments) {
+		switch run(command: verb, arguments: arguments) {
 		case .success?:
 			exit(EXIT_SUCCESS)
 
@@ -216,3 +216,10 @@ extension CommandRegistry {
 // MARK: - migration support
 @available(*, unavailable, renamed: "CommandProtocol")
 public typealias CommandType = CommandProtocol
+
+extension CommandRegistry {
+	@available(*, unavailable, renamed: "run(command:arguments:)")
+	public func runCommand(_ verb: String, arguments: [String]) -> Result<(), CommandantError<ClientError>>? {
+		return run(command: verb, arguments: arguments)
+	}
+}
