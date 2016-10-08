@@ -146,3 +146,15 @@ internal func informativeUsageError<ClientError>(_ option: Option<Bool>) -> Comm
 // MARK: - migration support
 @available(*, unavailable, message: "Use ErrorProtocol instead of ClientErrorType")
 public typealias ClientErrorType = Error
+
+extension CommandantError {
+	@available(*, unavailable, renamed: "usageError(description:)")
+	public static func UsageError(description: String) -> CommandantError {
+		return .usageError(description: description)
+	}
+
+	@available(*, unavailable, renamed: "commandError(_:)")
+	public static func CommandError(_ error: ClientError) -> CommandantError {
+		return .commandError(error)
+	}
+}
