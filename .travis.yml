@@ -45,4 +45,4 @@ deploy:
   on:
     repo: Carthage/Commandant
     tags: true
-    condition: $JOB = Xcode7.3
+    condition: $JOB = Xcode8
