@@ -19,7 +19,10 @@ matrix:
       osx_image: xcode8
       language: objective-c
       env: JOB=SPM
-    - script: swift build && swift test
+    - script:
+        - mv .Package.test.swift Package.swift
+        - swift build
+        - swift test
       env: JOB=Linux
       sudo: required
       dist: trusty
