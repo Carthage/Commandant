@@ -1,5 +1,5 @@
 //
-//  ArgumentProtocolSpec.swift
+//  ArgumentArraySpec.swift
 //  Commandant
 //
 //  Created by Anton Domashnev on 27/11/2016.
@@ -12,6 +12,20 @@ import Quick
 
 class ArgumentsArraySpec: QuickSpec {
 	override func spec() {
+		describe("Equatable") {
+			context("when arguments are the same") {
+				it("compares two ArgumentsArray as equal") {
+					expect(ArgumentsArray(arguments: ["one", "two"]) == ArgumentsArray(arguments: ["one", "two"])).to(beTrue())
+				}
+			}
+			
+			context("when arguments are not the same") {
+				it("compares two ArgumentsArray as not equal") {
+					expect(ArgumentsArray(arguments: ["one", "two"]) == ArgumentsArray(arguments: ["one", "three"])).to(beFalse())
+				}
+			}
+		}
+		
 		describe("ArgumentsArray.fromString") {
 			context("when arguments are not comma-separated") {
 				context("when only one word") {
