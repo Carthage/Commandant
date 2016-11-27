@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		6C29EE8B1CA6241B0005DA40 /* LinuxSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C29EE8A1CA6241B0005DA40 /* LinuxSupport.swift */; };
+		6D5816391DEB7FEC00D5CCD6 /* ArgumentProtocolSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D5816381DEB7FEC00D5CCD6 /* ArgumentProtocolSpec.swift */; };
 		CD2ED3411C1E6C5D0076092B /* Argument.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD2ED3401C1E6C5D0076092B /* Argument.swift */; };
 		CD2ED3431C1E6D540076092B /* ArgumentProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD2ED3421C1E6D540076092B /* ArgumentProtocol.swift */; };
 		CDFC88361C3C0612003AC8F8 /* CommandSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDFC88351C3C0612003AC8F8 /* CommandSpec.swift */; };
@@ -38,6 +39,7 @@
 /* Begin PBXFileReference section */
 		6C29EE8A1CA6241B0005DA40 /* LinuxSupport.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = LinuxSupport.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		6CAD549C1D371A4E00A2D031 /* LinuxMain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LinuxMain.swift; path = Tests/LinuxMain.swift; sourceTree = SOURCE_ROOT; };
+		6D5816381DEB7FEC00D5CCD6 /* ArgumentProtocolSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArgumentProtocolSpec.swift; sourceTree = "<group>"; };
 		CD2ED3401C1E6C5D0076092B /* Argument.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Argument.swift; sourceTree = "<group>"; };
 		CD2ED3421C1E6D540076092B /* ArgumentProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArgumentProtocol.swift; sourceTree = "<group>"; };
 		CDFC88351C3C0612003AC8F8 /* CommandSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommandSpec.swift; sourceTree = "<group>"; };
@@ -142,6 +144,7 @@
 		D00CCDE81A20717400109F8C /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				6D5816381DEB7FEC00D5CCD6 /* ArgumentProtocolSpec.swift */,
 				CDFC88351C3C0612003AC8F8 /* CommandSpec.swift */,
 				D00CCE281A20741C00109F8C /* OptionSpec.swift */,
 				D00CCDE91A20717400109F8C /* Supporting Files */,
@@ -377,6 +380,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6D5816391DEB7FEC00D5CCD6 /* ArgumentProtocolSpec.swift in Sources */,
 				CDFC88361C3C0612003AC8F8 /* CommandSpec.swift in Sources */,
 				D00CCE291A20741C00109F8C /* OptionSpec.swift in Sources */,
 			);
