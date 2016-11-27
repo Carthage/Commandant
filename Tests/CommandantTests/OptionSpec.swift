@@ -27,51 +27,63 @@ class OptionsProtocolSpec: QuickSpec {
 				expect(tryArguments("required", "--intValue").value).to(beNil())
 			}
 
-			it("should succeed without optional arguments") {
+			it("should succeed without optional string arguments") {
 				let value = tryArguments("required").value
-				let expected = TestOptions(intValue: 42, stringValue: "foobar", optionalStringValue: nil, optionalFilename: "filename", requiredName: "required", enabled: false, force: false, glob: false, arguments: [])
+				let expected = TestOptions(intValue: 42, stringValue: "foobar", optionalArgumentsArray: nil, optionalStringValue: nil, optionalFilename: "filename", requiredName: "required", enabled: false, force: false, glob: false, arguments: [])
 				expect(value).to(equal(expected))
 			}
 
-			it("should succeed with some optional arguments") {
+			it("should succeed with some optional string arguments") {
 				let value = tryArguments("required", "--intValue", "3", "--optionalStringValue", "baz", "fuzzbuzz").value
-				let expected = TestOptions(intValue: 3, stringValue: "foobar", optionalStringValue: "baz", optionalFilename: "fuzzbuzz", requiredName: "required", enabled: false, force: false, glob: false, arguments: [])
+				let expected = TestOptions(intValue: 3, stringValue: "foobar", optionalArgumentsArray: nil, optionalStringValue: "baz", optionalFilename: "fuzzbuzz", requiredName: "required", enabled: false, force: false, glob: false, arguments: [])
+				expect(value).to(equal(expected))
+			}
+			
+			it("should succeed without optional array arguments") {
+				let value = tryArguments("required").value
+				let expected = TestOptions(intValue: 42, stringValue: "foobar", optionalArgumentsArray: nil, optionalStringValue: nil, optionalFilename: "filename", requiredName: "required", enabled: false, force: false, glob: false, arguments: [])
+				expect(value).to(equal(expected))
+			}
+			
+			it("should succeed with some optional array arguments") {
+				let value = tryArguments("required", "--intValue", "3", "--optionalArgumentsArray", "one, two", "fuzzbuzz").value
+				let expected = TestOptions(intValue: 3, stringValue: "foobar", optionalArgumentsArray: ArgumentsArray(arguments: ["one", "two"]), optionalStringValue: nil, optionalFilename: "fuzzbuzz", requiredName: "required", enabled: false, force: false, glob: false, arguments: [])
 				expect(value).to(equal(expected))
 			}
 
 			it("should override previous optional arguments") {
 				let value = tryArguments("required", "--intValue", "3", "--stringValue", "fuzzbuzz", "--intValue", "5", "--stringValue", "bazbuzz").value
-				let expected = TestOptions(intValue: 5, stringValue: "bazbuzz", optionalStringValue: nil, optionalFilename: "filename", requiredName: "required", enabled: false, force: false, glob: false, arguments: [])
+				let expected = TestOptions(intValue: 5, stringValue: "bazbuzz", optionalArgumentsArray: nil, optionalStringValue: nil, optionalFilename: "filename", requiredName: "required", enabled: false, force: false, glob: false, arguments: [])
 				expect(value).to(equal(expected))
 			}
 
 			it("should enable a boolean flag") {
 				let value = tryArguments("required", "--enabled", "--intValue", "3", "fuzzbuzz").value
-				let expected = TestOptions(intValue: 3, stringValue: "foobar", optionalStringValue: nil, optionalFilename: "fuzzbuzz", requiredName: "required", enabled: true, force: false, glob: false, arguments: [])
+				let expected = TestOptions(intValue: 3, stringValue: "foobar", optionalArgumentsArray: nil, optionalStringValue: nil, optionalFilename: "fuzzbuzz", requiredName: "required", enabled: true, force: false, glob: false, arguments: [])
 				expect(value).to(equal(expected))
 			}
 
 			it("should re-disable a boolean flag") {
 				let value = tryArguments("required", "--enabled", "--no-enabled", "--intValue", "3", "fuzzbuzz").value
-				let expected = TestOptions(intValue: 3, stringValue: "foobar", optionalStringValue: nil, optionalFilename: "fuzzbuzz", requiredName: "required", enabled: false, force: false, glob: false, arguments: [])
+				let expected = TestOptions(intValue: 3, stringValue: "foobar", optionalArgumentsArray: nil, optionalStringValue: nil, optionalFilename: "fuzzbuzz", requiredName: "required", enabled: false, force: false, glob: false, arguments: [])
 				expect(value).to(equal(expected))
 			}
 
 			it("should enable multiple boolean flags") {
 				let value = tryArguments("required", "-fg").value
-				let expected = TestOptions(intValue: 42, stringValue: "foobar", optionalStringValue: nil, optionalFilename: "filename", requiredName: "required", enabled: false, force: true, glob: true, arguments: [])
+				let expected = TestOptions(intValue: 42, stringValue: "foobar", optionalArgumentsArray: nil, optionalStringValue: nil, optionalFilename: "filename", requiredName: "required", enabled: false, force: true, glob: true, arguments: [])
 				expect(value).to(equal(expected))
 			}
 
 			it("should consume the rest of positional arguments") {
 				let value = tryArguments("required", "optional", "value1", "value2").value
-				let expected = TestOptions(intValue: 42, stringValue: "foobar", optionalStringValue: nil, optionalFilename: "optional", requiredName: "required", enabled: false, force: false, glob: false, arguments: [ "value1", "value2" ])
+				let expected = TestOptions(intValue: 42, stringValue: "foobar", optionalArgumentsArray: nil, optionalStringValue: nil, optionalFilename: "optional", requiredName: "required", enabled: false, force: false, glob: false, arguments: [ "value1", "value2" ])
 				expect(value).to(equal(expected))
 			}
 
 			it("should treat -- as the end of valued options") {
 				let value = tryArguments("--", "--intValue").value
-				let expected = TestOptions(intValue: 42, stringValue: "foobar", optionalStringValue: nil, optionalFilename: "filename", requiredName: "--intValue", enabled: false, force: false, glob: false, arguments: [])
+				let expected = TestOptions(intValue: 42, stringValue: "foobar", optionalArgumentsArray: nil, optionalStringValue: nil, optionalFilename: "filename", requiredName: "--intValue", enabled: false, force: false, glob: false, arguments: [])
 				expect(value).to(equal(expected))
 			}
 		}
@@ -91,6 +103,7 @@ class OptionsProtocolSpec: QuickSpec {
 struct TestOptions: OptionsProtocol, Equatable {
 	let intValue: Int
 	let stringValue: String
+	let optionalArgumentsArray: ArgumentsArray?
 	let optionalStringValue: String?
 	let optionalFilename: String
 	let requiredName: String
@@ -101,16 +114,17 @@ struct TestOptions: OptionsProtocol, Equatable {
 
 	typealias ClientError = NoError
 
-	static func create(_ a: Int) -> (String) -> (String?) -> (String) -> (String) -> (Bool) -> (Bool) -> (Bool) -> ([String]) -> TestOptions {
-		return { b in { c in { d in { e in { f in { g in { h in { i in
-			return self.init(intValue: a, stringValue: b, optionalStringValue: c, optionalFilename: e, requiredName: d, enabled: f, force: g, glob: h, arguments: i)
-		} } } } } } } }
+	static func create(_ a: Int) -> (String) -> (ArgumentsArray?) -> (String?) -> (String) -> (String) -> (Bool) -> (Bool) -> (Bool) -> ([String]) -> TestOptions {
+		return { b in { c in { d in { e in { f in { g in { h in { i in { j in
+			return self.init(intValue: a, stringValue: b, optionalArgumentsArray: c, optionalStringValue: d, optionalFilename: f, requiredName: e, enabled: g, force: h, glob: i, arguments: j)
+			} } } } } } } } }
 	}
 
 	static func evaluate(_ m: CommandMode) -> Result<TestOptions, CommandantError<NoError>> {
 		return create
 			<*> m <| Option(key: "intValue", defaultValue: 42, usage: "Some integer value")
 			<*> m <| Option(key: "stringValue", defaultValue: "foobar", usage: "Some string value")
+			<*> m <| Option<ArgumentsArray?>(key: "optionalArgumentsArray", defaultValue: nil, usage: "Some array of arguments")
 			<*> m <| Option<String?>(key: "optionalStringValue", defaultValue: nil, usage: "Some string value")
 			<*> m <| Argument(usage: "A name you're required to specify")
 			<*> m <| Argument(defaultValue: "filename", usage: "A filename that you can optionally specify")
@@ -122,11 +136,11 @@ struct TestOptions: OptionsProtocol, Equatable {
 }
 
 func ==(lhs: TestOptions, rhs: TestOptions) -> Bool {
-	return lhs.intValue == rhs.intValue && lhs.stringValue == rhs.stringValue && lhs.optionalStringValue == rhs.optionalStringValue && lhs.optionalFilename == rhs.optionalFilename && lhs.requiredName == rhs.requiredName && lhs.enabled == rhs.enabled && lhs.force == rhs.force && lhs.glob == rhs.glob && lhs.arguments == rhs.arguments
+	return lhs.intValue == rhs.intValue && lhs.stringValue == rhs.stringValue && lhs.optionalArgumentsArray == rhs.optionalArgumentsArray && lhs.optionalStringValue == rhs.optionalStringValue && lhs.optionalFilename == rhs.optionalFilename && lhs.requiredName == rhs.requiredName && lhs.enabled == rhs.enabled && lhs.force == rhs.force && lhs.glob == rhs.glob && lhs.arguments == rhs.arguments
 }
 
 extension TestOptions: CustomStringConvertible {
 	var description: String {
-		return "{ intValue: \(intValue), stringValue: \(stringValue), optionalStringValue: \(optionalStringValue), optionalFilename: \(optionalFilename), requiredName: \(requiredName), enabled: \(enabled), force: \(force), glob: \(glob), arguments: \(arguments) }"
+		return "{ intValue: \(intValue), stringValue: \(stringValue), optionalArgumentsArray: \(optionalArgumentsArray?.arguments), optionalStringValue: \(optionalStringValue), optionalFilename: \(optionalFilename), requiredName: \(requiredName), enabled: \(enabled), force: \(force), glob: \(glob), arguments: \(arguments) }"
 	}
 }
