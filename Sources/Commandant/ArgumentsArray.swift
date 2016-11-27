@@ -14,12 +14,12 @@ import Foundation
 struct ArgumentsArray: ArgumentProtocol {
 	/// Array of arguments that were passed by a comma separated string
 	public let arguments: Array<String>
-	
+
 	/// Separator to be used to split string into values
 	private static let separator = ","
-	
+
 	public static let name = "array"
-	
+
 	public static func from(string: String) -> ArgumentsArray? {
 		let trimmedComponents = string.components(separatedBy: separator).map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
 		if trimmedComponents.count > 1 {
