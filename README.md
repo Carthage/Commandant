@@ -7,32 +7,32 @@ Commandant is a Swift framework for parsing command-line arguments, inspired by 
 With Commandant, a command and its associated options could be defined as follows:
 
 ```swift
-struct LogCommand: CommandType {
+struct LogCommand: CommandProtocol {
 	typealias Options = LogOptions
 
 	let verb = "log"
 	let function = "Reads the log"
 
-	func run(options: Options) -> Result<(), YourErrorType> {
+	func run(_ options: Options) -> Result<(), YourErrorType> {
 		// Use the parsed options to do something interesting here.
 		return ()
 	}
 }
 
-struct LogOptions: OptionsType {
+struct LogOptions: OptionsProtocol {
 	let lines: Int
 	let verbose: Bool
 	let logName: String
 
-	static func create(lines: Int)(verbose: Bool)(logName: String) -> LogOptions {
-		return LogOptions(lines: lines, verbose: verbose, logName: logName)
+	static func create(_ lines: Int) -> (Bool) -> (String) -> LogOptions {
+		return { verbose in { logName in LogOptions(lines: lines, verbose: verbose, logName: logName) } }
 	}
 
-	static func evaluate(m: CommandMode) -> Result<LogOptions, CommandantError<YourErrorType>> {
+	static func evaluate(_ m: CommandMode) -> Result<LogOptions, CommandantError<YourErrorType>> {
 		return create
 			<*> m <| Option(key: "lines", defaultValue: 0, usage: "the number of lines to read from the logs")
 			<*> m <| Option(key: "verbose", defaultValue: false, usage: "show verbose output")
-			<*> m <| Option(usage: "the log to read")
+			<*> m <| Argument(usage: "the log to read")
 	}
 }
 ```
@@ -40,7 +40,7 @@ struct LogOptions: OptionsType {
 Then, each available command should be added to a registry:
 
 ```swift
-let commands = CommandRegistry()
+let commands = CommandRegistry<YourErrorType>()
 commands.register(LogCommand())
 commands.register(VersionCommand())
 ```
@@ -48,17 +48,17 @@ commands.register(VersionCommand())
 After which, arguments can be parsed by simply invoking the registry:
 
 ```swift
-var arguments = Process.arguments
+var arguments = CommandLine.arguments
 
 // Remove the executable name.
-assert(arguments.count >= 1)
-arguments.removeAtIndex(0)
+assert(!arguments.isEmpty)
+arguments.remove(at: 0)
 
 if let verb = arguments.first {
 	// Remove the command name.
-	arguments.removeAtIndex(0)
+	arguments.remove(at: 0)
 
-	if let result = commands.runCommand(verb, arguments: arguments) {
+	if let result = commands.run(command: verb, arguments: arguments) {
 		// Handle success or failure.
 	} else {
 		// Unrecognized command.

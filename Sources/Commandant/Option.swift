@@ -20,18 +20,19 @@ import Result
 ///		struct LogOptions: OptionsProtocol {
 ///			let verbosity: Int
 ///			let outputFilename: String
+///			let shouldDelete: Bool
 ///			let logName: String
 ///
-///			static func create(verbosity: Int)(outputFilename: String)(logName: String) -> LogOptions {
-///				return LogOptions(verbosity: verbosity, outputFilename: outputFilename, logName: logName)
+///			static func create(_ verbosity: Int) -> (String) -> (Bool) -> (String) -> LogOptions {
+///				return { outputFilename in { shouldDelete in { logName in LogOptions(verbosity: verbosity, outputFilename: outputFilename, shouldDelete: shouldDelete, logName: logName) } } }
 ///			}
 ///
-///			static func evaluate(m: CommandMode) -> Result<LogOptions, CommandantError<YourErrorType>> {
+///			static func evaluate(_ m: CommandMode) -> Result<LogOptions, CommandantError<YourErrorType>> {
 ///				return create
 ///					<*> m <| Option(key: "verbose", defaultValue: 0, usage: "the verbosity level with which to read the logs")
 ///					<*> m <| Option(key: "outputFilename", defaultValue: "", usage: "a file to print output to, instead of stdout")
-///					<*> m <| Switch(flag: "d", key: "delete", defaultValue: false, usage: "delete the logs when finished")
-///					<*> m <| Option(usage: "the log to read")
+///					<*> m <| Switch(flag: "d", key: "delete", usage: "delete the logs when finished")
+///					<*> m <| Argument(usage: "the log to read")
 ///			}
 ///		}
 public protocol OptionsProtocol {
