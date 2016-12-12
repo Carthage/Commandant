@@ -137,6 +137,16 @@ internal func informativeUsageError<T: ArgumentProtocol, ClientError>(_ option: 
 	return informativeUsageError("--\(option.key) (\(T.name))", option: option)
 }
 
+/// Constructs an error that describes how to use the option.
+internal func informativeUsageError<T: ArgumentProtocol, ClientError>(_ option: Option<[T]>) -> CommandantError<ClientError> {
+	return informativeUsageError("--\(option.key) (\(option.defaultValue))", option: option)
+}
+
+/// Constructs an error that describes how to use the option.
+internal func informativeUsageError<T: ArgumentProtocol, ClientError>(_ option: Option<[T]?>) -> CommandantError<ClientError> {
+	return informativeUsageError("--\(option.key) (\(T.name))", option: option)
+}
+
 /// Constructs an error that describes how to use the given boolean option.
 internal func informativeUsageError<ClientError>(_ option: Option<Bool>) -> CommandantError<ClientError> {
 	let key = option.key

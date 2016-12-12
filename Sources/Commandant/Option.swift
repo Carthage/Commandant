@@ -193,6 +193,47 @@ public func <| <T: ArgumentProtocol, ClientError>(mode: CommandMode, option: Opt
 	}
 }
 
+/// Evaluates the given option in the given mode.
+///
+/// If parsing command line arguments, and no value was specified on the command
+/// line, `nil` is used.
+public func <| <T: ArgumentProtocol, ClientError>(mode: CommandMode, option: Option<[T]?>) -> Result<[T]?, CommandantError<ClientError>> {
+	let key = option.key
+	switch mode {
+	case let .arguments(arguments):
+		var stringValue: String?
+		switch arguments.consumeValue(forKey: key) {
+		case let .success(value):
+			stringValue = value
+			
+		case let .failure(error):
+			switch error {
+			case let .usageError(description):
+				return .failure(.usageError(description: description))
+				
+			case .commandError:
+				fatalError("CommandError should be impossible when parameterized over NoError")
+			}
+		}
+	
+		guard let unwrappedStringValue = stringValue else {
+			return .success(option.defaultValue)
+		}
+		let components = unwrappedStringValue.components(separatedBy: ",").map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+		var resultValues: [T] = []
+		for component in components {
+			guard let value = T.from(string: component) else {
+				let description = "Invalid value for '--\(key)': \(unwrappedStringValue)"
+				return .failure(.usageError(description: description))
+			}
+			resultValues.append(value)
+		}
+		return .success(resultValues)
+	case .usage:
+		return .failure(informativeUsageError(option))
+	}
+}
+
 /// Evaluates the given boolean option in the given mode.
 ///
 /// If parsing command line arguments, and no value was specified on the command
