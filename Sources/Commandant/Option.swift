@@ -84,15 +84,6 @@ extension Option: CustomStringConvertible {
 	}
 }
 
-extension String {
-	/// Split the string into substrings separated by the given separators.
-	internal func split(by separators: [Character] = [ ",", " " ], allowEmptySlices: Bool = true) -> [String] {
-		return characters
-				.split(omittingEmptySubsequences: allowEmptySlices, whereSeparator: separators.contains)
-				.map(String.init)
-	}
-}
-
 // Inspired by the Argo library:
 // https://github.com/thoughtbot/Argo
 /*
