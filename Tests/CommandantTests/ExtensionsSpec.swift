@@ -17,13 +17,13 @@ class ExtensionsSpec: QuickSpec {
 			context("when allowEmptySlices") {
 				context("when there is one separator") {
 					it("splits the string correctly") {
-						expect("a, b, c".split(by: [","], allowEmptySlices: true)).to(equal(["a"," b"," c"]))
+						expect("a, b, c".split(by: [","], omittingEmptySubsequences: false)).to(equal(["a"," b"," c"]))
 					}
 				}
 				
 				context("when there are multiple separators") {
 					it("splits the string correctly") {
-						expect(":a, :b, :c d".split(by: [",", " ", ":"], allowEmptySlices: true)).to(equal(["","a","","","b","","","c","d"]))
+						expect(":a, :b, :c d".split(by: [",", " ", ":"], omittingEmptySubsequences: false)).to(equal(["","a","","","b","","","c","d"]))
 					}
 				}
 			}
@@ -31,13 +31,13 @@ class ExtensionsSpec: QuickSpec {
 			context("when don't allowEmptySlices") {
 				context("when there is one separator") {
 					it("splits the string correctly") {
-						expect("a, b, c".split(by: [","], allowEmptySlices: false)).to(equal(["a"," b"," c"]))
+						expect("a, b, c".split(by: [","], omittingEmptySubsequences: true)).to(equal(["a"," b"," c"]))
 					}
 				}
 				
 				context("when there are multiple separators") {
 					it("splits the string correctly") {
-						expect(":a, :b, :c d".split(by: [",", " ", ":"], allowEmptySlices: false)).to(equal(["a","b","c","d"]))
+						expect(":a, :b, :c d".split(by: [",", " ", ":"], omittingEmptySubsequences: true)).to(equal(["a","b","c","d"]))
 					}
 				}
 			}
