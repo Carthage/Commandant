@@ -1,6 +1,9 @@
 xcode_workspace: Commandant.xcworkspace
 git:
   submodules: false
+branches:
+  only:
+    - master
 before_install:
   - git submodule update --init --recursive
 script: placeholder # workaround for https://github.com/travis-ci/travis-ci/issues/4681
