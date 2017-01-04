@@ -14,7 +14,7 @@ import Quick
 class ExtensionsSpec: QuickSpec {
 	override func spec() {
 		describe("String.split") {
-			context("when allowEmptySlices") {
+			context("when `omittingEmptySubsequences` is false") {
 				context("when there is one separator") {
 					it("splits the string correctly") {
 						expect("a, b, c".split(by: [","], omittingEmptySubsequences: false)).to(equal(["a"," b"," c"]))
@@ -28,7 +28,7 @@ class ExtensionsSpec: QuickSpec {
 				}
 			}
 			
-			context("when don't allowEmptySlices") {
+			context("when `omittingEmptySubsequences` is true") {
 				context("when there is one separator") {
 					it("splits the string correctly") {
 						expect("a, b, c".split(by: [","], omittingEmptySubsequences: true)).to(equal(["a"," b"," c"]))
@@ -42,7 +42,7 @@ class ExtensionsSpec: QuickSpec {
 				}
 			}
 			
-			context("when use default value for allowEmptySlices") {
+			context("when use default value for omittingEmptySubsequences") {
 				context("when there is one separator") {
 					it("splits the string correctly") {
 						expect("a, b, c".split(by: [","])).to(equal(["a"," b"," c"]))
