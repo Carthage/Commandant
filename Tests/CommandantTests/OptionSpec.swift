@@ -136,7 +136,7 @@ struct TestOptions: OptionsProtocol, Equatable {
 	static func create(_ a: Int) -> (String) -> ([String]) -> ([String]?) -> (String?) -> (String) -> (String) -> (Bool) -> (Bool) -> (Bool) -> ([String]) -> TestOptions {
 		return { b in { c in { d in { e in { f in { g in { h in { i in { j in { k in
 			return self.init(intValue: a, stringValue: b, stringsArray: c, optionalStringsArray: d, optionalStringValue: e, optionalFilename: g, requiredName: f, enabled: h, force: i, glob: j, arguments: k)
-			} } } } } } } } } }
+		} } } } } } } } } }
 	}
 
 	static func evaluate(_ m: CommandMode) -> Result<TestOptions, CommandantError<NoError>> {
@@ -161,9 +161,9 @@ func ==(lhs: TestOptions, rhs: TestOptions) -> Bool {
 
 func ==<T: Equatable>(lhs: [T]?, rhs: [T]?) -> Bool {
 	switch (lhs,rhs) {
-	case (.some(let lhs), .some(let rhs)):
+	case let (lhs?, rhs?):
 		return lhs == rhs
-	case (.none, .none):
+	case (nil, nil):
 		return true
 	default:
 		return false
