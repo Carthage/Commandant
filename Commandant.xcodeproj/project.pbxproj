@@ -147,10 +147,10 @@
 			isa = PBXGroup;
 			children = (
 				CDFC88351C3C0612003AC8F8 /* CommandSpec.swift */,
+				6D1EDD391E03E1F1009BCD2E /* ExtensionsSpec.swift */,
 				D00CCE281A20741C00109F8C /* OptionSpec.swift */,
 				D00CCDE91A20717400109F8C /* Supporting Files */,
 				6CAD549C1D371A4E00A2D031 /* LinuxMain.swift */,
-				6D1EDD391E03E1F1009BCD2E /* ExtensionsSpec.swift */,
 			);
 			name = Tests;
 			path = Tests/CommandantTests;
