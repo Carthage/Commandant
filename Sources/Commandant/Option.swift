@@ -210,26 +210,28 @@ public func <| <T: ArgumentProtocol, ClientError>(mode: CommandMode, option: Opt
 /// line, `nil` is used.
 public func <| <T: ArgumentProtocol, ClientError>(mode: CommandMode, option: Option<[T]?>) -> Result<[T]?, CommandantError<ClientError>> {
 	let key = option.key
+
 	switch mode {
 	case let .arguments(arguments):
-		var stringValue: String?
+		let stringValue: String?
 		switch arguments.consumeValue(forKey: key) {
 		case let .success(value):
 			stringValue = value
-			
+
 		case let .failure(error):
 			switch error {
 			case let .usageError(description):
 				return .failure(.usageError(description: description))
-				
+
 			case .commandError:
 				fatalError("CommandError should be impossible when parameterized over NoError")
 			}
 		}
-	
+
 		guard let unwrappedStringValue = stringValue else {
 			return .success(option.defaultValue)
 		}
+
 		let components = unwrappedStringValue.split()
 		var resultValues: [T] = []
 		for component in components {
@@ -240,6 +242,7 @@ public func <| <T: ArgumentProtocol, ClientError>(mode: CommandMode, option: Opt
 			resultValues.append(value)
 		}
 		return .success(resultValues)
+
 	case .usage:
 		return .failure(informativeUsageError(option))
 	}
