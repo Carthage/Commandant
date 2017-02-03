@@ -87,8 +87,26 @@ class OptionsProtocolSpec: QuickSpec {
 				expect(value).to(equal(expected))
 			}
 
-			it("should enable multiple boolean flags") {
+			it("should enable a boolean flag if a single Switch flag is passed") {
+				let value = tryArguments("required", "-f").value
+				let expected = TestOptions(intValue: 42, stringValue: "foobar", stringsArray: [], optionalStringsArray: nil, optionalStringValue: nil, optionalFilename: "filename", requiredName: "required", enabled: false, force: true, glob: false, arguments: [])
+				expect(value).to(equal(expected))
+			}
+
+			it("should enable multiple boolean flags if multiple grouped Switch flags are passed") {
 				let value = tryArguments("required", "-fg").value
+				let expected = TestOptions(intValue: 42, stringValue: "foobar", stringsArray: [], optionalStringsArray: nil, optionalStringValue: nil, optionalFilename: "filename", requiredName: "required", enabled: false, force: true, glob: true, arguments: [])
+				expect(value).to(equal(expected))
+			}
+
+			it("should enable a boolean flag if a single Switch key is passed") {
+				let value = tryArguments("required", "--force").value
+				let expected = TestOptions(intValue: 42, stringValue: "foobar", stringsArray: [], optionalStringsArray: nil, optionalStringValue: nil, optionalFilename: "filename", requiredName: "required", enabled: false, force: true, glob: false, arguments: [])
+				expect(value).to(equal(expected))
+			}
+
+			it("should enable multiple boolean flags if multiple Switch keys are passed") {
+				let value = tryArguments("required", "--force", "--glob").value
 				let expected = TestOptions(intValue: 42, stringValue: "foobar", stringsArray: [], optionalStringsArray: nil, optionalStringValue: nil, optionalFilename: "filename", requiredName: "required", enabled: false, force: true, glob: true, arguments: [])
 				expect(value).to(equal(expected))
 			}

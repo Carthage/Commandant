@@ -53,7 +53,8 @@ public func <| <ClientError> (mode: CommandMode, option: Switch) -> Result<Bool,
 	switch mode {
 	case let .arguments(arguments):
 		var enabled = arguments.consume(key: option.key)
-		if let flag = option.flag {
+
+		if let flag = option.flag, !enabled {
 			enabled = arguments.consumeBoolean(flag: flag)
 		}
 		return .success(enabled)
