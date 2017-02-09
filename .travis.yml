@@ -17,7 +17,10 @@ matrix:
       osx_image: xcode8.2
       language: objective-c
       env: JOB=Xcode8
-    - script: SWIFT_GIT=`xcrun --find git` swift build
+    - script:
+        - mv .Package.test.swift Package.swift
+        - SWIFT_GIT=`xcrun --find git` swift build
+        - swift test
       os: osx
       osx_image: xcode8.2
       language: objective-c
