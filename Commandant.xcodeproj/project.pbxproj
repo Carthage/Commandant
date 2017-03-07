@@ -314,7 +314,7 @@
 			attributes = {
 				LastSwiftMigration = 0700;
 				LastSwiftUpdateCheck = 0700;
-				LastUpgradeCheck = 0700;
+				LastUpgradeCheck = 0820;
 				ORGANIZATIONNAME = Carthage;
 				TargetAttributes = {
 					D00CCDD81A20717400109F8C = {
@@ -405,6 +405,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D00CCDFA1A20719500109F8C /* Debug.xcconfig */;
 			buildSettings = {
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_TESTABILITY = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
@@ -419,6 +421,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D00CCDFC1A20719500109F8C /* Release.xcconfig */;
 			buildSettings = {
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				SWIFT_VERSION = 3.0;
@@ -492,6 +496,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D00CCDFB1A20719500109F8C /* Profile.xcconfig */;
 			buildSettings = {
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				SWIFT_VERSION = 3.0;
@@ -534,6 +540,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D00CCDFD1A20719500109F8C /* Test.xcconfig */;
 			buildSettings = {
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				SWIFT_VERSION = 3.0;
