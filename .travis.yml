@@ -19,6 +19,8 @@ matrix:
       env: JOB=Xcode8
     - script:
         - mv .Package.test.swift Package.swift
+        - swift package update
+        - cd Packages/Nimble-* && git checkout 8116a83864ee78339798c3ef425c42f6ca6bf034 && cd ../../
         - SWIFT_GIT=`xcrun --find git` swift build
         - swift test
       os: osx
@@ -27,6 +29,8 @@ matrix:
       env: JOB=SPM
     - script:
         - mv .Package.test.swift Package.swift
+        - swift package update
+        - cd Packages/Nimble-* && git checkout 8116a83864ee78339798c3ef425c42f6ca6bf034 && cd ../../
         - swift build
         - swift test
       env: JOB=Linux
