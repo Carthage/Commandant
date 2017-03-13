@@ -158,12 +158,10 @@ extension CommandRegistry {
 
 		// use the default verb even if we have other arguments
 		var verb = defaultVerb
-		if let argument = arguments.first {
-			if argument.hasPrefix("-") == false {
-				verb = argument
-				// Remove the command name.
-				arguments.remove(at: 0)
-			}
+		if let argument = arguments.first, !argument.hasPrefix("-") {
+			verb = argument
+			// Remove the command name.
+			arguments.remove(at: 0)
 		}
 		
 		switch run(command: verb, arguments: arguments) {
