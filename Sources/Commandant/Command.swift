@@ -156,12 +156,14 @@ extension CommandRegistry {
 		// Extract the executable name.
 		let executableName = arguments.remove(at: 0)
 
-		let verb = arguments.first ?? defaultVerb
-		if arguments.count > 0 {
+		// use the default verb even if we have other arguments
+		var verb = defaultVerb
+		if let argument = arguments.first, !argument.hasPrefix("-") {
+			verb = argument
 			// Remove the command name.
 			arguments.remove(at: 0)
 		}
-
+		
 		switch run(command: verb, arguments: arguments) {
 		case .success?:
 			exit(EXIT_SUCCESS)
