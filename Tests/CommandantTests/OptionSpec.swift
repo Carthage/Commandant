@@ -190,6 +190,6 @@ func ==<T: Equatable>(lhs: [T]?, rhs: [T]?) -> Bool {
 
 extension TestOptions: CustomStringConvertible {
 	var description: String {
-		return "{ intValue: \(intValue), stringValue: \(stringValue), stringsArray: \(stringsArray), optionalStringsArray: \(optionalStringsArray), optionalStringValue: \(optionalStringValue), optionalFilename: \(optionalFilename), requiredName: \(requiredName), enabled: \(enabled), force: \(force), glob: \(glob), arguments: \(arguments) }"
+		return "{ intValue: \(intValue), stringValue: \(stringValue), stringsArray: \(stringsArray), optionalStringsArray: \(String(describing: optionalStringsArray)), optionalStringValue: \(String(describing: optionalStringValue)), optionalFilename: \(optionalFilename), requiredName: \(requiredName), enabled: \(enabled), force: \(force), glob: \(glob), arguments: \(arguments) }"
 	}
 }
