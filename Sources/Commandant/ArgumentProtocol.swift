@@ -30,12 +30,3 @@ extension String: ArgumentProtocol {
 		return string
 	}
 }
-
-// MARK: - migration support
-@available(*, unavailable, renamed: "ArgumentProtocol")
-public typealias ArgumentType = ArgumentProtocol
-
-extension ArgumentProtocol {
-	@available(*, unavailable, renamed: "from(string:)")
-	static func fromString(_ string: String) -> Self? { return nil }
-}

@@ -214,25 +214,3 @@ extension CommandRegistry {
 		return launchTask("/usr/bin/env", arguments: [ subcommand ] + arguments)
 	}
 }
-
-// MARK: - migration support
-@available(*, unavailable, renamed: "CommandProtocol")
-public typealias CommandType = CommandProtocol
-
-extension CommandMode {
-	@available(*, unavailable, renamed: "arguments(_:)")
-	public static func Arguments(_ parser: ArgumentParser) -> CommandMode {
-		return .arguments(parser)
-	}
-	@available(*, unavailable, renamed: "usage")
-	public static var Usage: CommandMode {
-		return .usage
-	}
-}
-
-extension CommandRegistry {
-	@available(*, unavailable, renamed: "run(command:arguments:)")
-	public func runCommand(_ verb: String, arguments: [String]) -> Result<(), CommandantError<ClientError>>? {
-		return run(command: verb, arguments: arguments)
-	}
-}
