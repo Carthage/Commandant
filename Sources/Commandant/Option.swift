@@ -265,7 +265,3 @@ public func <| <ClientError>(mode: CommandMode, option: Option<Bool>) -> Result<
 		return .failure(informativeUsageError(option))
 	}
 }
-
-// MARK: - migration support
-@available(*, unavailable, renamed: "OptionsProtocol")
-public typealias OptionsType = OptionsProtocol
