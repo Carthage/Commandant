@@ -84,6 +84,8 @@ extension Option: CustomStringConvertible {
 	}
 }
 
+// MARK: - Operators
+
 // Inspired by the Argo library:
 // https://github.com/thoughtbot/Argo
 /*
@@ -143,125 +145,127 @@ public func <*> <T, U, ClientError>(f: Result<((T) -> U), CommandantError<Client
 	}
 }
 
-/// Evaluates the given option in the given mode.
-///
-/// If parsing command line arguments, and no value was specified on the command
-/// line, the option's `defaultValue` is used.
-public func <| <T: ArgumentProtocol, ClientError>(mode: CommandMode, option: Option<T>) -> Result<T, CommandantError<ClientError>> {
-	let wrapped = Option<T?>(key: option.key, defaultValue: option.defaultValue, usage: option.usage)
-	// Since we are passing a non-nil default value, we can safely unwrap the
-	// result.
-	return (mode <| wrapped).map { $0! }
-}
+extension CommandMode {
+	/// Evaluates the given option in the given mode.
+	///
+	/// If parsing command line arguments, and no value was specified on the command
+	/// line, the option's `defaultValue` is used.
+	public static func <| <T: ArgumentProtocol, ClientError>(mode: CommandMode, option: Option<T>) -> Result<T, CommandantError<ClientError>> {
+		let wrapped = Option<T?>(key: option.key, defaultValue: option.defaultValue, usage: option.usage)
+		// Since we are passing a non-nil default value, we can safely unwrap the
+		// result.
+		return (mode <| wrapped).map { $0! }
+	}
 
-/// Evaluates the given option in the given mode.
-///
-/// If parsing command line arguments, and no value was specified on the command
-/// line, `nil` is used.
-public func <| <T: ArgumentProtocol, ClientError>(mode: CommandMode, option: Option<T?>) -> Result<T?, CommandantError<ClientError>> {
-	let key = option.key
-	switch mode {
-	case let .arguments(arguments):
-		var stringValue: String?
-		switch arguments.consumeValue(forKey: key) {
-		case let .success(value):
-			stringValue = value
+	/// Evaluates the given option in the given mode.
+	///
+	/// If parsing command line arguments, and no value was specified on the command
+	/// line, `nil` is used.
+	public static func <| <T: ArgumentProtocol, ClientError>(mode: CommandMode, option: Option<T?>) -> Result<T?, CommandantError<ClientError>> {
+		let key = option.key
+		switch mode {
+		case let .arguments(arguments):
+			var stringValue: String?
+			switch arguments.consumeValue(forKey: key) {
+			case let .success(value):
+				stringValue = value
 
-		case let .failure(error):
-			switch error {
-			case let .usageError(description):
-				return .failure(.usageError(description: description))
+			case let .failure(error):
+				switch error {
+				case let .usageError(description):
+					return .failure(.usageError(description: description))
 
-			case .commandError:
-				fatalError("CommandError should be impossible when parameterized over NoError")
+				case .commandError:
+					fatalError("CommandError should be impossible when parameterized over NoError")
+				}
 			}
-		}
 
-		if let stringValue = stringValue {
-			if let value = T.from(string: stringValue) {
+			if let stringValue = stringValue {
+				if let value = T.from(string: stringValue) {
+					return .success(value)
+				}
+				
+				let description = "Invalid value for '--\(key)': \(stringValue)"
+				return .failure(.usageError(description: description))
+			} else {
+				return .success(option.defaultValue)
+			}
+
+		case .usage:
+			return .failure(informativeUsageError(option))
+		}
+	}
+
+	/// Evaluates the given option in the given mode.
+	///
+	/// If parsing command line arguments, and no value was specified on the command
+	/// line, the option's `defaultValue` is used.
+	public static func <| <T: ArgumentProtocol, ClientError>(mode: CommandMode, option: Option<[T]>) -> Result<[T], CommandantError<ClientError>> {
+		let wrapped = Option<[T]?>(key: option.key, defaultValue: option.defaultValue, usage: option.usage)
+		// Since we are passing a non-nil default value, we can safely unwrap the
+		// result.
+		return (mode <| wrapped).map { $0! }
+	}
+
+	/// Evaluates the given option in the given mode.
+	///
+	/// If parsing command line arguments, and no value was specified on the command
+	/// line, `nil` is used.
+	public static func <| <T: ArgumentProtocol, ClientError>(mode: CommandMode, option: Option<[T]?>) -> Result<[T]?, CommandantError<ClientError>> {
+		let key = option.key
+
+		switch mode {
+		case let .arguments(arguments):
+			let stringValue: String?
+			switch arguments.consumeValue(forKey: key) {
+			case let .success(value):
+				stringValue = value
+
+			case let .failure(error):
+				switch error {
+				case let .usageError(description):
+					return .failure(.usageError(description: description))
+
+				case .commandError:
+					fatalError("CommandError should be impossible when parameterized over NoError")
+				}
+			}
+
+			guard let unwrappedStringValue = stringValue else {
+				return .success(option.defaultValue)
+			}
+
+			let components = unwrappedStringValue.split()
+			var resultValues: [T] = []
+			for component in components {
+				guard let value = T.from(string: component) else {
+					let description = "Invalid value for '--\(key)': \(unwrappedStringValue)"
+					return .failure(.usageError(description: description))
+				}
+				resultValues.append(value)
+			}
+			return .success(resultValues)
+
+		case .usage:
+			return .failure(informativeUsageError(option))
+		}
+	}
+
+	/// Evaluates the given boolean option in the given mode.
+	///
+	/// If parsing command line arguments, and no value was specified on the command
+	/// line, the option's `defaultValue` is used.
+	public static func <| <ClientError>(mode: CommandMode, option: Option<Bool>) -> Result<Bool, CommandantError<ClientError>> {
+		switch mode {
+		case let .arguments(arguments):
+			if let value = arguments.consumeBoolean(forKey: option.key) {
 				return .success(value)
+			} else {
+				return .success(option.defaultValue)
 			}
-			
-			let description = "Invalid value for '--\(key)': \(stringValue)"
-			return .failure(.usageError(description: description))
-		} else {
-			return .success(option.defaultValue)
+
+		case .usage:
+			return .failure(informativeUsageError(option))
 		}
-
-	case .usage:
-		return .failure(informativeUsageError(option))
-	}
-}
-
-/// Evaluates the given option in the given mode.
-///
-/// If parsing command line arguments, and no value was specified on the command
-/// line, the option's `defaultValue` is used.
-public func <| <T: ArgumentProtocol, ClientError>(mode: CommandMode, option: Option<[T]>) -> Result<[T], CommandantError<ClientError>> {
-	let wrapped = Option<[T]?>(key: option.key, defaultValue: option.defaultValue, usage: option.usage)
-	// Since we are passing a non-nil default value, we can safely unwrap the
-	// result.
-	return (mode <| wrapped).map { $0! }
-}
-
-/// Evaluates the given option in the given mode.
-///
-/// If parsing command line arguments, and no value was specified on the command
-/// line, `nil` is used.
-public func <| <T: ArgumentProtocol, ClientError>(mode: CommandMode, option: Option<[T]?>) -> Result<[T]?, CommandantError<ClientError>> {
-	let key = option.key
-
-	switch mode {
-	case let .arguments(arguments):
-		let stringValue: String?
-		switch arguments.consumeValue(forKey: key) {
-		case let .success(value):
-			stringValue = value
-
-		case let .failure(error):
-			switch error {
-			case let .usageError(description):
-				return .failure(.usageError(description: description))
-
-			case .commandError:
-				fatalError("CommandError should be impossible when parameterized over NoError")
-			}
-		}
-
-		guard let unwrappedStringValue = stringValue else {
-			return .success(option.defaultValue)
-		}
-
-		let components = unwrappedStringValue.split()
-		var resultValues: [T] = []
-		for component in components {
-			guard let value = T.from(string: component) else {
-				let description = "Invalid value for '--\(key)': \(unwrappedStringValue)"
-				return .failure(.usageError(description: description))
-			}
-			resultValues.append(value)
-		}
-		return .success(resultValues)
-
-	case .usage:
-		return .failure(informativeUsageError(option))
-	}
-}
-
-/// Evaluates the given boolean option in the given mode.
-///
-/// If parsing command line arguments, and no value was specified on the command
-/// line, the option's `defaultValue` is used.
-public func <| <ClientError>(mode: CommandMode, option: Option<Bool>) -> Result<Bool, CommandantError<ClientError>> {
-	switch mode {
-	case let .arguments(arguments):
-		if let value = arguments.consumeBoolean(forKey: option.key) {
-			return .success(value)
-		} else {
-			return .success(option.defaultValue)
-		}
-
-	case .usage:
-		return .failure(informativeUsageError(option))
 	}
 }
