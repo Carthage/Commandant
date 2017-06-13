@@ -14,6 +14,7 @@ matrix:
       language: objective-c
       env: JOB=Xcode8
     - script:
+        - swift --version
         - swift build
         - SWIFTPM_TEST_Commandant=YES swift test
       os: osx
@@ -21,9 +22,22 @@ matrix:
       language: objective-c
       env: JOB=SPM
     - script:
+        - swift --version
         - swift build
         - SWIFTPM_TEST_Commandant=YES swift test
       env: JOB=Linux
+      sudo: required
+      dist: trusty
+      language: generic
+      install:
+        - eval "$(curl -sL https://gist.githubusercontent.com/kylef/5c0475ff02b7c7671d2a/raw/02090c7ede5a637b76e6df1710e83cd0bbe7dcdf/swiftenv-install.sh)"
+    - script:
+        - swift --version
+        - swift build
+        - SWIFTPM_TEST_Commandant=YES swift test
+      env:
+        - JOB=Linux
+        - SWIFT_VERSION=4.0-DEVELOPMENT-SNAPSHOT-2017-06-11-a
       sudo: required
       dist: trusty
       language: generic
