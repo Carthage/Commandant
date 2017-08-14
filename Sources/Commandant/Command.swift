@@ -90,8 +90,13 @@ public final class CommandRegistry<ClientError: Error> {
 	///
 	/// If another command was already registered with the same `verb`, it will
 	/// be overwritten.
-	public func register<C: CommandProtocol>(_ command: C) where C.ClientError == ClientError, C.Options.ClientError == ClientError {
+	@discardableResult
+	public func register<C: CommandProtocol>(_ command: C)
+		-> CommandRegistry
+		where C.ClientError == ClientError, C.Options.ClientError == ClientError
+	{
 		commandsByVerb[command.verb] = CommandWrapper(command)
+		return self
 	}
 
 	/// Runs the command corresponding to the given verb, passing it the given
