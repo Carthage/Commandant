@@ -86,16 +86,18 @@ public final class CommandRegistry<ClientError: Error> {
 
 	public init() {}
 
-	/// Registers the given command, making it available to run.
+	/// Registers the given commands, making those available to run.
 	///
-	/// If another command was already registered with the same `verb`, it will
-	/// be overwritten.
+	/// If another commands were already registered with the same `verb`s, those
+	/// will be overwritten.
 	@discardableResult
-	public func register<C: CommandProtocol>(_ command: C)
+	public func register<C: CommandProtocol>(_ commands: C...)
 		-> CommandRegistry
 		where C.ClientError == ClientError, C.Options.ClientError == ClientError
 	{
-		commandsByVerb[command.verb] = CommandWrapper(command)
+		for command in commands {
+			commandsByVerb[command.verb] = CommandWrapper(command)
+		}
 		return self
 	}
 
