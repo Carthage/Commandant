@@ -2,6 +2,24 @@
   "object": {
     "pins": [
       {
+        "package": "Nimble",
+        "repositoryURL": "https://github.com/Quick/Nimble.git",
+        "state": {
+          "branch": "a63252b",
+          "revision": "a63252b16eba6cdebec4e4936388c90552165a68",
+          "version": null
+        }
+      },
+      {
+        "package": "Quick",
+        "repositoryURL": "https://github.com/Quick/Quick.git",
+        "state": {
+          "branch": "3665ae9",
+          "revision": "3665ae9570b682a562df847cccbb46811864676a",
+          "version": null
+        }
+      },
+      {
         "package": "Result",
         "repositoryURL": "https://github.com/antitypical/Result.git",
         "state": {

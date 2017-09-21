@@ -16,7 +16,7 @@ matrix:
     - script:
         - swift --version
         - swift build
-        - SWIFTPM_TEST_Commandant=YES swift test
+        - swift test
       os: osx
       osx_image: xcode9
       language: objective-c
@@ -24,7 +24,7 @@ matrix:
     - script:
         - swift --version
         - swift build
-        - SWIFTPM_TEST_Commandant=YES swift test
+        - swift test
       env: JOB=Linux
       sudo: required
       dist: trusty
@@ -34,7 +34,7 @@ matrix:
 #     - script:
 #         - swift --version
 #         - swift build
-#         - SWIFTPM_TEST_Commandant=YES swift test
+#         - swift test
 #       env:
 #         - JOB=Linux
 #         - SWIFT_VERSION=DEVELOPMENT-SNAPSHOT-2017-09-20-a

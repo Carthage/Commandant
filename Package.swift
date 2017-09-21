@@ -1,23 +1,20 @@
-import Foundation
-import PackageDescription
+// swift-tools-version:4.0
 
-var isSwiftPackagerManagerTest: Bool {
-    return ProcessInfo.processInfo.environment["SWIFTPM_TEST_Commandant"] == "YES"
-}
+import PackageDescription
 
 let package = Package(
     name: "Commandant",
-    dependencies: {
-        var deps: [Package.Dependency] = [
-            .Package(url: "https://github.com/antitypical/Result.git", versions: Version(3, 2, 1)..<Version(3, .max, .max)),
-        ]
-        if isSwiftPackagerManagerTest {
-            deps += [
-                .Package(url: "https://github.com/Quick/Quick.git", majorVersion: 1, minor: 1),
-                .Package(url: "https://github.com/Quick/Nimble.git", majorVersion: 7),
-            ]
-        }
-        return deps
-    }(),
+    products: [
+        .library(name: "Commandant", targets: ["Commandant"]),
+    ],
+    dependencies: [
+        .package(url: "https://github.com/antitypical/Result.git", from: "3.2.1"),
+        .package(url: "https://github.com/Quick/Quick.git", .revision("3665ae9")),
+        .package(url: "https://github.com/Quick/Nimble.git", .revision("a63252b")),
+    ],
+    targets: [
+        .target(name: "Commandant", dependencies: ["Result"]),
+        .testTarget(name: "CommandantTests", dependencies: ["Commandant", "Quick", "Nimble"]),
+    ],
     swiftLanguageVersions: [3, 4]
 )
