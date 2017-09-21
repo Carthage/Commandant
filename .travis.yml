@@ -10,15 +10,15 @@ matrix:
     - script: set -o pipefail && xcodebuild -workspace "$TRAVIS_XCODE_WORKSPACE" -scheme "$TRAVIS_XCODE_SCHEME" test | xcpretty
       xcode_scheme: Commandant
       os: osx
-      osx_image: xcode8.3
+      osx_image: xcode9
       language: objective-c
-      env: JOB=Xcode8
+      env: JOB=Xcode9
     - script:
         - swift --version
         - swift build
         - SWIFTPM_TEST_Commandant=YES swift test
       os: osx
-      osx_image: xcode8.3
+      osx_image: xcode9
       language: objective-c
       env: JOB=SPM
     - script:
@@ -37,7 +37,7 @@ matrix:
         - SWIFTPM_TEST_Commandant=YES swift test
       env:
         - JOB=Linux
-        - SWIFT_VERSION=4.0-DEVELOPMENT-SNAPSHOT-2017-08-04-a
+        - SWIFT_VERSION=DEVELOPMENT-SNAPSHOT-2017-09-20-a
       sudo: required
       dist: trusty
       language: generic
@@ -62,4 +62,4 @@ deploy:
   on:
     repo: Carthage/Commandant
     tags: true
-    condition: $JOB = Xcode8
+    condition: $JOB = Xcode9
