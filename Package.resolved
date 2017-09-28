@@ -5,9 +5,9 @@
         "package": "Nimble",
         "repositoryURL": "https://github.com/Quick/Nimble.git",
         "state": {
-          "branch": "a63252b",
-          "revision": "a63252b16eba6cdebec4e4936388c90552165a68",
-          "version": null
+          "branch": null,
+          "revision": "38c9ab0846a3fbec308eb2aa9ef68b10a7434eb4",
+          "version": "7.0.2"
         }
       },
       {
@@ -24,8 +24,8 @@
         "repositoryURL": "https://github.com/antitypical/Result.git",
         "state": {
           "branch": null,
-          "revision": "c8446185238659a2b27c0261f64ff1254291d07d",
-          "version": "3.2.3"
+          "revision": "7477584259bfce2560a19e06ad9f71db441fff11",
+          "version": "3.2.4"
         }
       }
     ]
