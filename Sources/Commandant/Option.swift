@@ -235,10 +235,13 @@ extension CommandMode {
 				return .success(option.defaultValue)
 			}
 
-			let components = unwrappedStringValue.split()
+			let components = unwrappedStringValue.split(
+				omittingEmptySubsequences: true,
+				whereSeparator: [",", " "].contains
+			)
 			var resultValues: [T] = []
 			for component in components {
-				guard let value = T.from(string: component) else {
+				guard let value = T.from(string: String(component)) else {
 					let description = "Invalid value for '--\(key)': \(unwrappedStringValue)"
 					return .failure(.usageError(description: description))
 				}

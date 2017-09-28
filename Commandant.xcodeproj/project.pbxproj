@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		6D1EDD381E03E196009BCD2E /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D1EDD371E03E196009BCD2E /* Extensions.swift */; };
-		6D1EDD3A1E03E1F1009BCD2E /* ExtensionsSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D1EDD391E03E1F1009BCD2E /* ExtensionsSpec.swift */; };
 		CD2ED3411C1E6C5D0076092B /* Argument.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD2ED3401C1E6C5D0076092B /* Argument.swift */; };
 		CD2ED3431C1E6D540076092B /* ArgumentProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD2ED3421C1E6D540076092B /* ArgumentProtocol.swift */; };
 		CDFC88361C3C0612003AC8F8 /* CommandSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDFC88351C3C0612003AC8F8 /* CommandSpec.swift */; };
@@ -38,8 +36,6 @@
 
 /* Begin PBXFileReference section */
 		6CAD549C1D371A4E00A2D031 /* LinuxMain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LinuxMain.swift; path = Tests/LinuxMain.swift; sourceTree = SOURCE_ROOT; };
-		6D1EDD371E03E196009BCD2E /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
-		6D1EDD391E03E1F1009BCD2E /* ExtensionsSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionsSpec.swift; sourceTree = "<group>"; };
 		CD2ED3401C1E6C5D0076092B /* Argument.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Argument.swift; sourceTree = "<group>"; };
 		CD2ED3421C1E6D540076092B /* ArgumentProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArgumentProtocol.swift; sourceTree = "<group>"; };
 		CDFC88351C3C0612003AC8F8 /* CommandSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommandSpec.swift; sourceTree = "<group>"; };
@@ -145,7 +141,6 @@
 			isa = PBXGroup;
 			children = (
 				CDFC88351C3C0612003AC8F8 /* CommandSpec.swift */,
-				6D1EDD391E03E1F1009BCD2E /* ExtensionsSpec.swift */,
 				D00CCE281A20741C00109F8C /* OptionSpec.swift */,
 				D00CCDE91A20717400109F8C /* Supporting Files */,
 				6CAD549C1D371A4E00A2D031 /* LinuxMain.swift */,
@@ -240,7 +235,6 @@
 				D00CCE2A1A20748500109F8C /* Errors.swift */,
 				D00CCE2E1A2075F700109F8C /* Option.swift */,
 				D8169D861ACB942D00923FB0 /* Switch.swift */,
-				6D1EDD371E03E196009BCD2E /* Extensions.swift */,
 			);
 			name = Core;
 			sourceTree = "<group>";
@@ -368,7 +362,6 @@
 				D0BF14FB1A4C8957003147BC /* HelpCommand.swift in Sources */,
 				CD2ED3431C1E6D540076092B /* ArgumentProtocol.swift in Sources */,
 				D00CCE2F1A2075F700109F8C /* Option.swift in Sources */,
-				6D1EDD381E03E196009BCD2E /* Extensions.swift in Sources */,
 				D00CCE2B1A20748500109F8C /* Errors.swift in Sources */,
 				D8169D871ACB942D00923FB0 /* Switch.swift in Sources */,
 				D00CCE271A20741300109F8C /* Command.swift in Sources */,
@@ -380,7 +373,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6D1EDD3A1E03E1F1009BCD2E /* ExtensionsSpec.swift in Sources */,
 				CDFC88361C3C0612003AC8F8 /* CommandSpec.swift in Sources */,
 				D00CCE291A20741C00109F8C /* OptionSpec.swift in Sources */,
 			);
