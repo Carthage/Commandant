@@ -72,7 +72,7 @@ public final class ArgumentParser {
 				if opt.first == "-" {
 					return .key(String(opt.dropFirst()))
 				} else {
-					return .flag(Set(opt))
+					return .flag(NSOrderedSet(object: opt))
 				}
 			} else {
 				return .value(arg)
