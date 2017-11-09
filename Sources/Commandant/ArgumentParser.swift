@@ -19,7 +19,7 @@ private enum RawArgument: Equatable {
 	case value(String)
 
 	/// One or more flag arguments (e.g 'r' and 'f' for `-rf`)
-	case flag(Set<Character>)
+	case flag(NSMutableOrderedSet)
 }
 
 private func ==(lhs: RawArgument, rhs: RawArgument) -> Bool {
@@ -48,7 +48,7 @@ extension RawArgument: CustomStringConvertible {
 			return "\"\(value)\""
 
 		case let .flag(flags):
-			return "-\(String(flags))"
+			return "-\(String(describing: flags))"
 		}
 	}
 }
@@ -72,7 +72,7 @@ public final class ArgumentParser {
 				if opt.first == "-" {
 					return .key(String(opt.dropFirst()))
 				} else {
-					return .value(String(opt))
+					return .flag(NSMutableOrderedSet(array: Array(opt)))
 				}
 			} else {
 				return .value(arg)
@@ -177,7 +177,7 @@ public final class ArgumentParser {
 				var flags = flags
 				flags.remove(flag)
 
-				if flags.isEmpty {
+				if flags.count == 0 {
 					rawArguments.remove(at: index)
 				} else {
 					rawArguments[index] = .flag(flags)
