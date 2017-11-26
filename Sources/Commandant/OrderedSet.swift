@@ -16,7 +16,9 @@ internal struct OrderedSet<T: Hashable> {
 			return nil
 		}
 	}
+}
 
+extension OrderedSet: Equatable {
 	static func == (_ lhs: OrderedSet, rhs: OrderedSet) -> Bool {
 		return lhs.values == rhs.values
 	}
