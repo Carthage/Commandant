@@ -6,5 +6,6 @@ import Quick
 Quick.QCKMain([
 	CommandWrapperSpec.self,
 	OptionsProtocolSpec.self,
-	OptionsWithEnumProtocolSpec.self
+	OptionsWithEnumProtocolSpec.self,
+	OrderedSetSpec.self,
 ])
