@@ -30,3 +30,33 @@ extension String: ArgumentProtocol {
 		return string
 	}
 }
+
+public extension RawRepresentable where Self.RawValue: StringProtocol, Self: ArgumentProtocol {
+	
+	public static func from(string: String) -> Self? {
+		
+		guard let stringValue = Self.RawValue(string)
+			else {
+				return .none
+		}
+		
+		return Self(rawValue: stringValue)
+		
+	}
+	
+}
+
+public extension RawRepresentable where Self.RawValue: FixedWidthInteger, Self: ArgumentProtocol {
+	
+	public static func from(string: String) -> Self? {
+		
+		guard let intValue = Self.RawValue(string)
+			else {
+				return .none
+		}
+		
+		return Self(rawValue: intValue)
+		
+	}
+	
+}
