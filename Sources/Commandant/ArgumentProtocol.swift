@@ -31,32 +31,14 @@ extension String: ArgumentProtocol {
 	}
 }
 
-public extension RawRepresentable where Self.RawValue: StringProtocol, Self: ArgumentProtocol {
-	
+extension RawRepresentable where RawValue: StringProtocol, Self: ArgumentProtocol {
 	public static func from(string: String) -> Self? {
-		
-		guard let stringValue = Self.RawValue(string)
-			else {
-				return .none
-		}
-		
-		return Self(rawValue: stringValue)
-		
+		return RawValue(string).flatMap(Self.init(rawValue:))
 	}
-	
 }
 
-public extension RawRepresentable where Self.RawValue: FixedWidthInteger, Self: ArgumentProtocol {
-	
+extension RawRepresentable where RawValue: FixedWidthInteger, Self: ArgumentProtocol {
 	public static func from(string: String) -> Self? {
-		
-		guard let intValue = Self.RawValue(string)
-			else {
-				return .none
-		}
-		
-		return Self(rawValue: intValue)
-		
+		return RawValue(string).flatMap(Self.init(rawValue:))
 	}
-	
 }

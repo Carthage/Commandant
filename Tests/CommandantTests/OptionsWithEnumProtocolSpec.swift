@@ -156,7 +156,6 @@ extension TestEnumOptions: CustomStringConvertible {
 }
 
 enum StrictStringValue: String, ArgumentProtocol {
-	
 	static var name: String = "Strict string value: `foobar`, `bazbuzz`, `one`, `two`, `baz`, `a`, `b` or `c`"
 	
 	case foobar
@@ -167,11 +166,9 @@ enum StrictStringValue: String, ArgumentProtocol {
 	case a
 	case b
 	case c
-	
 }
 
 enum StrictIntValue: UInt8, ArgumentProtocol {
-	
 	static var name: String = "Strict int value: `3`, `5`, `42`, `0`, `255`"
 	
 	case min = 0
@@ -179,5 +176,4 @@ enum StrictIntValue: UInt8, ArgumentProtocol {
 	case giveFive = 5
 	case theAnswerToTheUltimateQuestionOfLifeTheUniverseAndEverything = 42
 	case max = 255
-	
 }
