@@ -117,6 +117,9 @@ public final class CommandRegistry<ClientError: Error> {
 }
 
 extension CommandRegistry {
+	public func main(defaultVerb: String, completionHandler:() -> Void, errorHandler: (ClientError) -> ()) -> Never  {
+		main(arguments: CommandLine.arguments, defaultVerb: defaultVerb, completionHandler: completionHandler, errorHandler: errorHandler)
+	}
 	/// Hands off execution to the CommandRegistry, by parsing CommandLine.arguments
 	/// and then running whichever command has been identified in the argument
 	/// list.
@@ -155,7 +158,7 @@ extension CommandRegistry {
 	/// If a matching command could not be found or a usage error occurred,
 	/// a helpful error message will be written to `stderr`, then the process
 	/// will exit with a failure error code.
-	public func main(arguments: [String], defaultVerb: String, errorHandler: (ClientError) -> ()) -> Never  {
+	public func main(arguments: [String], defaultVerb: String, completionHandler:() -> Void = { }, errorHandler: (ClientError) -> ()) -> Never  {
 		assert(arguments.count >= 1)
 
 		var arguments = arguments
@@ -173,6 +176,7 @@ extension CommandRegistry {
 		
 		switch run(command: verb, arguments: arguments) {
 		case .success?:
+			completionHandler()
 			exit(EXIT_SUCCESS)
 
 		case let .failure(error)?:
