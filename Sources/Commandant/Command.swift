@@ -117,7 +117,7 @@ public final class CommandRegistry<ClientError: Error> {
 }
 
 extension CommandRegistry {
-	public func main(defaultVerb: String, completionHandler:() -> Void, errorHandler: (ClientError) -> ()) -> Never  {
+	public func main(defaultVerb: String, completionHandler: () -> Void, errorHandler: (ClientError) -> ()) -> Never  {
 		main(arguments: CommandLine.arguments, defaultVerb: defaultVerb, completionHandler: completionHandler, errorHandler: errorHandler)
 	}
 	/// Hands off execution to the CommandRegistry, by parsing CommandLine.arguments
