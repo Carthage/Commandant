@@ -10,7 +10,7 @@ matrix:
     - script: set -o pipefail && xcodebuild -workspace "$TRAVIS_XCODE_WORKSPACE" -scheme "$TRAVIS_XCODE_SCHEME" test | xcpretty
       xcode_scheme: Commandant
       os: osx
-      osx_image: xcode9
+      osx_image: xcode9.3beta
       language: objective-c
       env: JOB=Xcode9
     - script:
@@ -18,7 +18,7 @@ matrix:
         - swift build
         - swift test
       os: osx
-      osx_image: xcode9
+      osx_image: xcode9.3beta
       language: objective-c
       env: JOB=SPM
     - script:
@@ -31,18 +31,6 @@ matrix:
       language: generic
       install:
         - eval "$(curl -sL https://gist.githubusercontent.com/kylef/5c0475ff02b7c7671d2a/raw/02090c7ede5a637b76e6df1710e83cd0bbe7dcdf/swiftenv-install.sh)"
-#     - script:
-#         - swift --version
-#         - swift build
-#         - swift test
-#       env:
-#         - JOB=Linux
-#         - SWIFT_VERSION=DEVELOPMENT-SNAPSHOT-2017-09-20-a
-#       sudo: required
-#       dist: trusty
-#       language: generic
-#       install:
-#         - eval "$(curl -sL https://gist.githubusercontent.com/kylef/5c0475ff02b7c7671d2a/raw/02090c7ede5a637b76e6df1710e83cd0bbe7dcdf/swiftenv-install.sh)"
 
 notifications:
   email: false
