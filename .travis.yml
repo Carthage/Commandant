@@ -10,7 +10,7 @@ matrix:
     - script: set -o pipefail && xcodebuild -workspace "$TRAVIS_XCODE_WORKSPACE" -scheme "$TRAVIS_XCODE_SCHEME" test | xcpretty
       xcode_scheme: Commandant
       os: osx
-      osx_image: xcode9.3beta
+      osx_image: xcode9.3
       language: objective-c
       env: JOB=Xcode9
     - script:
@@ -18,7 +18,7 @@ matrix:
         - swift build
         - swift test
       os: osx
-      osx_image: xcode9.3beta
+      osx_image: xcode9.3
       language: objective-c
       env: JOB=SPM
     - script:
