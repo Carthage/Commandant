@@ -14,7 +14,6 @@ class OrderedSetSpec: QuickSpec {
 
 			it("should preserve the order of the given input") {
 				let input = ["a", "c", "b", "a"]
-				expect(Set(input).joined()) != "acb"
 				expect(OrderedSet(input).joined()) == "acb"
 			}
 		}
