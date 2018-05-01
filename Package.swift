@@ -9,8 +9,8 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/antitypical/Result.git", from: "3.2.1"),
-        .package(url: "https://github.com/Quick/Quick.git", from: "1.2.0"),
-        .package(url: "https://github.com/Quick/Nimble.git", from: "7.0.2"),
+        .package(url: "https://github.com/Quick/Quick.git", from: "1.3.0"),
+        .package(url: "https://github.com/Quick/Nimble.git", from: "7.1.1"),
     ],
     targets: [
         .target(name: "Commandant", dependencies: ["Result"]),
