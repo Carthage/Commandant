@@ -20,14 +20,36 @@ public struct Argument<T> {
 	/// be shown in help messages.
 	public let usage: String
 
-	public init(defaultValue: T? = nil, usage: String) {
+	/// A human-readable string that describes this argument as a paramater shown
+	/// in the list of possible parameters in help messages (e.g. for "paths", the
+	/// user would see <paths…>).
+	public let usageParameter: String?
+
+	public init(defaultValue: T? = nil, usage: String, usageParameter: String? = nil) {
 		self.defaultValue = defaultValue
 		self.usage = usage
+		self.usageParameter = usageParameter
 	}
 
 	fileprivate func invalidUsageError<ClientError>(_ value: String) -> CommandantError<ClientError> {
-		let description = "Invalid value for '\(self)': \(value)"
+		let description = "Invalid value for '\(self.usageParameterDescription)': \(value)"
 		return .usageError(description: description)
+	}
+}
+
+extension Argument {
+	/// A string describing this argument as a parameter in help messages. This falls back
+	/// to `"\(self)"` if `usageParameter` is `nil`
+	internal var usageParameterDescription: String {
+		return self.usageParameter.map { "<\($0)>" } ?? "\(self)"
+	}
+}
+
+extension Argument where T: Sequence {
+	/// A string describing this argument as a parameter in help messages. This falls back
+	/// to `"\(self)"` if `usageParameter` is `nil`
+	internal var usageParameterDescription: String {
+		return self.usageParameter.map { "<\($0)…>" } ?? "\(self)"
 	}
 }
 

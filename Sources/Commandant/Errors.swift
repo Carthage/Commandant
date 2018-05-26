@@ -88,7 +88,9 @@ internal func informativeUsageError<T: ArgumentProtocol, ClientError>(_ argument
 	var example = ""
 
 	var valueExample = ""
-	if let defaultValue = argument.defaultValue {
+	if argument.usageParameter != nil {
+		valueExample = argument.usageParameterDescription
+	} else if let defaultValue = argument.defaultValue {
 		valueExample = "\(defaultValue)"
 	}
 
@@ -106,7 +108,9 @@ internal func informativeUsageError<T: ArgumentProtocol, ClientError>(_ argument
 	var example = ""
 
 	var valueExample = ""
-	if let defaultValue = argument.defaultValue {
+	if argument.usageParameter != nil {
+		valueExample = argument.usageParameterDescription
+	} else if let defaultValue = argument.defaultValue {
 		valueExample = "\(defaultValue)"
 	}
 
