@@ -2,10 +2,7 @@ xcode_workspace: Commandant.xcworkspace
 branches:
   only:
     - master
-script: placeholder # workaround for https://github.com/travis-ci/travis-ci/issues/4681
 matrix:
-  exclude:
-    - script: placeholder # workaround for https://github.com/travis-ci/travis-ci/issues/4681
   include:
     - script: set -o pipefail && xcodebuild -workspace "$TRAVIS_XCODE_WORKSPACE" -scheme "$TRAVIS_XCODE_SCHEME" test | xcpretty
       xcode_scheme: Commandant
