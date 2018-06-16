@@ -48,6 +48,14 @@ matrix:
     - <<: *swiftpm_linux
       env: 
         - JOB=Linux
+    - <<: *swiftpm_linux
+      env: 
+        - JOB=Linux
+        - SWIFT_VERSION=4.1.2
+    - <<: *swiftpm_linux
+      env: 
+        - JOB=Linux
+        - SWIFT_VERSION=4.2-DEVELOPMENT-SNAPSHOT-2018-06-15-a
 
 notifications:
   email: false
