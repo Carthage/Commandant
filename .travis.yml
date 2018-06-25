@@ -1,48 +1,61 @@
-xcode_workspace: Commandant.xcworkspace
+aliases:
+  - &xcode
+    script: set -o pipefail && xcodebuild -workspace "$TRAVIS_XCODE_WORKSPACE" -scheme "$TRAVIS_XCODE_SCHEME" test | xcpretty
+    xcode_workspace: Commandant.xcworkspace
+    xcode_scheme: Commandant
+    os: osx
+    language: objective-c
+  - &swiftpm
+    script:
+      - swift --version
+      - swift build
+      - swift test
+    git:
+      submodules: false
+  - &swiftpm_darwin
+    <<: *swiftpm
+    os: osx
+    language: objective-c
+    env: JOB=SPM
+  - &swiftpm_linux
+    <<: *swiftpm
+    sudo: required
+    dist: trusty
+    language: generic
+    install:
+      - eval "$(curl -sL https://gist.githubusercontent.com/kylef/5c0475ff02b7c7671d2a/raw/02090c7ede5a637b76e6df1710e83cd0bbe7dcdf/swiftenv-install.sh)"
+
 branches:
   only:
     - master
-script: placeholder # workaround for https://github.com/travis-ci/travis-ci/issues/4681
+
 matrix:
-  exclude:
-    - script: placeholder # workaround for https://github.com/travis-ci/travis-ci/issues/4681
   include:
-    - script: set -o pipefail && xcodebuild -workspace "$TRAVIS_XCODE_WORKSPACE" -scheme "$TRAVIS_XCODE_SCHEME" test | xcpretty
-      xcode_scheme: Commandant
-      os: osx
-      osx_image: xcode9
-      language: objective-c
-      env: JOB=Xcode9
-    - script:
-        - swift --version
-        - swift build
-        - swift test
-      os: osx
-      osx_image: xcode9
-      language: objective-c
-      env: JOB=SPM
-    - script:
-        - swift --version
-        - swift build
-        - swift test
-      env: JOB=Linux
-      sudo: required
-      dist: trusty
-      language: generic
-      install:
-        - eval "$(curl -sL https://gist.githubusercontent.com/kylef/5c0475ff02b7c7671d2a/raw/02090c7ede5a637b76e6df1710e83cd0bbe7dcdf/swiftenv-install.sh)"
-#     - script:
-#         - swift --version
-#         - swift build
-#         - swift test
-#       env:
-#         - JOB=Linux
-#         - SWIFT_VERSION=DEVELOPMENT-SNAPSHOT-2017-09-20-a
-#       sudo: required
-#       dist: trusty
-#       language: generic
-#       install:
-#         - eval "$(curl -sL https://gist.githubusercontent.com/kylef/5c0475ff02b7c7671d2a/raw/02090c7ede5a637b76e6df1710e83cd0bbe7dcdf/swiftenv-install.sh)"
+    - <<: *xcode
+      osx_image: xcode9.2
+      env: JOB=Xcode9.2
+    - <<: *xcode
+      osx_image: xcode9.3
+      env: JOB=Xcode9.3
+    - <<: *swiftpm_darwin
+      osx_image: xcode9.2
+    - <<: *swiftpm_darwin
+      osx_image: xcode9.3
+    - <<: *swiftpm_linux
+      env: 
+        - JOB=Linux
+        - SWIFT_VERSION=4.0.3
+    - <<: *swiftpm_linux
+      env: 
+        - JOB=Linux
+    - <<: *swiftpm_linux
+      env: 
+        - JOB=Linux
+        - SWIFT_VERSION=4.1.2
+    - <<: *swiftpm_linux
+      env: 
+        - JOB=Linux
+        - SWIFT_VERSION=4.2-DEVELOPMENT-SNAPSHOT-2018-06-15-a
 
 notifications:
   email: false
@@ -62,4 +75,4 @@ deploy:
   on:
     repo: Carthage/Commandant
     tags: true
-    condition: $JOB = Xcode9
+    condition: $JOB = Xcode9.3

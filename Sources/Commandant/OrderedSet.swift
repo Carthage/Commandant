@@ -1,5 +1,5 @@
 /// A poor man's ordered set.
-internal struct OrderedSet<T: Hashable> {
+internal struct OrderedSet<T: Hashable>: Equatable {
 	fileprivate var values: [T] = []
 
 	init<S: Sequence>(_ sequence: S) where S.Element == T {
@@ -18,11 +18,13 @@ internal struct OrderedSet<T: Hashable> {
 	}
 }
 
-extension OrderedSet: Equatable {
+#if !swift(>=4.1)
+extension OrderedSet {
 	static func == (_ lhs: OrderedSet, rhs: OrderedSet) -> Bool {
 		return lhs.values == rhs.values
 	}
 }
+#endif
 
 extension OrderedSet: Collection {
 	subscript(position: Int) -> T {
