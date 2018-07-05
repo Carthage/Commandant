@@ -6,7 +6,9 @@ aliases:
     os: osx
     language: objective-c
   - &cocoapods
-    script: pod lib lint --verbose
+    script:
+      - pod repo update master
+      - pod lib lint --verbose
     os: osx
     language: objective-c
   - &swiftpm
