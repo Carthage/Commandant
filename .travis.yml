@@ -12,6 +12,7 @@ aliases:
       - pod lib lint --verbose
     os: osx
     language: objective-c
+    env: JOB=CocoaPods
   - &swiftpm
     script:
       - swift --version
