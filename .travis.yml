@@ -45,12 +45,17 @@ matrix:
     - <<: *xcode
       osx_image: xcode9.4
       env: JOB=Xcode9.4
+    - <<: *xcode
+      osx_image: xcode10
+      env: JOB=Xcode10
     - <<: *cocoapods
       osx_image: xcode9.4
     - <<: *swiftpm_darwin
       osx_image: xcode9.2
     - <<: *swiftpm_darwin
       osx_image: xcode9.4
+    - <<: *swiftpm_darwin
+      osx_image: xcode10
     - <<: *swiftpm_linux
       env:
         - JOB=Linux
@@ -61,7 +66,7 @@ matrix:
     - <<: *swiftpm_linux
       env:
         - JOB=Linux
-        - SWIFT_VERSION=4.2-DEVELOPMENT-SNAPSHOT-2018-07-05-a
+        - SWIFT_VERSION=4.2
 
 notifications:
   email: false
