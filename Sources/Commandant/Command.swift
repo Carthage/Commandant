@@ -15,7 +15,7 @@ public protocol CommandProtocol {
 	/// The command's options type.
 	associatedtype Options: OptionsProtocol
 
-	associatedtype ClientError: Error = Options.ClientError
+	associatedtype ClientError where ClientError == Options.ClientError
 	
 	/// The action that users should specify to use this subcommand (e.g.,
 	/// `help`).
@@ -39,7 +39,7 @@ public struct CommandWrapper<ClientError: Error> {
 	public let usage: () -> CommandantError<ClientError>?
 
 	/// Creates a command that wraps another.
-	fileprivate init<C: CommandProtocol>(_ command: C) where C.ClientError == ClientError, C.Options.ClientError == ClientError {
+	fileprivate init<C: CommandProtocol>(_ command: C) where C.ClientError == ClientError {
 		verb = command.verb
 		function = command.function
 		run = { (arguments: ArgumentParser) -> Result<(), CommandantError<ClientError>> in
@@ -93,7 +93,7 @@ public final class CommandRegistry<ClientError: Error> {
 	@discardableResult
 	public func register<C: CommandProtocol>(_ commands: C...)
 		-> CommandRegistry
-		where C.ClientError == ClientError, C.Options.ClientError == ClientError
+		where C.ClientError == ClientError
 	{
 		for command in commands {
 			commandsByVerb[command.verb] = CommandWrapper(command)
