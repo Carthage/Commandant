@@ -10,19 +10,19 @@ internal struct OrderedSet<T: Hashable>: Equatable {
 
 	@discardableResult
 	mutating func remove(_ member: T) -> T? {
-        #if swift(>=5.0)
-        if let index = values.firstIndex(of: member) {
-            return values.remove(at: index)
-        } else {
-            return nil
-        }
-        #else
-        if let index = values.index(of: member) {
-            return values.remove(at: index)
-        } else {
-            return nil
-        }
-        #endif
+		#if swift(>=5.0)
+		if let index = values.firstIndex(of: member) {
+			return values.remove(at: index)
+		} else {
+			return nil
+		}
+		#else
+		if let index = values.index(of: member) {
+			return values.remove(at: index)
+		} else {
+			return nil
+		}
+		#endif
 	}
 }
 
