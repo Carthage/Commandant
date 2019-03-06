@@ -22,3 +22,4 @@ DerivedData
 Carthage/Build
 Packages/
 .build/
+/Commandant.xcodeproj
