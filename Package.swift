@@ -10,11 +10,11 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/antitypical/Result.git", from: "4.0.0"),
         .package(url: "https://github.com/Quick/Quick.git", from: "2.0.0"),
-        .package(url: "https://github.com/Quick/Nimble.git", from: "8.0.0"),
+        .package(url: "https://github.com/Quick/Nimble.git", from: "8.0.0")
     ],
     targets: [
         .target(name: "Commandant", dependencies: ["Result"]),
-        .testTarget(name: "CommandantTests", dependencies: ["Commandant", "Quick", "Nimble"]),
+        .testTarget(name: "CommandantTests", dependencies: ["Commandant", "Quick", "Nimble"])
     ],
     swiftLanguageVersions: [4]
 )
