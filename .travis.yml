@@ -40,33 +40,15 @@ branches:
 matrix:
   include:
     - <<: *xcode
-      osx_image: xcode9.2
-      env: JOB=Xcode9.2
-    - <<: *xcode
-      osx_image: xcode9.4
-      env: JOB=Xcode9.4
-    - <<: *xcode
       osx_image: xcode10
       env: JOB=Xcode10
     - <<: *cocoapods
-      osx_image: xcode9.4
-    - <<: *swiftpm_darwin
-      osx_image: xcode9.2
-    - <<: *swiftpm_darwin
-      osx_image: xcode9.4
+      osx_image: xcode10
     - <<: *swiftpm_darwin
       osx_image: xcode10
     - <<: *swiftpm_linux
       env:
         - JOB=Linux
-        - SWIFT_VERSION=4.0.3
-    - <<: *swiftpm_linux
-      env:
-        - JOB=Linux
-    - <<: *swiftpm_linux
-      env:
-        - JOB=Linux
-        - SWIFT_VERSION=4.2
 
 notifications:
   email: false
@@ -88,4 +70,4 @@ deploy:
   on:
     repo: Carthage/Commandant
     tags: true
-    condition: $JOB = Xcode9.4
+    condition: $JOB = Xcode10
