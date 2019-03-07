@@ -8,7 +8,7 @@ aliases:
   - &cocoapods
     script:
       - rm .swift-version
-      - gem install cocoapods
+      - gem update cocoapods
       - pod repo update master
       - pod lib lint --verbose
     os: osx
