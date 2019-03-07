@@ -20,7 +20,7 @@ Commandant is a Swift framework for parsing command-line arguments, inspired by 
   s.license      = { type: "MIT", file: "LICENSE.md" }
   s.authors      = { "Carthage contributors" => "https://github.com/Carthage/Commandant/graphs/contributors" }
 
-  s.platform     = :osx, "10.10"
+  s.platform     = :osx, "10.9"
   s.source       = { git: "https://github.com/Carthage/Commandant.git", tag: s.version }
 
   s.source_files  = "Sources/**/*.swift"
