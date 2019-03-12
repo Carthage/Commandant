@@ -205,10 +205,29 @@ extension CommandRegistry {
 
 		func launchTask(_ path: String, arguments: [String]) -> Int32 {
 			let task = Process()
-			task.launchPath = path
 			task.arguments = arguments
 
-			task.launch()
+			do {
+			#if canImport(Darwin)
+				if #available(macOS 10.13, *) {
+					task.executableURL = URL(fileURLWithPath: path)
+					try task.run()
+				} else {
+					task.launchPath = path
+					task.launch()
+				}
+			#elseif compiler(>=5)
+				task.executableURL = URL(fileURLWithPath: path)
+				try task.run()
+			#else
+				task.launchPath = path
+				task.launch()
+			#endif
+			} catch let nserror as NSError {
+				return Int32(truncatingIfNeeded: nserror.code)
+			} catch {
+				return -1
+			}
 			task.waitUntilExit()
 
 			return task.terminationStatus
