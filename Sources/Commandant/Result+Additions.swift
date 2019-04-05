@@ -6,8 +6,6 @@
 //  Copyright © 2019 Carthage. All rights reserved.
 //
 
-import Foundation
-
 public extension Result {
 	var value: Success? {
 		switch self {
