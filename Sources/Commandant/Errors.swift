@@ -7,6 +7,9 @@
 //
 
 import Foundation
+#if !swift(>=5.0)
+import Result
+#endif
 
 /// Possible errors that can originate from Commandant.
 ///
@@ -32,7 +35,9 @@ extension CommandantError: CustomStringConvertible {
 	}
 }
 
+#if swift(>=5.0)
 public enum NoError: Error {}
+#endif
 
 /// Constructs an `InvalidArgument` error that indicates a missing value for
 /// the argument by the given name.

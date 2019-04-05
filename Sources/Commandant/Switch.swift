@@ -6,6 +6,10 @@
 //  Copyright (c) 2015 Carthage. All rights reserved.
 //
 
+#if !swift(>=5.0)
+import Result
+#endif
+
 /// Describes a parameterless command line flag that defaults to false and can only
 /// be switched on. Canonical examples include `--force` and `--recurse`.
 ///

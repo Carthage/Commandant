@@ -6,6 +6,10 @@
 //  Copyright (c) 2015 Carthage. All rights reserved.
 //
 
+#if !swift(>=5.0)
+import Result
+#endif
+
 /// Describes an argument that can be provided on the command line.
 public struct Argument<T> {
 	/// The default value for this argument. This is the value that will be used
