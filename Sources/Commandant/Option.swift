@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import Result
 
 /// Represents a record of options for a command, which can be parsed from
 /// a list of command-line arguments.

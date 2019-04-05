@@ -10,7 +10,6 @@
 import Foundation
 import Nimble
 import Quick
-import Result
 
 class OptionsProtocolSpec: QuickSpec {
 	override func spec() {

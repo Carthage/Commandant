@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import Result
 
 /// Represents an argument passed on the command line.
 private enum RawArgument: Equatable {

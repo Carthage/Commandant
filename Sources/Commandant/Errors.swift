@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import Result
 
 /// Possible errors that can originate from Commandant.
 ///
@@ -32,6 +31,8 @@ extension CommandantError: CustomStringConvertible {
 		}
 	}
 }
+
+public enum NoError: Error {}
 
 /// Constructs an `InvalidArgument` error that indicates a missing value for
 /// the argument by the given name.
