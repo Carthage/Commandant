@@ -6,7 +6,6 @@
 //  Copyright © 2019 Carthage. All rights reserved.
 //
 
-#if swift(>=5.0)
 internal extension Result {
 	var value: Success? {
 		switch self {
@@ -26,4 +25,3 @@ internal extension Result {
 		}
 	}
 }
-#endif

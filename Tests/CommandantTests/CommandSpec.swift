@@ -9,9 +9,6 @@
 import Commandant
 import Nimble
 import Quick
-#if !swift(>=5.0)
-import Result
-#endif
 
 class CommandWrapperSpec: QuickSpec {
 	override func spec() {

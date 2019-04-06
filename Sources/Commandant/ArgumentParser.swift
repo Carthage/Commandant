@@ -7,9 +7,6 @@
 //
 
 import Foundation
-#if !swift(>=5.0)
-import Result
-#endif
 
 /// Represents an argument passed on the command line.
 private enum RawArgument: Equatable {

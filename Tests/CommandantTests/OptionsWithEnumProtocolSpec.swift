@@ -10,9 +10,6 @@
 import Foundation
 import Nimble
 import Quick
-#if !swift(>=5.0)
-import Result
-#endif
 
 class OptionsWithEnumProtocolSpec: QuickSpec {
 	override func spec() {

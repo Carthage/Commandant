@@ -7,9 +7,6 @@
 //
 
 import Foundation
-#if !swift(>=5.0)
-import Result
-#endif
 
 /// Represents a subcommand that can be executed with its own set of arguments.
 public protocol CommandProtocol {

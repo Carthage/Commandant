@@ -7,9 +7,6 @@
 //
 
 import Foundation
-#if !swift(>=5.0)
-import Result
-#endif
 
 /// Represents a record of options for a command, which can be parsed from
 /// a list of command-line arguments.

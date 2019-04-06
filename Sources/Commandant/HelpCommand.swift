@@ -7,9 +7,6 @@
 //
 
 import Foundation
-#if !swift(>=5.0)
-import Result
-#endif
 
 /// A basic implementation of a `help` command, using information available in a
 /// `CommandRegistry`.
