@@ -7,7 +7,7 @@
 //
 
 #if swift(>=5.0)
-public extension Result {
+internal extension Result {
 	var value: Success? {
 		switch self {
 		case .success(let value):

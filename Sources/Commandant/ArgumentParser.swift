@@ -106,7 +106,7 @@ public final class ArgumentParser {
 	///
 	/// If a value is found, the key and the value are both removed from the
 	/// list of arguments remaining to be parsed.
-	internal func consumeValue(forKey key: String) -> Result<String?, CommandantError<NoError>> {
+	internal func consumeValue(forKey key: String) -> Result<String?, CommandantError<Never>> {
 		let oldArguments = rawArguments
 		rawArguments.removeAll()
 

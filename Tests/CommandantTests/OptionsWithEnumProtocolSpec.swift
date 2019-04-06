@@ -17,7 +17,7 @@ import Result
 class OptionsWithEnumProtocolSpec: QuickSpec {
 	override func spec() {
 		describe("CommandMode.Arguments") {
-			func tryArguments(_ arguments: String...) -> Result<TestEnumOptions, CommandantError<NoError>> {
+			func tryArguments(_ arguments: String...) -> Result<TestEnumOptions, CommandantError<Never>> {
 				return TestEnumOptions.evaluate(.arguments(ArgumentParser(arguments)))
 			}
 
@@ -125,16 +125,16 @@ struct TestEnumOptions: OptionsProtocol, Equatable {
 	let optionalStrictInt: StrictIntValue
 	let requiredName: String
 	let arguments: [String]
-
-	typealias ClientError = NoError
+	
+	typealias ClientError = Never
 
 	static func create(_ a: StrictIntValue) -> (StrictStringValue) -> ([StrictStringValue]) -> ([StrictStringValue]?) -> (StrictStringValue?) -> (String) -> (StrictIntValue) -> ([String]) -> TestEnumOptions {
 		return { b in { c in { d in { e in { f in { g in { h in
 			return self.init(strictIntValue: a, strictStringValue: b, strictStringsArray: c, optionalStrictStringsArray: d, optionalStrictStringValue: e, optionalStrictInt: g, requiredName: f, arguments: h)
 			} } } } } } }
 	}
-
-	static func evaluate(_ m: CommandMode) -> Result<TestEnumOptions, CommandantError<NoError>> {
+	
+	static func evaluate(_ m: CommandMode) -> Result<TestEnumOptions, CommandantError<Never>> {
 		return create
 			<*> m <| Option(key: "strictIntValue", defaultValue: .theAnswerToTheUltimateQuestionOfLifeTheUniverseAndEverything, usage: "`0` - zero, `255` - max, `3` - three, `5` - five or `42` - The Answer")
 			<*> m <| Option(key: "strictStringValue", defaultValue: .foobar, usage: "`foobar`, `bazbuzzz`, `a`, `b`, `c`, `one`, `two`, `c`")

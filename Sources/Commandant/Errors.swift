@@ -35,8 +35,8 @@ extension CommandantError: CustomStringConvertible {
 	}
 }
 
-#if swift(>=5.0)
-public enum NoError: Error {}
+#if !swift(>=5.0)
+extension Never: Error {}
 #endif
 
 /// Constructs an `InvalidArgument` error that indicates a missing value for

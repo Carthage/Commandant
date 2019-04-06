@@ -15,5 +15,5 @@ let package = Package(
         .target(name: "Commandant", dependencies: []),
         .testTarget(name: "CommandantTests", dependencies: ["Commandant", "Quick", "Nimble"])
     ],
-    swiftLanguageVersions: [.version("5")]
+    swiftLanguageVersions: [.v5]
 )
