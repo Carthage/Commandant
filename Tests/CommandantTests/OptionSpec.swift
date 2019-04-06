@@ -35,34 +35,34 @@ class OptionsProtocolSpec: QuickSpec {
 
 			it("should succeed with some strings array arguments separated by comma") {
 				let value = tryArguments("required", "--intValue", "3", "--optionalStringValue", "baz", "fuzzbuzz", "--stringsArray", "a,b,c").value
-				let expected = TestOptions(intValue: 3, stringValue: "foobar", stringsArray: ["a","b","c"], optionalStringsArray: nil, optionalStringValue: "baz", optionalFilename: "fuzzbuzz", requiredName: "required", enabled: false, force: false, glob: false, arguments: [])
+				let expected = TestOptions(intValue: 3, stringValue: "foobar", stringsArray: ["a", "b", "c"], optionalStringsArray: nil, optionalStringValue: "baz", optionalFilename: "fuzzbuzz", requiredName: "required", enabled: false, force: false, glob: false, arguments: [])
 				expect(value).to(equal(expected))
 			}
-			
+
 			it("should succeed with some strings array arguments separated by space") {
 				let value = tryArguments("required", "--intValue", "3", "--optionalStringValue", "baz", "--stringsArray", "a b c", "fuzzbuzz").value
 				let expected = TestOptions(intValue: 3, stringValue: "foobar", stringsArray: ["a", "b", "c"], optionalStringsArray: nil, optionalStringValue: "baz", optionalFilename: "fuzzbuzz", requiredName: "required", enabled: false, force: false, glob: false, arguments: [])
 				expect(value).to(equal(expected))
 			}
-			
+
 			it("should succeed with some strings array arguments separated by comma and space") {
 				let value = tryArguments("required", "--intValue", "3", "--optionalStringValue", "baz", "--stringsArray", "a, b, c", "fuzzbuzz").value
 				let expected = TestOptions(intValue: 3, stringValue: "foobar", stringsArray: ["a", "b", "c"], optionalStringsArray: nil, optionalStringValue: "baz", optionalFilename: "fuzzbuzz", requiredName: "required", enabled: false, force: false, glob: false, arguments: [])
 				expect(value).to(equal(expected))
 			}
-			
+
 			it("should succeed with some optional string arguments") {
 				let value = tryArguments("required", "--intValue", "3", "--optionalStringValue", "baz", "fuzzbuzz").value
 				let expected = TestOptions(intValue: 3, stringValue: "foobar", stringsArray: [], optionalStringsArray: nil, optionalStringValue: "baz", optionalFilename: "fuzzbuzz", requiredName: "required", enabled: false, force: false, glob: false, arguments: [])
 				expect(value).to(equal(expected))
 			}
-			
+
 			it("should succeed without optional array arguments") {
 				let value = tryArguments("required").value
 				let expected = TestOptions(intValue: 42, stringValue: "foobar", stringsArray: [], optionalStringsArray: nil, optionalStringValue: nil, optionalFilename: "filename", requiredName: "required", enabled: false, force: false, glob: false, arguments: [])
 				expect(value).to(equal(expected))
 			}
-			
+
 			it("should succeed with some optional array arguments") {
 				let value = tryArguments("required", "--intValue", "3", "--optionalStringsArray", "one, two", "fuzzbuzz").value
 				let expected = TestOptions(intValue: 3, stringValue: "foobar", stringsArray: [], optionalStringsArray: ["one", "two"], optionalStringValue: nil, optionalFilename: "fuzzbuzz", requiredName: "required", enabled: false, force: false, glob: false, arguments: [])
@@ -178,7 +178,7 @@ func ==(lhs: TestOptions, rhs: TestOptions) -> Bool {
 }
 
 func ==<T: Equatable>(lhs: [T]?, rhs: [T]?) -> Bool {
-	switch (lhs,rhs) {
+	switch (lhs, rhs) {
 	case let (lhs?, rhs?):
 		return lhs == rhs
 	case (nil, nil):

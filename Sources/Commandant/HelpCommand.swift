@@ -23,7 +23,7 @@ public struct HelpCommand<ClientError: Error>: CommandProtocol {
 
 	public let verb = "help"
 	public let function: String
-	
+
 	private let registry: CommandRegistry<ClientError>
 
 	/// Initializes the command to provide help from the given registry of
@@ -61,7 +61,7 @@ public struct HelpCommand<ClientError: Error>: CommandProtocol {
 
 public struct HelpOptions<ClientError: Error>: OptionsProtocol {
 	fileprivate let verb: String?
-	
+
 	private init(verb: String?) {
 		self.verb = verb
 	}
