@@ -125,7 +125,7 @@ struct TestEnumOptions: OptionsProtocol, Equatable {
 	let optionalStrictInt: StrictIntValue
 	let requiredName: String
 	let arguments: [String]
-	
+
 	typealias ClientError = Never
 
 	static func create(_ a: StrictIntValue) -> (StrictStringValue) -> ([StrictStringValue]) -> ([StrictStringValue]?) -> (StrictStringValue?) -> (String) -> (StrictIntValue) -> ([String]) -> TestEnumOptions {
@@ -133,7 +133,7 @@ struct TestEnumOptions: OptionsProtocol, Equatable {
 			return self.init(strictIntValue: a, strictStringValue: b, strictStringsArray: c, optionalStrictStringsArray: d, optionalStrictStringValue: e, optionalStrictInt: g, requiredName: f, arguments: h)
 			} } } } } } }
 	}
-	
+
 	static func evaluate(_ m: CommandMode) -> Result<TestEnumOptions, CommandantError<Never>> {
 		return create
 			<*> m <| Option(key: "strictIntValue", defaultValue: .theAnswerToTheUltimateQuestionOfLifeTheUniverseAndEverything, usage: "`0` - zero, `255` - max, `3` - three, `5` - five or `42` - The Answer")
