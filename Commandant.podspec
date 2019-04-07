@@ -25,8 +25,6 @@ Commandant is a Swift framework for parsing command-line arguments, inspired by 
 
   s.source_files  = "Sources/**/*.swift"
 
-  s.dependency "Result", "~> 4.0"
-
   s.cocoapods_version = ">= 1.4.0"
-  s.swift_version = "4.2"
+  s.swift_version = "5.0"
 end
