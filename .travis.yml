@@ -63,10 +63,10 @@ matrix:
         - JOB=Linux
         - SWIFT_VESION=4.2.3
     - <<: *swiftpm_linux
-      name: Linux / Swift 5.0 Development
+      name: Linux / Swift 5.0
       env:
         - JOB=Linux
-        - SWIFT_VERSION=5.0-DEVELOPMENT-SNAPSHOT-2019-02-28-a
+        - SWIFT_VERSION=5.0
 
 notifications:
   email: false
