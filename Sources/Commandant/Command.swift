@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import Result
 
 /// Represents a subcommand that can be executed with its own set of arguments.
 public protocol CommandProtocol {

@@ -10,12 +10,11 @@
 import Foundation
 import Nimble
 import Quick
-import Result
 
 class OptionsProtocolSpec: QuickSpec {
 	override func spec() {
 		describe("CommandMode.Arguments") {
-			func tryArguments(_ arguments: String...) -> Result<TestOptions, CommandantError<NoError>> {
+			func tryArguments(_ arguments: String...) -> Result<TestOptions, CommandantError<Never>> {
 				return TestOptions.evaluate(.arguments(ArgumentParser(arguments)))
 			}
 
@@ -149,7 +148,7 @@ struct TestOptions: OptionsProtocol, Equatable {
 	let glob: Bool
 	let arguments: [String]
 
-	typealias ClientError = NoError
+	typealias ClientError = Never
 
 	static func create(_ a: Int) -> (String) -> ([String]) -> ([String]?) -> (String?) -> (String) -> (String) -> (Bool) -> (Bool) -> (Bool) -> ([String]) -> TestOptions {
 		return { b in { c in { d in { e in { f in { g in { h in { i in { j in { k in
@@ -157,7 +156,7 @@ struct TestOptions: OptionsProtocol, Equatable {
 		} } } } } } } } } }
 	}
 
-	static func evaluate(_ m: CommandMode) -> Result<TestOptions, CommandantError<NoError>> {
+	static func evaluate(_ m: CommandMode) -> Result<TestOptions, CommandantError<Never>> {
 		return create
 			<*> m <| Option(key: "intValue", defaultValue: 42, usage: "Some integer value")
 			<*> m <| Option(key: "stringValue", defaultValue: "foobar", usage: "Some string value")
