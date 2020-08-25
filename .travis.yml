@@ -9,7 +9,7 @@ aliases:
     script:
       - rm .swift-version
       - gem update cocoapods
-      - pod repo update master
+      - pod setup
       - pod lib lint --verbose
     os: osx
     language: objective-c
