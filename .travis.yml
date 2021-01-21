@@ -29,7 +29,7 @@ aliases:
   - &swiftpm_linux
     <<: *swiftpm
     sudo: required
-    dist: trusty
+    dist: xenial
     language: generic
     install:
       - eval "$(curl -sL https://swiftenv.fuller.li/install.sh)"
