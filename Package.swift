@@ -8,7 +8,7 @@ let package = Package(
         .library(name: "Commandant", targets: ["Commandant"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/Quick/Quick.git", from: "3.0.1"),
+        .package(url: "https://github.com/Quick/Quick.git", from: "3.1.0"),
         .package(url: "https://github.com/Quick/Nimble.git", from: "9.0.0"),
     ],
     targets: [
