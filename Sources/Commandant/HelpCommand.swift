@@ -18,9 +18,11 @@ import Foundation
 /// 	let helpCommand = HelpCommand(registry: commands)
 /// 	commands.register(helpCommand)
 public struct HelpCommand<ClientError: Error>: CommandProtocol {
+
 	public typealias Options = HelpOptions<ClientError>
 
 	public let verb = "help"
+	public let aliases: [String] = []
 	public let function: String
 
 	private let registry: CommandRegistry<ClientError>

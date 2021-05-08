@@ -20,6 +20,9 @@ public protocol CommandProtocol {
 	/// `help`).
 	var verb: String { get }
 
+	/// Optional list of additional verbs which can be used to invoke this command.
+	var aliases: [String] { get }
+
 	/// A human-readable, high-level description of what this command is used
 	/// for.
 	var function: String { get }
@@ -96,6 +99,10 @@ public final class CommandRegistry<ClientError: Error> {
 	{
 		for command in commands {
 			commandsByVerb[command.verb] = CommandWrapper(command)
+			// Register command for each additional alias
+			for alias in command.aliases {
+				commandsByVerb[alias] = CommandWrapper(command)
+			}
 		}
 		return self
 	}
